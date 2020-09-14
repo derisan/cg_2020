@@ -18,12 +18,15 @@ void changeBGColor(int value);
 glm::vec3 color(1.0f, 1.0f, 1.0f);
 bool shouldTimerStop = false;
 
+const int SCR_WIDTH = 800;
+const int SCR_HEIGHT = 600;
+
 int main(int argc, char** argv)
 {
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA);
 	glutInitWindowPosition(0, 0);
-	glutInitWindowSize(800, 600);
+	glutInitWindowSize(SCR_WIDTH, SCR_HEIGHT);
 	glutCreateWindow("Example1");
 
 	Random::init();
@@ -40,6 +43,7 @@ int main(int argc, char** argv)
 	glutDisplayFunc(drawScene);
 	glutReshapeFunc(reshape);
 	glutKeyboardFunc(keyboard);
+
 	glutMainLoop();
 
 	return 0;
