@@ -21,12 +21,15 @@ bool shouldRectColorChange = true;
 glm::vec3 bgColor(0.0f, 0.0f, 0.0f);
 glm::vec3 rectColor(0.0f, 0.0f, 0.0f);
 
+const int SCR_WIDTH = 600;
+const int SCR_HEIGHT = 600;
+
 int main(int argc, char** argv)
 {
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA);
 	glutInitWindowPosition(0, 0);
-	glutInitWindowSize(600, 600);
+	glutInitWindowSize(SCR_WIDTH, SCR_HEIGHT);
 	glutCreateWindow("Example1");
 	Random::init();
 

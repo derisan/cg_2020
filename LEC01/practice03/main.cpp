@@ -21,6 +21,7 @@ glm::vec3 bgColor(0.17f, 0.17f, 0.17f);
 glm::vec3 rectColor(0.0f, 0.0f, 0.0f);
 
 bool shouldAnimPlay = false;
+bool shouldRectColorChange = true;
 
 float FPS = 60.0f;
 float rectSpeed = 0.6f / FPS;
@@ -28,13 +29,15 @@ int xDir = 1;
 int yDir = 1;
 
 const float rectLen = 0.1f;
+const int SCR_WIDTH = 600;
+const int SCR_HEIGHT = 600;
 
 int main(int argc, char** argv)
 {
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA);
 	glutInitWindowPosition(0, 0);
-	glutInitWindowSize(600, 600);
+	glutInitWindowSize(SCR_WIDTH, SCR_HEIGHT);
 	glutCreateWindow("Example1");
 	Random::init();
 
@@ -61,6 +64,11 @@ void drawScene()
 	glClearColor(bgColor.x, bgColor.y, bgColor.z, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT);
 
+	if (shouldRectColorChange)
+	{
+		shouldRectColorChange = false;
+		rectColor = glm::vec3(Random::getFloat(), Random::getFloat(), Random::getFloat());
+	}
 	glColor3f(rectColor.x, rectColor.y, rectColor.z);
 	glRectf(rectPos.x - rectLen, rectPos.y - rectLen, rectPos.x + rectLen, rectPos.y + rectLen);
 
@@ -96,8 +104,8 @@ void getRectPos(int button, int state, int x, int y)
 {
 	if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN)
 	{
-		rectPos = screenToNDC(x, y);
-		rectColor = glm::vec3(Random::getFloat(), Random::getFloat(), Random::getFloat());
+		rectPos = screenToNDC(x, y, static_cast<float>(SCR_WIDTH), static_cast<float>(SCR_HEIGHT));
+		shouldRectColorChange = true;
 	}
 }
 
@@ -105,15 +113,17 @@ void playAnimation(int value)
 {
 	if (shouldAnimPlay)
 	{
+		float border = 1.0f - rectLen;
+
 		rectPos.x += xDir * rectSpeed;
 		rectPos.y += yDir * rectSpeed;
 
-		if (rectPos.x > (1.0f - rectLen)|| rectPos.x < -(1.0f - rectLen))
+		if (rectPos.x > border || rectPos.x < -border)
 			xDir *= -1;
-		if (rectPos.y > (1.0f - rectLen) || rectPos.y < -(1.0f - rectLen))
+		if (rectPos.y > border || rectPos.y < -border)
 			yDir *= -1;
 
-		glutTimerFunc(1000 / FPS, playAnimation, 1);
+		glutTimerFunc(static_cast<unsigned int>(1000 / FPS), playAnimation, 1);
 	}
 	glutPostRedisplay();
 }
