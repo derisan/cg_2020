@@ -89,8 +89,11 @@ void drawScene()
 
 	// Change triangles color
 	if (shouldChangeColor)
+	{
+		shouldChangeColor = false;
 		for (auto tri : triangles)
 			tri->setColor(glm::vec3(Random::getFloat(), Random::getFloat(), Random::getFloat()));
+	}
 
 	for (auto tri : triangles)
 	{
@@ -132,6 +135,9 @@ void keyboard(unsigned char key, int x, int y)
 			shouldChangeColor = true;
 			break;
 		case 'q': case 'Q':
+			for (auto tri : triangles)
+				delete tri;
+			triangles.clear();
 			glutLeaveMainLoop();
 			break;
 	}
