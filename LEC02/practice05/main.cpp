@@ -1,5 +1,5 @@
 // -----------------------------------
-// 쉐이더
+// 실습5. 화면에 삼각형 그리고 회전시키기
 // 2016180007 김명규
 // -----------------------------------
 
@@ -15,12 +15,12 @@ void drawScene();
 void reshape(int width, int height);
 void keyboard(unsigned char key, int x, int y);
 void mouse(int button, int state, int x, int y);
+void timer(int value);
 
 
 // Screen width, height
 const int SCR_WIDTH = 600;
 const int SCR_HEIGHT = 600;
-
 
 // Verts
 const float vertices[] = {
@@ -43,6 +43,11 @@ VertexArray* vao = nullptr;
 // Triangles
 std::vector<Triangle*> triangles;
 unsigned int curIdx = 0;
+
+// Some globals
+bool shouldChangeColor = false;
+bool shouldChangeMode = false;
+bool shouldAnimPlay = false;
 
 int main(int argc, char** argv)
 {
@@ -76,9 +81,22 @@ void drawScene()
 
 	shader->use();
 	vao->use();
-	
+
+	if (shouldChangeMode)
+		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	else
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+
+	// Change triangles color
+	if (shouldChangeColor)
+		for (auto tri : triangles)
+			tri->setColor(glm::vec3(Random::getFloat(), Random::getFloat(), Random::getFloat()));
+
 	for (auto tri : triangles)
 	{
+		if (shouldAnimPlay)
+			tri->move();
+
 		glm::mat4 trans(glm::mat4(1.0f));
 		trans = glm::translate(trans, tri->getWorld());
 		shader->setMat4("world", trans);
@@ -97,9 +115,25 @@ void keyboard(unsigned char key, int x, int y)
 {
 	switch (key)
 	{
-	case 'q': case 'Q':
-		glutLeaveMainLoop();
-		break;
+		case 'f': case 'F':
+			shouldChangeMode = !shouldChangeMode;
+			break;
+		case 'm': case 'M':
+			if (!shouldAnimPlay)
+			{
+				shouldAnimPlay = true;
+				glutTimerFunc(16, timer, 1);
+			}
+			break;
+		case 's': case 'S':
+			shouldAnimPlay = false;
+			break;
+		case 'c': case 'C':
+			shouldChangeColor = true;
+			break;
+		case 'q': case 'Q':
+			glutLeaveMainLoop();
+			break;
 	}
 	glutPostRedisplay();
 }
@@ -111,5 +145,14 @@ void mouse(int button, int state, int x, int y)
 		glm::vec2 pos = screenToNDC(x, y, SCR_WIDTH, SCR_HEIGHT);
 
 		triangles[(curIdx++) % 4]->setWorld(glm::vec3(pos, 0.0f));
+	}
+}
+
+void timer(int value)
+{
+	if (shouldAnimPlay)
+	{
+		glutTimerFunc(16, timer, 1);
+		glutPostRedisplay();
 	}
 }
