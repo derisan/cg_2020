@@ -1,5 +1,6 @@
 #pragma once
 
+#include <iostream>
 #include <random>
 #include <GL/glew.h>
 #include <GL/freeglut.h>
@@ -16,7 +17,7 @@ public:
 	}
 
 	// returns 0.0 ~ 1.0
-	static float getFloat()
+	static float getFloat(float min = 0.0f, float max = 1.0f)
 	{
 		std::uniform_real_distribution<float> dist(0.0f, 1.0f);
 		return dist(generator);

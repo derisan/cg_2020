@@ -24,6 +24,9 @@
     <ClCompile Include="VertexArray.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Triangle.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="vert.glsl" />
@@ -37,6 +40,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="utils.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Triangle.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

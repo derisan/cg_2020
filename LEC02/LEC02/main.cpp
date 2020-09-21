@@ -3,12 +3,13 @@
 // 2016180007 ±è¸í±Ô
 // -----------------------------------
 
-#include <iostream>
+#include <vector>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include "Shader.h"
 #include "VertexArray.h"
 #include "utils.h"
+#include "Triangle.h"
 
 void drawScene();
 void reshape(int width, int height);
@@ -23,9 +24,9 @@ const int SCR_HEIGHT = 600;
 
 // Verts
 const float vertices[] = {
-	0.0f, 0.25f, 0.0f,
-	0.25f, -0.25f, 0.0f,
-	-0.25f, -0.25f, 0.0f
+	0.0f, 0.1f, 0.0f,
+	0.1f, -0.1f, 0.0f,
+	-0.1f, -0.1f, 0.0f
 };
 
 // Indices
@@ -39,14 +40,26 @@ Shader* shader = nullptr;
 // Vertex array
 VertexArray* vao = nullptr;
 
+// Triangles
+std::vector<Triangle*> triangles;
+unsigned int curIdx = 0;
+
 int main(int argc, char** argv)
 {
 	if (!window::init(SCR_WIDTH, SCR_HEIGHT, &argc, argv))
 		exit(EXIT_FAILURE);
 
+	Random::init();
+
 	glutDisplayFunc(drawScene);
 	glutReshapeFunc(reshape);
 	glutKeyboardFunc(keyboard);
+	glutMouseFunc(mouse);
+
+	triangles.emplace_back(new Triangle(glm::vec3(0.5f, 0.5f, 0.0f), glm::vec3(1.0f, 0.0f, 0.0f)));
+	triangles.emplace_back(new Triangle(glm::vec3(-0.5f, -0.5f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f)));
+	triangles.emplace_back(new Triangle(glm::vec3(-0.5f, 0.5f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f)));
+	triangles.emplace_back(new Triangle(glm::vec3(0.5f, -0.5f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f)));
 
 	shader = createShader("vert.glsl", "frag.glsl");
 	vao = createVertexArray(vertices, 3, indices, 3);
@@ -63,12 +76,15 @@ void drawScene()
 
 	shader->use();
 	vao->use();
-	glm::mat4 trans(glm::mat4(1.0f));
-	trans = glm::translate(trans, glm::vec3(0.2f, 0.0f, 0.0f));
-	shader->setMat4("world", trans);
-
-	glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, 0);
-
+	
+	for (auto tri : triangles)
+	{
+		glm::mat4 trans(glm::mat4(1.0f));
+		trans = glm::translate(trans, tri->getWorld());
+		shader->setMat4("world", trans);
+		shader->setVec3("color", tri->getColor());
+		tri->draw();
+	}
 	glutSwapBuffers();
 }
 
@@ -92,6 +108,8 @@ void mouse(int button, int state, int x, int y)
 {
 	if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN)
 	{
-	
+		glm::vec2 pos = screenToNDC(x, y, SCR_WIDTH, SCR_HEIGHT);
+
+		triangles[(curIdx++) % 4]->setWorld(glm::vec3(pos, 0.0f));
 	}
 }

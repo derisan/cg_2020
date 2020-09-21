@@ -141,6 +141,7 @@
   <ItemGroup>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Shader.cpp" />
+    <ClCompile Include="Triangle.cpp" />
     <ClCompile Include="VertexArray.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -149,6 +150,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Shader.h" />
+    <ClInclude Include="Triangle.h" />
     <ClInclude Include="utils.h" />
     <ClInclude Include="VertexArray.h" />
   </ItemGroup>
