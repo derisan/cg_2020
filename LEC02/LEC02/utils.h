@@ -4,6 +4,7 @@
 #include <GL/glew.h>
 #include <GL/freeglut.h>
 #include <GL/freeglut_ext.h>
+#include <glm/glm.hpp>
 
 class Random
 {
@@ -52,3 +53,10 @@ namespace window
 	}
 }
 
+glm::vec2 screenToNDC(int x, int y, float width = 600.0f, float height = 600.0f)
+{
+	float retX = ((float)x - width / 2) * (2 / width);
+	float retY = ((float)-y + height / 2) * (2 / height);
+
+	return glm::vec2(retX, retY);
+}

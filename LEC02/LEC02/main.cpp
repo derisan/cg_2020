@@ -4,6 +4,8 @@
 // -----------------------------------
 
 #include <iostream>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 #include "Shader.h"
 #include "VertexArray.h"
 #include "utils.h"
@@ -11,6 +13,7 @@
 void drawScene();
 void reshape(int width, int height);
 void keyboard(unsigned char key, int x, int y);
+void mouse(int button, int state, int x, int y);
 
 
 // Screen width, height
@@ -60,6 +63,10 @@ void drawScene()
 
 	shader->use();
 	vao->use();
+	glm::mat4 trans(glm::mat4(1.0f));
+	trans = glm::translate(trans, glm::vec3(0.2f, 0.0f, 0.0f));
+	shader->setMat4("world", trans);
+
 	glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, 0);
 
 	glutSwapBuffers();
@@ -81,3 +88,10 @@ void keyboard(unsigned char key, int x, int y)
 	glutPostRedisplay();
 }
 
+void mouse(int button, int state, int x, int y)
+{
+	if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN)
+	{
+	
+	}
+}

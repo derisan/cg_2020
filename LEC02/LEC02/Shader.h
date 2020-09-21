@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 #include <glm/glm.hpp>
+#include <GL/glew.h>
 
 typedef unsigned int GLenum;
 typedef unsigned int GLuint;
@@ -16,6 +17,11 @@ public:
 	
 	void use();
 	void setMatrixUniform(const char* name, const glm::mat4& matrix);
+
+	void setMat4(const std::string& name, const glm::mat4& matrix) const
+	{
+		glUniformMatrix4fv(glGetUniformLocation(_shaderProgram, name.c_str()), 1, GL_FALSE, &matrix[0][0]);
+	}
 private:
 	bool compileShader(const std::string& fileName,
 		GLenum shaderType,
