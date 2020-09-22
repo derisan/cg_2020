@@ -35,6 +35,9 @@ bool Shader::load(const std::string& vertName, const std::string& fragName)
 	glAttachShader(_shaderProgram, _fragShader);
 	glLinkProgram(_shaderProgram);
 
+	glDeleteShader(_vertexShader);
+	glDeleteShader(_fragShader);
+
 	// Verify that the program linked successfully
 	if (!isValidProgram())
 	{
@@ -48,8 +51,6 @@ void Shader::unload()
 {
 	// Delete the program/shaders
 	glDeleteProgram(_shaderProgram);
-	glDeleteShader(_vertexShader);
-	glDeleteShader(_fragShader);
 }
 
 void Shader::use()
