@@ -61,10 +61,10 @@ int main(int argc, char** argv)
 	glutKeyboardFunc(keyboard);
 	glutMouseFunc(mouse);
 
-	triangles.emplace_back(new Triangle(glm::vec3(0.5f, 0.5f, 0.0f), glm::vec3(1.0f, 0.0f, 0.0f)));
-	triangles.emplace_back(new Triangle(glm::vec3(-0.5f, -0.5f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f)));
-	triangles.emplace_back(new Triangle(glm::vec3(-0.5f, 0.5f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f)));
-	triangles.emplace_back(new Triangle(glm::vec3(0.5f, -0.5f, 0.0f), glm::vec3(1.0f, 1.0f, 0.0f)));
+	triangles.emplace_back(new Triangle(glm::vec3(0.5f, 0.5f, 0.0f), glm::vec3(1.0f, 0.0f, 0.0f), 0.0f, 0.0f));
+	triangles.emplace_back(new Triangle(glm::vec3(-0.5f, -0.5f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f), -0.88f, -0.88f));
+	triangles.emplace_back(new Triangle(glm::vec3(-0.5f, 0.5f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f), -0.88f, 0.0f));
+	triangles.emplace_back(new Triangle(glm::vec3(0.5f, -0.5f, 0.0f), glm::vec3(1.0f, 1.0f, 0.0f), 0.0f, -0.88f));
 
 	shader = createShader("vert.glsl", "frag.glsl");
 	vao = createVertexArray(vertices, 3, indices, 3);

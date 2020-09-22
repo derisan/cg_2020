@@ -5,7 +5,7 @@
 class Triangle
 {
 public:
-	Triangle(glm::vec3 world = glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3 color = glm::vec3(0.0f, 0.0f, 0.0f));
+	Triangle(glm::vec3 world = glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3 color = glm::vec3(0.0f, 0.0f, 0.0f), float x = 0.0f, float y = 0.0f);
 	void draw() const;
 	void move();
 
@@ -17,10 +17,17 @@ public:
 	void setYDir(int yDir) { _yDir = yDir; }
 
 private:
+	struct Border
+	{
+		float x;
+		float y;
+	};
+
 	glm::vec3 _world;
 	glm::vec3 _color;
 	int _xDir;
 	int _yDir;
 	float _speed;
+	Border _border;
 };
 
