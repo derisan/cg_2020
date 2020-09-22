@@ -3,9 +3,6 @@
 #include <glm/glm.hpp>
 #include <GL/glew.h>
 
-typedef unsigned int GLenum;
-typedef unsigned int GLuint;
-
 class Shader
 {
 public:

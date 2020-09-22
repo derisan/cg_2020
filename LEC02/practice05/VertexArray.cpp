@@ -1,12 +1,6 @@
 #include "VertexArray.h"
 #include <GL/glew.h>
 
-VertexArray::VertexArray()
-	: _numVerts(0),
-	_numIndices(0)
-{
-}
-
 VertexArray::VertexArray(const float* verts, unsigned int numVerts,
 	const unsigned int* indices, unsigned int numIndices)
 	:_numVerts(numVerts)
@@ -25,9 +19,6 @@ VertexArray::VertexArray(const float* verts, unsigned int numVerts,
 
 	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 3, 0);
-	//glEnableVertexAttribArray(1);
-	//glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 3,
-	//	reinterpret_cast<void*>(sizeof(float) * 3));
 }
 
 VertexArray::~VertexArray()
