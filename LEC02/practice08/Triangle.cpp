@@ -1,9 +1,10 @@
 #include "Triangle.h"
 #include <gl/glew.h>
 
-Triangle::Triangle(glm::vec3 world, glm::vec3 color, float border)
+Triangle::Triangle(glm::vec3 world, glm::vec3 color, glm::vec3 scale, float border)
 	: _world(world.x, world.y, world.z),
 	_color(color.x, color.y, color.z),
+	_scale(scale.x, scale.y, scale.z),
 	_xDir(1),
 	_yDir(1),
 	_speed(0.015f),

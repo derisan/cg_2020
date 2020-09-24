@@ -17,7 +17,7 @@ void keyboard(unsigned char key, int x, int y);
 void mouse(int button, int state, int x, int y);
 void timer(int value);
 
-void createTriangles(float x, float y, float border = 0.9f);
+void createTriangles(float x, float y, float scale = 1.0f, float border = 0.9f);
 
 
 // Screen width, height
@@ -48,7 +48,6 @@ const unsigned int indicesRect[] = {
 	1, 2, 3
 };
 
-
 // Shader
 Shader* shader = nullptr;
 
@@ -77,11 +76,14 @@ int main(int argc, char** argv)
 	glutMouseFunc(mouse);
 
 
-	// Create 1 triangles
-	createTriangles(Random::getFloat(-0.9f, 0.9f), Random::getFloat(-0.9f, 0.9f));
-	createTriangles(Random::getFloat(-0.5f, 0.5f), 0.5f, 0.5f);
-	createTriangles(Random::getFloat(-0.5f, 0.5f), -0.5f, 0.5f);
-	
+	// Create 1 big triangle and 2 small triangles
+	createTriangles(-0.9f, 0.0f, 1.0f);
+	createTriangles(Random::getFloat(-0.5f, 0.5f), -0.45f, 0.5f, 0.45f);
+	createTriangles(Random::getFloat(-0.5f, 0.5f), 0.45f, 0.5f, 0.45f);
+	triangles[1]->setRotation(0.0f);
+	triangles[2]->setRotation(-180.0f);
+
+
 	// Create shader and va
 	shader = createShader("vert.glsl", "frag.glsl");
 	vao = createVertexArray(vertices, 3, indices, 3);
@@ -97,15 +99,14 @@ void drawScene()
 	glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT);
 
-
 	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	vaoRect->use();
 	shader->use();
-	glm::mat4 trans(glm::mat4(1.0f));
-	shader->setMat4("world", trans);
+	shader->setMat4("world", glm::mat4(1.0f));
 	shader->setVec3("color", glm::vec3(0.0f, 0.0f, 0.0f));
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
+	shader->use();
 	vao->use();
 
 	if (shouldChangeMode)
@@ -113,12 +114,11 @@ void drawScene()
 	else
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
-	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	for (auto tri : triangles)
 	{
 		if (shouldAnimPlay)
 			tri->move();
-
+			
 		if (tri->getChangeColor())
 		{
 			tri->setChangeColor(false);
@@ -128,13 +128,12 @@ void drawScene()
 		glm::mat4 trans(glm::mat4(1.0f));
 		trans = glm::translate(trans, tri->getWorld());
 		trans = glm::rotate(trans, glm::radians(tri->getRotation()), glm::vec3(0.0f, 0.0f, 1.0f));
+		trans = glm::scale(trans, tri->getScale());
 		shader->setMat4("world", trans);
 		shader->setVec3("color", tri->getColor());
 		tri->draw();
 	}
 
-
-	
 	glutSwapBuffers();
 }
 
@@ -185,6 +184,7 @@ void mouse(int button, int state, int x, int y)
 {
 	if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN)
 	{
+
 	}
 }
 
@@ -197,8 +197,8 @@ void timer(int value)
 	}
 }
 
-void createTriangles(float x, float y, float border)
+void createTriangles(float x, float y, float scale, float border)
 {
 	triangles.emplace_back(new Triangle(glm::vec3(x, y, 0.0f),
-		glm::vec3(Random::getFloat(), Random::getFloat(), Random::getFloat()), border));
+		glm::vec3(Random::getFloat(), Random::getFloat(), Random::getFloat()), glm::vec3(scale, scale, 0.0f), border));
 }

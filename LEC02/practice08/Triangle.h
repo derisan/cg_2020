@@ -5,13 +5,16 @@
 class Triangle
 {
 public:
-	Triangle(glm::vec3 world = glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3 color = glm::vec3(0.0f, 0.0f, 0.0f), float border = 0.9f);
+	Triangle(glm::vec3 world = glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3 color = glm::vec3(0.0f, 0.0f, 0.0f), 
+		glm::vec3 _scale = glm::vec3(1.0f, 1.0f, 0.0f), float border = 0.9f);
 	void draw() const;
 	void move();
 
 	glm::vec3 getWorld() const { return _world; }
 	glm::vec3 getColor() const { return _color; }
-	
+
+	glm::vec3 getScale() const { return _scale; }
+
 	void setWorld(const glm::vec3& world) { _world = world; }
 	void setColor(const glm::vec3& color) { _color = color; }
 	void setXDir(int xDir) { _xDir = xDir; }
@@ -22,9 +25,10 @@ public:
 
 	void setChangeColor(bool shouldChangeColor) { _shouldChangeColor = shouldChangeColor; }
 	bool getChangeColor() const { return _shouldChangeColor; }
-	
+
 private:
 	glm::vec3 _world;
+	glm::vec3 _scale;
 	glm::vec3 _color;
 	int _xDir;
 	int _yDir;
@@ -33,4 +37,7 @@ private:
 	float _border;
 	bool _shouldChangeColor;
 };
+
+
+bool isCollide(const Triangle& tri);
 
