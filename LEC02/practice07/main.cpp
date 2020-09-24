@@ -17,6 +17,8 @@ void keyboard(unsigned char key, int x, int y);
 void mouse(int button, int state, int x, int y);
 void timer(int value);
 
+void createTriangles(float x, float y);
+
 
 // Screen width, height
 const int SCR_WIDTH = 600;
@@ -55,13 +57,18 @@ int main(int argc, char** argv)
 
 	Random::init();
 
+	// Bind several funcs
 	glutDisplayFunc(drawScene);
 	glutReshapeFunc(reshape);
 	glutKeyboardFunc(keyboard);
 	glutMouseFunc(mouse);
 
-	triangles.emplace_back(new Triangle(glm::vec3(-0.90f, 0.0f, 0.0f), glm::vec3(1.0f, 0.0f, 0.0f)));
+
+	// Create 10 triangles
+	for(int i = 0; i < 10 ; ++i)
+		createTriangles(Random::getFloat(-0.9f, 0.9f), Random::getFloat(-0.9f, 0.9f));
 	
+	// Create shader and va
 	shader = createShader("vert.glsl", "frag.glsl");
 	vao = createVertexArray(vertices, 3, indices, 3);
 
@@ -131,6 +138,17 @@ void keyboard(unsigned char key, int x, int y)
 		case 'c': case 'C':
 			shouldChangeColor = true;
 			break;
+		case 'r': case 'R':
+			for (auto tri : triangles)
+				delete tri;
+			triangles.clear();
+		case 'p': case 'P':
+			if (!triangles.empty())
+			{
+				delete triangles.back();
+				triangles.pop_back();
+			}
+			break;
 		case 'q': case 'Q':
 			for (auto tri : triangles)
 				delete tri;
@@ -147,8 +165,10 @@ void mouse(int button, int state, int x, int y)
 	{
 		glm::vec2 pos = screenToNDC(x, y, SCR_WIDTH, SCR_HEIGHT);
 
-		triangles.emplace_back(new Triangle(glm::vec3(Random::getFloat(-0.9f, 0.9f), Random::getFloat(-0.9f, 0.9f), 0.0f), 
-			glm::vec3(Random::getFloat(), Random::getFloat(), Random::getFloat())));
+		if (triangles.size() < 10)
+			createTriangles(pos.x, pos.y);
+		else
+			std::cout << "Failed to create triangle. It's alredy 10." << '\n';
 	}
 }
 
@@ -159,4 +179,10 @@ void timer(int value)
 		glutTimerFunc(16, timer, 1);
 		glutPostRedisplay();
 	}
+}
+
+void createTriangles(float x, float y)
+{
+	triangles.emplace_back(new Triangle(glm::vec3(x, y, 0.0f),
+		glm::vec3(Random::getFloat(), Random::getFloat(), Random::getFloat())));
 }

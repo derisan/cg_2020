@@ -6,7 +6,7 @@ Triangle::Triangle(glm::vec3 world, glm::vec3 color)
 	_color(color.x, color.y, color.z),
 	_xDir(1),
 	_yDir(1),
-	_speed(0.03f),
+	_speed(0.015f),
 	_rotation(-90.0f)
 {
 }
