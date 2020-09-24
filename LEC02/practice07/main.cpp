@@ -24,7 +24,7 @@ const int SCR_HEIGHT = 600;
 
 // Verts
 const float vertices[] = {
-	0.0f, 0.1f, 0.0f,
+	0.0f, 0.2f, 0.0f,
 	0.1f, -0.1f, 0.0f,
 	-0.1f, -0.1f, 0.0f
 };
@@ -42,7 +42,6 @@ VertexArray* vao = nullptr;
 
 // Triangles
 std::vector<Triangle*> triangles;
-unsigned int curIdx = 0;
 
 // Some globals
 bool shouldChangeColor = false;
@@ -61,11 +60,8 @@ int main(int argc, char** argv)
 	glutKeyboardFunc(keyboard);
 	glutMouseFunc(mouse);
 
-	triangles.emplace_back(new Triangle(glm::vec3(0.5f, 0.5f, 0.0f), glm::vec3(1.0f, 0.0f, 0.0f), 0.0f, 0.0f));
-	triangles.emplace_back(new Triangle(glm::vec3(-0.5f, -0.5f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f), -0.88f, -0.88f));
-	triangles.emplace_back(new Triangle(glm::vec3(-0.5f, 0.5f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f), -0.88f, 0.0f));
-	triangles.emplace_back(new Triangle(glm::vec3(0.5f, -0.5f, 0.0f), glm::vec3(1.0f, 1.0f, 0.0f), 0.0f, -0.88f));
-
+	triangles.emplace_back(new Triangle(glm::vec3(-0.90f, 0.0f, 0.0f), glm::vec3(1.0f, 0.0f, 0.0f)));
+	
 	shader = createShader("vert.glsl", "frag.glsl");
 	vao = createVertexArray(vertices, 3, indices, 3);
 
@@ -102,6 +98,7 @@ void drawScene()
 
 		glm::mat4 trans(glm::mat4(1.0f));
 		trans = glm::translate(trans, tri->getWorld());
+		trans = glm::rotate(trans, glm::radians(tri->getRotation()), glm::vec3(0.0f, 0.0f, 1.0f));
 		shader->setMat4("world", trans);
 		shader->setVec3("color", tri->getColor());
 		tri->draw();
@@ -129,7 +126,7 @@ void keyboard(unsigned char key, int x, int y)
 			}
 			break;
 		case 's': case 'S':
-			shouldAnimPlay = false;q
+			shouldAnimPlay = false;
 			break;
 		case 'c': case 'C':
 			shouldChangeColor = true;
@@ -150,7 +147,8 @@ void mouse(int button, int state, int x, int y)
 	{
 		glm::vec2 pos = screenToNDC(x, y, SCR_WIDTH, SCR_HEIGHT);
 
-		triangles[(curIdx++) % 4]->setWorld(glm::vec3(pos, 0.0f));
+		triangles.emplace_back(new Triangle(glm::vec3(Random::getFloat(-0.9f, 0.9f), Random::getFloat(-0.9f, 0.9f), 0.0f), 
+			glm::vec3(Random::getFloat(), Random::getFloat(), Random::getFloat())));
 	}
 }
 

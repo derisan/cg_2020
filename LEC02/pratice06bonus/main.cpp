@@ -1,5 +1,5 @@
 // -----------------------------------
-// 실습5. 원형 애니메이션
+// 실습6. 원형 애니메이션 나선 구현
 // 2016180007 김명규
 // -----------------------------------
 
@@ -76,7 +76,7 @@ void drawScene()
 	{
 		circle->update();
 
-		// circle dies when its radius bigger than 1 and if it's destined to die
+		// Circle dies when its radius bigger than 1 and if it's destined to die
 		if (circle->getState() == Circle::State::kDead)
 		{
 			auto iter = std::find(circles.begin(), circles.end(), circle);
