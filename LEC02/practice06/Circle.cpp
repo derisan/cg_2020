@@ -4,7 +4,7 @@
 #include "Circle.h"
 #include "VertexArray.h"
 
-Circle::Circle(glm::vec2 center, int destiny)
+Circle::Circle(glm::vec2 center, Destiny destiny)
 	: vao_{ nullptr },
 	radius_{ 0.0f },
 	center_{ center },
@@ -23,7 +23,7 @@ void Circle::update()
 {
 	radius_ += 0.005f;
 	if (radius_ > 1.0f)
-		if (destiny_)
+		if (destiny_ == Destiny::kAlive)
 			radius_ = 0.0f;
 		else
 			state_ = State::kDead;

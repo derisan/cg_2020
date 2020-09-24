@@ -76,7 +76,7 @@ void drawScene()
 	{
 		circle->update();
 
-		// circle dies when its radius bigger than 1
+		// circle dies when its radius bigger than 1 and if it's destined to die
 		if (circle->getState() == Circle::State::kDead)
 		{
 			auto iter = std::find(circles.begin(), circles.end(), circle);
@@ -134,7 +134,7 @@ void mouse(int button, int state, int x, int y)
 
 		// Create circle if less than 10
 		if (circles.size() < 10)
-			circles.emplace_back(new Circle(pos, Random::getInt()));
+			circles.emplace_back(new Circle(pos, static_cast<Circle::Destiny>(Random::getInt())));
 		else
 			std::cout << "Failed to create circle. It's already 10." << '\n';
 	}

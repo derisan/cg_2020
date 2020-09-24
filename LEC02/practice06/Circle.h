@@ -13,7 +13,13 @@ public:
 		kDead
 	};
 
-	Circle(glm::vec2 center, int destiny);
+	enum class Destiny
+	{
+		kAlive,
+		kGoHell
+	};
+
+	Circle(glm::vec2 center, Destiny destiny);
 	~Circle();
 
 	void update();
@@ -25,7 +31,7 @@ private:
 	float radius_;
 	glm::vec2 center_;
 	State state_;
-	int destiny_;
+	Destiny destiny_;
 };
 
 
