@@ -9,6 +9,7 @@ public:
 		glm::vec3 _scale = glm::vec3(1.0f, 1.0f, 0.0f), float border = 0.9f);
 	void draw() const;
 	void move();
+	void collide();
 
 	glm::vec3 getWorld() const { return _world; }
 	glm::vec3 getColor() const { return _color; }
