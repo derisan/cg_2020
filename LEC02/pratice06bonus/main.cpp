@@ -30,8 +30,8 @@ Shader* shader = nullptr;
 VertexArray* vao = nullptr;
 
 // Some globals
-bool shouldChangeMode = false;
-GLenum drawMode = 0x0002;
+bool shouldChangeMode = true;
+GLenum drawMode = 0x0000;
 
 // Circles
 std::vector<Circle*> circles;
@@ -70,7 +70,7 @@ void drawScene()
 		glPointSize(2.0f);
 	}
 	else
-		drawMode = GL_LINE_LOOP;
+		drawMode = GL_LINE_STRIP;
 	
 	for (auto circle : circles)
 	{

@@ -9,7 +9,8 @@ Circle::Circle(glm::vec2 center, Destiny destiny)
 	radius_{ 0.0f },
 	center_{ center },
 	state_{ State::kActive },
-	destiny_{ destiny }
+	destiny_{ destiny },
+	num_points_{ 0 }
 {
 
 }
@@ -21,19 +22,20 @@ Circle::~Circle()
 
 void Circle::update()
 {
-	radius_ += 0.005f;
-	if (radius_ > 1.0f)
+	if (num_points_ >= 360)
 		if (destiny_ == Destiny::kAlive)
-			radius_ = 0.0f;
+			num_points_ = 0;
+		
 		else
 			state_ = State::kDead;
 
 	if (getState() == State::kActive)
 	{
 		float verts[360];
-		for (int i = 0; i < 360; i += 3)
+		for (int i = 0; i < num_points_; i += 3)
 		{
-			float theta = i * 3.141592 / 180;
+			radius_ += 0.005f;
+			float theta = i  * 20.0f / 3.14f;
 			verts[i] = center_.x + radius_ * cos(theta);
 			verts[i + 1] = center_.y + radius_ * sin(theta);
 			verts[i + 2] = 0;
@@ -42,6 +44,9 @@ void Circle::update()
 		if (vao_)
 			delete vao_;
 		vao_ = createVertexArray(verts, 120);
+
+		radius_ = 0.0f;
+		num_points_ += 3;
 	}
 }
 

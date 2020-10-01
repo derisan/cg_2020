@@ -32,6 +32,7 @@ private:
 	glm::vec2 center_;
 	State state_;
 	Destiny destiny_;
+	float num_points_;
 };
 
 
