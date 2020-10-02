@@ -67,6 +67,7 @@ void Triangle::collide()
 		auto rot = getRotation();
 		rot -= 90.0f;
 		setRotation(rot);
+		setChangeColor(true);
 	}
 
 	// ¾Æ·§º¯
@@ -77,6 +78,7 @@ void Triangle::collide()
 		auto rot = getRotation();
 		rot -= 90.0f;
 		setRotation(rot);
+		setChangeColor(true);
 	}
 
 	// ÁÂº¯
@@ -87,6 +89,7 @@ void Triangle::collide()
 		auto rot = getRotation();
 		rot -= 90.0f;
 		setRotation(rot);
+		setChangeColor(true);
 	}
 
 	// ¿ìº¯
@@ -97,6 +100,7 @@ void Triangle::collide()
 		auto rot = getRotation();
 		rot -= 90.0f;
 		setRotation(rot);
+		setChangeColor(true);
 	}
 
 }
