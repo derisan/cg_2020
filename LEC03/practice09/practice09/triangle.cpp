@@ -14,7 +14,8 @@ Triangle::Triangle()
 	speed_{ 0.005f },
 	is_move_{ false },
 	is_stretch_{ false },
-	should_bounce_{ false }
+	should_bounce_{ false },
+	angle_{ 0.0f }
 {
 	forward_ = -glm::vec2{ sin(rotation_), cos(rotation_) };
 }
@@ -58,5 +59,10 @@ void Triangle::Move()
 
 void Triangle::Stretch()
 {
+	if(rotation_ == 0.0f || rotation_ == 180.0f)
+		scale_.x = cos(angle_);
+	else
+		scale_.y = cos(angle_);
 
+	angle_ += 0.015f;	
 }

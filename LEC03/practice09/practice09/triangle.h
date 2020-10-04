@@ -43,8 +43,7 @@ private:
 	bool is_move_;
 	bool is_stretch_;
 	bool should_bounce_;
+	float angle_;
 	glm::vec2 forward_;
-
-	//glm::vec2 prev_position_;
 };
 
