@@ -24,9 +24,10 @@ const int SCR_HEIGHT = 600;
 
 // Verts and indices 
 const float vertices[] = {
-	0.0f, 0.0f, 0.0f,
-	-0.25f, -0.25f, 0.0f,
-	0.25f, -0.25f, 0.0f
+	// pos					// color
+	0.0f, 0.0f, 0.0f,		1.0f, 0.0f, 0.0f,
+	-0.25f, -0.25f, 0.0f,	0.0f, 1.0f, 0.0f,
+	0.25f, -0.25f, 0.0f,	0.0f, 0.0f, 1.0f
 };
 
 const unsigned int indices[] = {
@@ -61,7 +62,7 @@ int main(int argc, char** argv)
 
 	// Create shader and va
 	shader = CreateShader("Shaders/vert.glsl", "Shaders/frag.glsl");
-	vao = CreateVertexArray(vertices, 5, indices, 12);
+	vao = CreateVertexArray(vertices, 3, indices, 3);
 
 	LoadData();
 	

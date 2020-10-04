@@ -11,14 +11,17 @@ VertexArray::VertexArray(const float* verts, unsigned int numVerts,
 
 	glGenBuffers(1, &vertex_buffer_);
 	glBindBuffer(GL_ARRAY_BUFFER, vertex_buffer_);
-	glBufferData(GL_ARRAY_BUFFER, num_verts_ * 3 * sizeof(float), verts, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, num_verts_ * 6 * sizeof(float), verts, GL_STATIC_DRAW);
 
 	glGenBuffers(1, &index_buffer_);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, index_buffer_);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, num_indices_ * sizeof(unsigned int), indices, GL_STATIC_DRAW);
 
 	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 3, 0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 6, 0);
+
+	glEnableVertexAttribArray(1);
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 6, reinterpret_cast<void*>(sizeof(float) * 3));
 }
 
 VertexArray::~VertexArray()
