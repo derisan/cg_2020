@@ -19,7 +19,8 @@ public:
 	float GetRotation() const { return rotation_; }
 	const glm::vec3& GetColor() const { return color_; }
 	float GetSpeed() const { return speed_; }
-	
+	const glm::vec2& GetForward() const { return forward_; }
+
 	// Setters
 	void SetPosition(const glm::vec2& position) { position_ = position; }
 	void SetScale(const glm::vec2& scale) { scale_ = scale; }
@@ -28,7 +29,7 @@ public:
 	void SetSpeed(float speed) { speed_ = speed; }
 	void SetMove(bool move) { is_move_ = move; }
 	void SetStretch(bool stretch) { is_stretch_ = stretch; }
-
+	
 private:
 	// Transform
 	glm::vec2 position_;
@@ -41,5 +42,9 @@ private:
 	// Animation specifics
 	bool is_move_;
 	bool is_stretch_;
+	bool should_bounce_;
+	glm::vec2 forward_;
+
+	//glm::vec2 prev_position_;
 };
 
