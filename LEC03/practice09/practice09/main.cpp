@@ -163,7 +163,6 @@ void LoadData()
 	{
 		auto tri = new Triangle();
 		tri->SetRotation(angle);
-		tri->SetColor(glm::vec3{ Random::getFloat(), Random::getFloat(), Random::getFloat() });
 		triangles.emplace_back(tri);
 
 		angle += 90.0f;
