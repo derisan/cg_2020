@@ -59,10 +59,14 @@ void Triangle::Move()
 
 void Triangle::Stretch()
 {
-	if(rotation_ == 0.0f || rotation_ == 180.0f)
-		scale_.x = cos(angle_);
+	auto angle = cos(angle_);
+	if (angle < 0)
+		angle *= -1;
+
+	if (rotation_ == 0.0f || rotation_ == 180.0f)
+		scale_.x = angle;
 	else
-		scale_.y = cos(angle_);
+		scale_.y = angle;
 
 	angle_ += 0.015f;	
 }
