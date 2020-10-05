@@ -41,9 +41,9 @@ void Rect::Update()
 void Rect::Draw(Shader* shader)
 {
 	glm::mat4 trans = glm::identity<glm::mat4>();
-	trans = glm::scale(trans, glm::vec3{ scale_, 0.0f });
-	trans = glm::rotate(trans, glm::radians(rotation_), glm::vec3(0.0f, 0.0f, 1.0f));
 	trans = glm::translate(trans, glm::vec3{ position_, 0.0f });
+	trans = glm::rotate(trans, glm::radians(rotation_), glm::vec3(0.0f, 0.0f, 1.0f));
+	trans = glm::scale(trans, glm::vec3{ scale_, 0.0f });
 
 	shader->SetMat4("world", trans);
 	shader->SetVec3("color", color_);
