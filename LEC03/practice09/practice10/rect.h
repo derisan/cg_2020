@@ -2,16 +2,16 @@
 
 #include <glm/glm.hpp>
 
-class Triangle
+class Rect
 {
 public:
-	Triangle();
-	virtual ~Triangle();
+	Rect();
+	virtual ~Rect();
 
 	void Update();
 	void Draw(class Shader* shader);
 	void Pull();
-	
+
 	// Getters
 	const glm::vec2& GetPosition() const { return position_; }
 	const glm::vec2& GetScale() const { return scale_; }
@@ -25,9 +25,7 @@ public:
 	void SetRotation(float rotation) { rotation_ = rotation; }
 	void SetColor(const glm::vec3& color) { color_ = color; }
 	void SetSpeed(float speed) { speed_ = speed; }
-	void SetX(float x) { x_ = x; }
-	void SetY(float y) { y_ = y; }
-
+	
 private:
 	// Transform
 	glm::vec2 position_;
@@ -40,7 +38,7 @@ private:
 	class VertexArray* vao;
 
 	// Program specific
-	float x_;
-	float y_;
+	float left_x_;
+	float right_x_;
 };
 

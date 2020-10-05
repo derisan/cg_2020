@@ -1,4 +1,4 @@
-#include "triangle.h"
+#include "rect.h"
 
 #include <gl/glew.h>
 #include <glm/gtc/matrix_transform.hpp>
@@ -6,39 +6,39 @@
 #include "shader.h"
 #include "vertexarray.h"
 
-Triangle::Triangle()
+Rect::Rect()
 	: position_{ 0.0f, 0.0f },
 	scale_{ 1.0f, 1.0f },
 	rotation_{ 0.0f },
 	color_{ 0.0f, 0.0f, 0.0f },
 	speed_{ 0.005f },
 	vao{ nullptr },
-	x_{ 0.0f },
-	y_{ 0.25f }
+	left_x_{ 0.0f },
+	right_x_{ 0.0f }
 {
 	Pull();
 }
 
-Triangle::~Triangle()
+Rect::~Rect()
 {
 	delete vao;
 }
 
-void Triangle::Update()
+void Rect::Update()
 {
-	x_ += 0.00125f;
-	y_ += -0.0025f;
+	left_x_ += -0.00125f;
+	right_x_ += 0.00125f;
 
-	if (x_ > 0.25f)
-		x_ = 0.25f;
+	if (left_x_ < -0.25f)
+		left_x_ = -0.25f;
 
-	if (y_ < -0.25f)
-		y_ = -0.25f;
+	if (right_x_ > 0.25f)
+		right_x_ = 0.25f;
 
 	Pull();
 }
 
-void Triangle::Draw(Shader* shader) 
+void Rect::Draw(Shader* shader)
 {
 	glm::mat4 trans = glm::identity<glm::mat4>();
 	trans = glm::scale(trans, glm::vec3{ scale_, 0.0f });
@@ -49,22 +49,24 @@ void Triangle::Draw(Shader* shader)
 	shader->SetVec3("color", color_);
 	vao->SetActive();
 
-	glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, nullptr);
+	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
 }
 
-void Triangle::Pull()
+void Rect::Pull()
 {
 	float vertices[] = {
-		0.0f, 0.25f, 0.0f,
-		-0.25f, -0.25f, 0.0f,
-		x_, y_, 0.0f
+		left_x_, 0.25f, 0.0f,		// left top
+		-0.25f, -0.25f, 0.0f,	// left bottom
+		0.25f, -0.25f, 0.0f,	// right bottom
+		right_x_, 0.25f, 0.0f			// right top
 	};
 
 	const unsigned int indices[] = {
-		0, 1, 2
+		0, 1, 2,
+		0, 2, 3
 	};
 
 	if (vao)
 		delete vao;
-	vao = CreateVertexArray(vertices, 3, indices, 3);
+	vao = CreateVertexArray(vertices, 4, indices, 6);
 }

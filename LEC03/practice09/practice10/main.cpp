@@ -9,7 +9,11 @@
 #include "vertexarray.h"
 #include "utils.h"
 #include "triangle.h"
+#include "rect.h"
+#include "pentagon.h"
+#include "dot.h"
 
+// Callback funcs
 void drawScene();
 void reshape(int width, int height);
 void keyboard(unsigned char key, int x, int y);
@@ -22,27 +26,17 @@ void LoadData();
 const int SCR_WIDTH = 800;
 const int SCR_HEIGHT = 600;
 
-// Verts and indices 
-const float vertices[] = {
-	// pos			
-	0.0f, 0.0f, 0.0f,		
-	-0.25f, -0.25f, 0.0f,	
-	0.25f, -0.25f, 0.0f
-};
-
-const unsigned int indices[] = {
-	0, 1, 2
-};
-
 // Shader
 Shader* shader = nullptr;
 
-// Triangles
-std::vector<Triangle*> triangles;
+// Figures
+Triangle* triangle = nullptr;
+Rect* rect = nullptr;
+Pentagon* penta = nullptr;
+Dot* dot = nullptr;
 
 // Some globals
 bool should_play = false;
-
 
 int main(int argc, char** argv)
 {
@@ -51,7 +45,7 @@ int main(int argc, char** argv)
 
 	Random::init();
 
-	// Bind several funcs
+	// Bind callback funcs
 	glutDisplayFunc(drawScene);
 	glutReshapeFunc(reshape);
 	glutKeyboardFunc(keyboard);
@@ -76,14 +70,22 @@ void drawScene()
 
 	shader->SetActive();
 	
-	for (auto tri : triangles)
+	// for debug
+	// glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	
+	if (should_play)
 	{
-		if (should_play)
-			tri->Update();
-
-		tri->Draw(shader);
+		triangle->Update();
+		rect->Update();
+		penta->Update();
+		dot->Update();
 	}
 
+	triangle->Draw(shader);
+	rect->Draw(shader);
+	penta->Draw(shader);
+	dot->Draw(shader);
+	
 	glutSwapBuffers();
 }
 
@@ -104,9 +106,10 @@ void keyboard(unsigned char key, int x, int y)
 			should_play = false;
 			break;
 		case 'q': case 'Q':
-			for (auto tri : triangles)
-				delete tri;
-			triangles.clear();
+			delete triangle;
+			delete rect;
+			delete penta;
+			delete dot;
 			glutLeaveMainLoop();
 			break;
 	}
@@ -136,8 +139,19 @@ void timer(int value)
 
 void LoadData()
 {
-	auto tri = new Triangle();
-	tri->SetColor(glm::vec3{ 0.0f, 0.5f, 1.0f });
-	tri->SetPosition(glm::vec2{ -0.5f, 0.5f });
-	triangles.emplace_back(tri);
+	triangle = new Triangle();
+	triangle->SetColor(glm::vec3{ 0.0f, 0.5f, 1.0f });
+	triangle->SetPosition(glm::vec2{ -0.5f, 0.5f });
+	
+	rect = new Rect();
+	rect->SetColor(glm::vec3{ 1.0f, 1.0f, 0.0f });
+	rect->SetPosition(glm::vec2{ 0.5f, 0.5f });
+
+	penta = new Pentagon();
+	penta->SetColor(glm::vec3{ 0.0f, 1.0f, 0.5f });
+	penta->SetPosition(glm::vec2{ -0.5f, -0.5f });
+
+	dot = new Dot();
+	dot->SetColor(glm::vec3{ 1.0f, 0.0f, 0.0f });
+	dot->SetPosition(glm::vec2{ 0.5f, -0.5f });
 }

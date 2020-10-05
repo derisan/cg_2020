@@ -139,12 +139,18 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="dot.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="pentagon.cpp" />
+    <ClCompile Include="rect.cpp" />
     <ClCompile Include="shader.cpp" />
     <ClCompile Include="triangle.cpp" />
     <ClCompile Include="vertexarray.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="dot.h" />
+    <ClInclude Include="pentagon.h" />
+    <ClInclude Include="rect.h" />
     <ClInclude Include="shader.h" />
     <ClInclude Include="triangle.h" />
     <ClInclude Include="utils.h" />

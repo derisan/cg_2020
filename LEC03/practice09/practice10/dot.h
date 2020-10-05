@@ -2,16 +2,16 @@
 
 #include <glm/glm.hpp>
 
-class Triangle
+class Dot
 {
 public:
-	Triangle();
-	virtual ~Triangle();
+	Dot();
+	~Dot();
 
 	void Update();
 	void Draw(class Shader* shader);
 	void Pull();
-	
+
 	// Getters
 	const glm::vec2& GetPosition() const { return position_; }
 	const glm::vec2& GetScale() const { return scale_; }
@@ -25,8 +25,6 @@ public:
 	void SetRotation(float rotation) { rotation_ = rotation; }
 	void SetColor(const glm::vec3& color) { color_ = color; }
 	void SetSpeed(float speed) { speed_ = speed; }
-	void SetX(float x) { x_ = x; }
-	void SetY(float y) { y_ = y; }
 
 private:
 	// Transform
@@ -38,9 +36,5 @@ private:
 	float speed_;
 
 	class VertexArray* vao;
-
-	// Program specific
-	float x_;
-	float y_;
 };
 
