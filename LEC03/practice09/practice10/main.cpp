@@ -4,14 +4,13 @@
 // -----------------------------------
 
 #include <vector>
+#include <iostream>
 
 #include "shader.h"
 #include "vertexarray.h"
 #include "utils.h"
-#include "triangle.h"
 #include "rect.h"
-#include "pentagon.h"
-#include "dot.h"
+
 
 // Callback funcs
 void drawScene();
@@ -19,6 +18,7 @@ void reshape(int width, int height);
 void keyboard(unsigned char key, int x, int y);
 void mouse(int button, int state, int x, int y);
 void timer(int value);
+void motion(int x, int y);
 
 void LoadData();
 
@@ -30,13 +30,12 @@ const int SCR_HEIGHT = 600;
 Shader* shader = nullptr;
 
 // Figures
-Triangle* triangle = nullptr;
 Rect* rect = nullptr;
-Pentagon* penta = nullptr;
-Dot* dot = nullptr;
 
 // Some globals
-bool should_play = false;
+bool should_play = true;
+bool is_left_down = false;
+glm::vec2 mouse_pos = glm::vec2{ 0.0f, 0.0f };
 
 int main(int argc, char** argv)
 {
@@ -50,6 +49,7 @@ int main(int argc, char** argv)
 	glutReshapeFunc(reshape);
 	glutKeyboardFunc(keyboard);
 	glutMouseFunc(mouse);
+	glutMotionFunc(motion);
 
 	// Create shader and va
 	shader = CreateShader("Shaders/vert.glsl", "Shaders/frag.glsl");
@@ -57,6 +57,8 @@ int main(int argc, char** argv)
 		exit(EXIT_FAILURE);
 	
 	LoadData();
+
+	glutTimerFunc(16, timer, 1);
 	
 	glutMainLoop();
 
@@ -73,19 +75,13 @@ void drawScene()
 	// for debug
 	// glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	
-	if (should_play)
+	if (is_left_down)
 	{
-		triangle->Update();
-		rect->Update();
-		penta->Update();
-		dot->Update();
+		rect->Update(mouse_pos);
 	}
 
-	triangle->Draw(shader);
 	rect->Draw(shader);
-	penta->Draw(shader);
-	dot->Draw(shader);
-	
+
 	glutSwapBuffers();
 }
 
@@ -106,10 +102,9 @@ void keyboard(unsigned char key, int x, int y)
 			should_play = false;
 			break;
 		case 'q': case 'Q':
-			delete triangle;
+			
 			delete rect;
-			delete penta;
-			delete dot;
+			
 			glutLeaveMainLoop();
 			break;
 	}
@@ -124,8 +119,11 @@ void mouse(int button, int state, int x, int y)
 {
 	if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN)
 	{
-
+		is_left_down = true;
+		mouse_pos = screenToNDC(x, y, SCR_WIDTH, SCR_HEIGHT);
 	}
+	else if (button == GLUT_LEFT_BUTTON && state == GLUT_UP)
+		is_left_down = false;
 }
 
 void timer(int value)
@@ -137,21 +135,20 @@ void timer(int value)
 	}
 }
 
+void motion(int x, int y)
+{
+	if (is_left_down)
+	{
+		mouse_pos = screenToNDC(x, y, SCR_WIDTH, SCR_HEIGHT);
+
+		std::cout << mouse_pos.x << ' ' << mouse_pos.y << std::endl;
+	}
+}
+
 void LoadData()
 {
-	triangle = new Triangle();
-	triangle->SetColor(glm::vec3{ 0.0f, 0.5f, 1.0f });
-	triangle->SetPosition(glm::vec2{ -0.5f, 0.5f });
-	
 	rect = new Rect();
 	rect->SetColor(glm::vec3{ 1.0f, 1.0f, 0.0f });
-	rect->SetPosition(glm::vec2{ 0.5f, 0.5f });
+	rect->SetPosition(glm::vec2{ 0.0f, 0.0f });
 
-	penta = new Pentagon();
-	penta->SetColor(glm::vec3{ 0.0f, 1.0f, 0.5f });
-	penta->SetPosition(glm::vec2{ -0.5f, -0.5f });
-
-	dot = new Dot();
-	dot->SetColor(glm::vec3{ 1.0f, 0.0f, 0.0f });
-	dot->SetPosition(glm::vec2{ 0.5f, -0.5f });
 }

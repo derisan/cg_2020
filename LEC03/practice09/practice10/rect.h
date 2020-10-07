@@ -8,9 +8,10 @@ public:
 	Rect();
 	virtual ~Rect();
 
-	void Update();
+	void Update(const glm::vec2& pos);
 	void Draw(class Shader* shader);
-	void Pull();
+	void UpdateVAO();
+	void NearVertex(const glm::vec2& pos);
 
 	// Getters
 	const glm::vec2& GetPosition() const { return position_; }
@@ -35,10 +36,12 @@ private:
 	glm::vec3 color_;
 	float speed_;
 
-	class VertexArray* vao;
+	class VertexArray* vao_;
 
 	// Program specific
-	float left_x_;
-	float right_x_;
+	glm::vec2 lefttop_;
+	glm::vec2 righttop_;
+	glm::vec2 leftbot_;
+	glm::vec2 rightbot_;
 };
 

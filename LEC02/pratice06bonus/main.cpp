@@ -63,6 +63,7 @@ void drawScene()
 	glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT);
 
+
 	// Change draw mode if 'f' key down
 	if (shouldChangeMode)
 	{
@@ -71,6 +72,7 @@ void drawScene()
 	}
 	else
 		drawMode = GL_LINE_STRIP;
+	
 	
 	for (auto circle : circles)
 	{
@@ -142,6 +144,6 @@ void mouse(int button, int state, int x, int y)
 
 void timer(int value)
 {
-	glutTimerFunc(16, timer, 1);
+	glutTimerFunc(100, timer, 1);
 	glutPostRedisplay();
 }

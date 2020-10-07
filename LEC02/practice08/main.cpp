@@ -184,7 +184,12 @@ void mouse(int button, int state, int x, int y)
 {
 	if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN)
 	{
+		glm::vec2 pos = screenToNDC(x, y, SCR_WIDTH, SCR_HEIGHT);
 
+		if (triangles.size() < 10)
+			createTriangles(pos.x, pos.y);
+		else
+			std::cout << "Failed to create triangle. It's alredy 10." << '\n';
 	}
 }
 
