@@ -1,5 +1,5 @@
 // -----------------------------------
-// 실습5. 화면에 삼각형 그리고 회전시키기
+// 실습8. 삼각형 튕기기
 // 2016180007 김명규
 // -----------------------------------
 
@@ -99,7 +99,7 @@ void drawScene()
 	glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT);
 
-	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	vaoRect->use();
 	shader->use();
 	shader->setMat4("world", glm::mat4(1.0f));
