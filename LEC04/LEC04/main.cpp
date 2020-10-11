@@ -66,6 +66,8 @@ void Draw()
 
 	glEnable(GL_DEPTH_TEST);
 	
+	shader->SetActive();
+
 	glm::mat4 view = glm::lookAt(camera.position, camera.target, camera.up);
 	glm::mat4 proj = glm::perspective(glm::radians(45.0f),
 		static_cast<float>(kScrWidth) / static_cast<float>(kScrHeight),
