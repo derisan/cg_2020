@@ -57,13 +57,13 @@ void Shader::SetActive()
 void Shader::SetMatrixUniform(const std::string& name, const glm::mat4& mat)
 {
 	GLuint loc = glGetUniformLocation(mShaderProgram, name.c_str());
-	glUniformMatrix4fv(loc, 1, GL_TRUE, glm::value_ptr(mat));
+	glUniformMatrix4fv(loc, 1, GL_FALSE, glm::value_ptr(mat));
 }
 
 void Shader::SetVectorUniform(const std::string& name, const glm::vec3& vec)
 {
 	GLuint loc = glGetUniformLocation(mShaderProgram, name.c_str());
-	glUniformMatrix3fv(loc, 1, GL_TRUE, glm::value_ptr(vec));
+	glUniformMatrix3fv(loc, 1, GL_FALSE, glm::value_ptr(vec));
 }
 
 void Shader::SetFloatUniform(const std::string& name, float value)

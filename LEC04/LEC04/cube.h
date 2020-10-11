@@ -17,7 +17,6 @@ public:
 
 private:
 	class VertexArray* mVertexArray;
-
-	
+	float mAngle;
 };
 

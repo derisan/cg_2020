@@ -4,7 +4,8 @@
 #include "vertexarray.h"
 
 Cube::Cube()
-	: mVertexArray{ nullptr }
+	: mVertexArray{ nullptr },
+	mAngle{ 0.0f }
 {
 	Load();
 }
@@ -52,7 +53,8 @@ void Cube::Update(float dt)
 
 	if (GetState() == State::kActive)
 	{
-
+		mAngle += cos(dt);
+		SetRotation(mAngle);
 	}
 }
 

@@ -53,7 +53,7 @@ int main(int argc, char** argv)
 	glutKeyboardFunc(Keyboard);
 	glutMouseFunc(Mouse);
 	glutSpecialFunc(ArrowKey);
-	//glutTimerFunc(16, Timer, 1);
+	glutTimerFunc(16, Timer, 1);
 
 	glutMainLoop();
 	return 0;
@@ -83,7 +83,6 @@ void Draw()
 	for (auto obj : objs)
 		obj->Update(dt);
 	
-
 	// Draw
 	for (auto obj : objs)
 		obj->Draw(shader);
@@ -101,11 +100,9 @@ void Keyboard(unsigned char key, int x, int y)
 	switch (key)
 	{
 		case 'q': case 'Q':
-			
 			glutLeaveMainLoop();
 			break;
 	}
-	glutPostRedisplay();
 }
 
 void ArrowKey(int key, int x, int y)
@@ -131,6 +128,7 @@ void Mouse(int button, int state, int x, int y)
 void Timer(int value)
 {
 	glutTimerFunc(16, Timer, 1);
+	glutPostRedisplay();
 }
 
 void LoadData()
@@ -138,9 +136,10 @@ void LoadData()
 	shader = new Shader();
 	shader->Load("Shaders/basic.vert", "Shaders/basic.frag");
 	
-	objs.emplace_back(new Cube());
+	Cube* cube = new Cube();
+	objs.emplace_back(cube);
 
-	camera.position = glm::vec3{ 0.0f, 0.0f, 1.0f };
+	camera.position = glm::vec3{ 0.0f, 0.0f, 3.0f };
 	camera.target = glm::vec3{ 0.0f, 0.0f, -1.0f };
 	camera.up = glm::vec3{ 0.0f, 1.0f, 0.0f };
 }
