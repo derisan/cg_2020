@@ -10,8 +10,9 @@
 
 #include "utils.h"
 #include "random.h"
-#include "cube.h"
 #include "shader.h"
+#include "cube.h"
+#include "pyramid.h"
 
 
 // Callback functions
@@ -43,6 +44,7 @@ Shader* shader{ nullptr };
 
 // Objects need to draw
 std::vector<Object*> objs;
+Object* curObj{ nullptr };
 
 // Program specific globals
 bool isCullface = false;
@@ -82,13 +84,8 @@ void Draw()
 
 	float dt = 16.0f / 1000.0f;
 
-	// Update
-	for (auto obj : objs)
-		obj->Update(dt);
-	
-	// Draw
-	for (auto obj : objs)
-		obj->Draw(shader);
+	curObj->Update(dt);
+	curObj->Draw(shader);
 
 	glutSwapBuffers();
 }
@@ -123,27 +120,18 @@ void Keyboard(unsigned char key, int x, int y)
 			break;
 		// x축 회전
 		case 'x': case 'X':
-			for (auto obj : objs)
-			{
-				obj->SetState(Object::State::kActive);
-				obj->SetAxis(glm::vec3{ 1.0f, 0.0f, 0.0f });
-			}
+			curObj->SetState(Object::State::kActive);
+			curObj->SetAxis(glm::vec3{ 1.0f, 0.0f, 0.0f });
 			break;
 		// y축 회전
 		case 'y': case 'Y':
-			for (auto obj : objs)
-			{
-				obj->SetState(Object::State::kActive);
-				obj->SetAxis(glm::vec3{ 0.0f, 1.0f, 0.0f });
-			}
+			curObj->SetState(Object::State::kActive);
+			curObj->SetAxis(glm::vec3{ 0.0f, 1.0f, 0.0f });
 			break;
 		// 멈추기
 		case 's': case 'S':
-			for (auto obj : objs)
-			{
-				obj->SetState(Object::State::kPaused);
-				obj->SetRotation(0.0f);
-			}
+			curObj->SetState(Object::State::kPaused);
+			curObj->SetRotation(0.0f);
 			break;
 		// 그리기 모드
 		case 'w': case 'W':
@@ -155,11 +143,19 @@ void Keyboard(unsigned char key, int x, int y)
 			break;
 		// 정육면체
 		case 'c': case 'C':
-			Cube * cube = new Cube();
-			objs.emplace_back(cube);
+			if (curObj && curObj != objs[0])
+			{
+				curObj->SetState(Object::State::kPaused);
+				curObj = objs[0];
+			}
 			break;
 		// 사각뿔
 		case 'p': case 'P':
+			if (curObj && curObj != objs[1])
+			{
+				curObj->SetState(Object::State::kPaused);
+				curObj = objs[1];
+			}
 			break;
 	}
 }
@@ -198,6 +194,10 @@ void LoadData()
 		0.1f,
 		100.0f);
 	shader->SetMatrixUniform("uProj", proj);
+
+	objs.emplace_back(new Cube());
+	objs.emplace_back(new Pyramid());
+	curObj = objs[0];
 
 	camera.position = glm::vec3{ 0.0f, 1.0f, 3.0f };
 	camera.target = glm::vec3{ 0.0f, 0.0f, -1.0f };
