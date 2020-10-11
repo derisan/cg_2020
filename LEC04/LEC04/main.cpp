@@ -24,6 +24,8 @@ void Mouse(int button, int state, int x, int y);
 void Timer(int value);
 void LoadData();
 void UnloadData();
+void Move(int key);
+void Reset();
 
 // Camera things
 struct Camera
@@ -87,6 +89,13 @@ void Draw()
 	curObj->Update(dt);
 	curObj->Draw(shader);
 
+	glDisable(GL_DEPTH_TEST);
+
+	glBegin(GL_LINES);
+	glVertex2f(-1.0f, 0.0f);
+	glVertex2f(1.0f, 0.0f);
+	glEnd();
+
 	glutSwapBuffers();
 }
 
@@ -128,10 +137,9 @@ void Keyboard(unsigned char key, int x, int y)
 			curObj->SetState(Object::State::kActive);
 			curObj->SetAxis(glm::vec3{ 0.0f, 1.0f, 0.0f });
 			break;
-		// 멈추기
+		// 멈추기, 위치 초기화
 		case 's': case 'S':
-			curObj->SetState(Object::State::kPaused);
-			curObj->SetRotation(0.0f);
+			Reset();
 			break;
 		// 그리기 모드
 		case 'w': case 'W':
@@ -168,6 +176,7 @@ void ArrowKey(int key, int x, int y)
 		case GLUT_KEY_DOWN:
 		case GLUT_KEY_LEFT:
 		case GLUT_KEY_RIGHT:
+			Move(key);
 			break;
 	}
 }
@@ -211,4 +220,34 @@ void UnloadData()
 	for (auto obj : objs)
 		delete obj;
 	objs.clear();
+}
+
+void Move(int key)
+{
+	glm::vec3 pos{ 0.0f };
+
+	switch (key)
+	{
+		case GLUT_KEY_UP:
+			pos = curObj->GetPosition() + glm::vec3{ 0.0f, 0.1f, 0.0f };
+			break;
+		case GLUT_KEY_DOWN:
+			pos = curObj->GetPosition() + glm::vec3{ 0.0f, -0.1f, 0.0f };
+			break;
+		case GLUT_KEY_LEFT:
+			pos = curObj->GetPosition() + glm::vec3{ -0.1f, 0.0f, 0.0f };
+			break;
+		case GLUT_KEY_RIGHT:
+			pos = curObj->GetPosition() + glm::vec3{ 0.1f, 0.0f, 0.0f };
+			break;
+	}
+	curObj->SetPosition(pos);
+}
+
+void Reset()
+{
+	curObj->SetState(Object::State::kPaused);
+	curObj->SetRotation(30.0f);
+	curObj->SetAxis(glm::vec3{ 1.0f, 1.0f, 0.0f });
+	curObj->SetPosition(glm::vec3{ 0.0f, 0.0f, 0.0f });
 }

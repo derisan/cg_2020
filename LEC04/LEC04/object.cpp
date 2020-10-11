@@ -8,8 +8,8 @@ Object::Object()
 	: mState{ State::kPaused },
 	mPosition{ 0.0f, 0.0f, 0.0f },
 	mScale{ 1.0f, 1.0f, 1.0f },
-	mRotation{ 0.0f },
-	mAxis{ 0.0f, 0.0f, 1.0f },
+	mRotation{ 30.0f },
+	mAxis{ 1.0f, 1.0f, 0.0f },
 	mRecomputeWorldTransform{ true }
 {
 
