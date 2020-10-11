@@ -43,6 +43,7 @@ const int kScrHeight{ 600 };
 
 // Shader
 Shader* shader{ nullptr };
+Shader* spriteShader{ nullptr };
 
 // Objects need to draw
 std::vector<Object*> objs;
@@ -86,15 +87,19 @@ void Draw()
 
 	float dt = 16.0f / 1000.0f;
 
+	// Object update & drawing
 	curObj->Update(dt);
 	curObj->Draw(shader);
 
-	glDisable(GL_DEPTH_TEST);
-
+	// Draw x, y coordinate line
+	spriteShader->SetActive();
 	glBegin(GL_LINES);
 	glVertex2f(-1.0f, 0.0f);
 	glVertex2f(1.0f, 0.0f);
+	glVertex2f(0.0f, 1.0f);
+	glVertex2f(0.0f, -1.0f);
 	glEnd();
+	
 
 	glutSwapBuffers();
 }
@@ -204,11 +209,14 @@ void LoadData()
 		100.0f);
 	shader->SetMatrixUniform("uProj", proj);
 
+	spriteShader = new Shader();
+	spriteShader->Load("Shaders/sprite.vert", "Shaders/sprite.frag");
+
 	objs.emplace_back(new Cube());
 	objs.emplace_back(new Pyramid());
 	curObj = objs[0];
 
-	camera.position = glm::vec3{ 0.0f, 1.0f, 3.0f };
+	camera.position = glm::vec3{ 0.0f, 0.0f, 3.0f };
 	camera.target = glm::vec3{ 0.0f, 0.0f, -1.0f };
 	camera.up = glm::vec3{ 0.0f, 1.0f, 0.0f };
 }

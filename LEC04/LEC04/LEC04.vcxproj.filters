@@ -66,5 +66,11 @@
     <None Include="Shaders\basic.vert">
       <Filter>Shaders</Filter>
     </None>
+    <None Include="Shaders\sprite.frag">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\sprite.vert">
+      <Filter>Shaders</Filter>
+    </None>
   </ItemGroup>
 </Project>
