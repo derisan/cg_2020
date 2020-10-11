@@ -60,12 +60,8 @@ void Cube::Update(float dt)
 
 void Cube::Draw(Shader* shader)
 {
-	if (GetState() == State::kActive)
-	{
-		shader->SetMatrixUniform("uWorld", GetWorldTransform());
-		mVertexArray->SetActive();
-
-		glDrawElements(GL_TRIANGLES, mVertexArray->GetNumIndices(), GL_UNSIGNED_INT, nullptr);
-	}
+	shader->SetMatrixUniform("uWorld", GetWorldTransform());
+	mVertexArray->SetActive();
+	glDrawElements(GL_TRIANGLES, mVertexArray->GetNumIndices(), GL_UNSIGNED_INT, nullptr);
 }
 

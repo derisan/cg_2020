@@ -15,6 +15,8 @@ public:
 	void Update(float dt) override;
 	void Draw(class Shader* shader) override;
 
+	// Setters
+
 private:
 	class VertexArray* mVertexArray;
 	float mAngle;

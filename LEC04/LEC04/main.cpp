@@ -22,7 +22,9 @@ void ArrowKey(int key, int x, int y);
 void Mouse(int button, int state, int x, int y);
 void Timer(int value);
 void LoadData();
+void UnloadData();
 
+// Camera things
 struct Camera
 {
 	glm::vec3 position;
@@ -32,12 +34,19 @@ struct Camera
 
 Camera camera;
 
+// Settings
 const int kScrWidth{ 800 };
 const int kScrHeight{ 600 };
 
+// Shader
 Shader* shader{ nullptr };
 
+// Objects need to draw
 std::vector<Object*> objs;
+
+// Program specific globals
+bool isCullface = false;
+bool isWireframe = false;
 
 int main(int argc, char** argv)
 {
@@ -69,13 +78,7 @@ void Draw()
 	shader->SetActive();
 
 	glm::mat4 view = glm::lookAt(camera.position, camera.target, camera.up);
-	glm::mat4 proj = glm::perspective(glm::radians(45.0f),
-		static_cast<float>(kScrWidth) / static_cast<float>(kScrHeight),
-		0.1f,
-		100.0f);
-
 	shader->SetMatrixUniform("uView", view);
-	shader->SetMatrixUniform("uProj", proj);
 
 	float dt = 16.0f / 1000.0f;
 
@@ -99,8 +102,64 @@ void Keyboard(unsigned char key, int x, int y)
 {
 	switch (key)
 	{
+		// 종료
 		case 'q': case 'Q':
+			UnloadData();
 			glutLeaveMainLoop();
+			break;
+		// 은면 제거
+		case 'h': case 'H':
+			isCullface = !isCullface;
+			if (isCullface) 
+			{
+				glEnable(GL_CULL_FACE);
+				glFrontFace(GL_CW);
+			}
+			else
+			{
+				glDisable(GL_CULL_FACE);
+				glFrontFace(GL_CCW);
+			}
+			break;
+		// x축 회전
+		case 'x': case 'X':
+			for (auto obj : objs)
+			{
+				obj->SetState(Object::State::kActive);
+				obj->SetAxis(glm::vec3{ 1.0f, 0.0f, 0.0f });
+			}
+			break;
+		// y축 회전
+		case 'y': case 'Y':
+			for (auto obj : objs)
+			{
+				obj->SetState(Object::State::kActive);
+				obj->SetAxis(glm::vec3{ 0.0f, 1.0f, 0.0f });
+			}
+			break;
+		// 멈추기
+		case 's': case 'S':
+			for (auto obj : objs)
+			{
+				obj->SetState(Object::State::kPaused);
+				obj->SetRotation(0.0f);
+			}
+			break;
+		// 그리기 모드
+		case 'w': case 'W':
+			isWireframe = !isWireframe;
+			if (isWireframe)
+				glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+			else
+				glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+			break;
+		// 정육면체
+		case 'c': case 'C':
+			Cube * cube = new Cube();
+			objs.emplace_back(cube);
+			break;
+		// 사각뿔
+		case 'p': case 'P':
 			break;
 	}
 }
@@ -110,11 +169,8 @@ void ArrowKey(int key, int x, int y)
 	switch (key)
 	{
 		case GLUT_KEY_UP:
-			break;
 		case GLUT_KEY_DOWN:
-			break;
 		case GLUT_KEY_LEFT:
-			break;
 		case GLUT_KEY_RIGHT:
 			break;
 	}
@@ -135,11 +191,24 @@ void LoadData()
 {
 	shader = new Shader();
 	shader->Load("Shaders/basic.vert", "Shaders/basic.frag");
-	
-	Cube* cube = new Cube();
-	objs.emplace_back(cube);
 
-	camera.position = glm::vec3{ 0.0f, 0.0f, 3.0f };
+	shader->SetActive();
+	glm::mat4 proj = glm::perspective(glm::radians(45.0f),
+		static_cast<float>(kScrWidth) / static_cast<float>(kScrHeight),
+		0.1f,
+		100.0f);
+	shader->SetMatrixUniform("uProj", proj);
+
+	camera.position = glm::vec3{ 0.0f, 1.0f, 3.0f };
 	camera.target = glm::vec3{ 0.0f, 0.0f, -1.0f };
 	camera.up = glm::vec3{ 0.0f, 1.0f, 0.0f };
+}
+
+void UnloadData()
+{
+	delete shader;
+
+	for (auto obj : objs)
+		delete obj;
+	objs.clear();
 }

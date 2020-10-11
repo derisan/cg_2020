@@ -20,6 +20,9 @@ public:
 
 	void ComputeWorldTransform();
 
+	// Program specific
+	
+
 	// Getters
 	State GetState() const { return mState; }
 	const glm::mat4& GetWorldTransform() const { return mWorldTransform; }

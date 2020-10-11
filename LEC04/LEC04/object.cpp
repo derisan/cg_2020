@@ -1,13 +1,15 @@
 #include "object.h"
 
+#include <iostream>
+
 #include <glm/gtc/matrix_transform.hpp>
 
 Object::Object()
-	: mState{ State::kActive },
+	: mState{ State::kPaused },
 	mPosition{ 0.0f, 0.0f, 0.0f },
 	mScale{ 1.0f, 1.0f, 1.0f },
 	mRotation{ 0.0f },
-	mAxis{ 0.0f, 1.0f, 0.0f },
+	mAxis{ 0.0f, 0.0f, 1.0f },
 	mRecomputeWorldTransform{ true }
 {
 
@@ -31,3 +33,4 @@ void Object::ComputeWorldTransform()
 		mWorldTransform = glm::scale(mWorldTransform, mScale);
 	}
 }
+
