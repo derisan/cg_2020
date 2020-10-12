@@ -26,6 +26,7 @@ void LoadData();
 void UnloadData();
 void Move(int key);
 void Reset();
+void DrawAxis();
 
 // Camera things
 struct Camera
@@ -42,7 +43,7 @@ const int kScrWidth{ 800 };
 const int kScrHeight{ 600 };
 
 // Shader
-Shader* shader{ nullptr };
+Shader* meshShader{ nullptr };
 Shader* spriteShader{ nullptr };
 
 // Objects need to draw
@@ -80,25 +81,20 @@ void Draw()
 
 	glEnable(GL_DEPTH_TEST);
 	
-	shader->SetActive();
+	meshShader->SetActive();
 
 	glm::mat4 view = glm::lookAt(camera.position, camera.target, camera.up);
-	shader->SetMatrixUniform("uView", view);
+	meshShader->SetMatrixUniform("uView", view);
 
 	float dt = 16.0f / 1000.0f;
 
 	// Object update & drawing
 	curObj->Update(dt);
-	curObj->Draw(shader);
+	curObj->Draw(meshShader);
 
 	// Draw x, y coordinate line
 	spriteShader->SetActive();
-	glBegin(GL_LINES);
-	glVertex2f(-1.0f, 0.0f);
-	glVertex2f(1.0f, 0.0f);
-	glVertex2f(0.0f, 1.0f);
-	glVertex2f(0.0f, -1.0f);
-	glEnd();
+	DrawAxis();
 	
 
 	glutSwapBuffers();
@@ -199,15 +195,15 @@ void Timer(int value)
 
 void LoadData()
 {
-	shader = new Shader();
-	shader->Load("Shaders/basic.vert", "Shaders/basic.frag");
+	meshShader = new Shader();
+	meshShader->Load("Shaders/basic.vert", "Shaders/basic.frag");
 
-	shader->SetActive();
+	meshShader->SetActive();
 	glm::mat4 proj = glm::perspective(glm::radians(45.0f),
 		static_cast<float>(kScrWidth) / static_cast<float>(kScrHeight),
 		0.1f,
 		100.0f);
-	shader->SetMatrixUniform("uProj", proj);
+	meshShader->SetMatrixUniform("uProj", proj);
 
 	spriteShader = new Shader();
 	spriteShader->Load("Shaders/sprite.vert", "Shaders/sprite.frag");
@@ -223,7 +219,7 @@ void LoadData()
 
 void UnloadData()
 {
-	delete shader;
+	delete meshShader;
 
 	for (auto obj : objs)
 		delete obj;
@@ -258,4 +254,14 @@ void Reset()
 	curObj->SetRotation(30.0f);
 	curObj->SetAxis(glm::vec3{ 1.0f, 1.0f, 0.0f });
 	curObj->SetPosition(glm::vec3{ 0.0f, 0.0f, 0.0f });
+}
+
+void DrawAxis()
+{
+	glBegin(GL_LINES);
+	glVertex2f(-1.0f, 0.0f);
+	glVertex2f(1.0f, 0.0f);
+	glVertex2f(0.0f, 1.0f);
+	glVertex2f(0.0f, -1.0f);
+	glEnd();
 }
