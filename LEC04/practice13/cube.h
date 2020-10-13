@@ -21,6 +21,12 @@ public:
 	void ComputeWorldTransform();
 	void Load();
 
+	//Program specific
+	void Travel(float dt);
+	void Rotate(float dt);
+	void Scale(float dt);
+	void Reset();
+
 	// Getters
 	State GetState() const { return mState; }
 	const glm::mat4& GetWorldTransform() const { return mWorldTransform; }
@@ -34,6 +40,9 @@ public:
 	void SetPosition(const glm::vec3& position) { mPosition = position; mRecomputeWorldTransform = true; }
 	void SetScale(const glm::vec3& scale) { mScale = scale; mRecomputeWorldTransform = true; }
 	void SetRotation(float rotation) { mRotation = rotation; mRecomputeWorldTransform = true; }
+	void SetShouldTravel(bool value) { mShouldTravel = value; }
+	void SetShouldRotate(bool value) { mShouldRotate = value; }
+	void SetShouldScale(bool value) { mShouldScale = value; }
 
 private:
 	State mState;
@@ -49,6 +58,10 @@ private:
 	class VertexArray* mVertexArray;
 
 	// Program specific
+	float mAngle;
 	int mNum;
+	bool mShouldTravel;
+	bool mShouldRotate;
+	bool mShouldScale;
 };
 

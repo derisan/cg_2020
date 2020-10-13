@@ -10,12 +10,17 @@
 
 Cube::Cube()
 	: mState{ State::kActive },
-	mPosition{ 0.0f, 0.0f, 0.0f },
+	mPosition{ -1.0f, sin(glm::radians(static_cast<float>(-200))), 0.0f },
 	mScale{ 0.05f, 0.1f, 0.1f },
 	mRotation{ 0.0f },
 	mRecomputeWorldTransform{ true },
 	mVertexArray{ nullptr },
-	mNum{ -200 }
+	mAngle{ 0.0f },
+	mNum{ -200 },
+	mShouldTravel{ false },
+	mShouldRotate{ false },
+	mShouldScale{ false }
+	
 {
 	Load();
 }
@@ -32,16 +37,15 @@ void Cube::Update(float dt)
 
 	if (mState == State::kActive)
 	{
-		mRotation += cos(dt);
-
-		++mNum;
+		if (mShouldRotate)
+			Rotate(dt);
 		
-		if (mNum > 200)
-			mNum = -200;
+		if (mShouldTravel)
+			Travel(dt);
 
-		mPosition.x = 0.005f * mNum;
-		mPosition.y = sin(glm::radians(static_cast<float>(mNum)));
-
+		if (mShouldScale)
+			Scale(dt);
+		
 		mRecomputeWorldTransform = true;
 	}
 }
@@ -97,4 +101,40 @@ void Cube::Load()
 	};
 
 	mVertexArray = new VertexArray(vertices, 8, indices, static_cast<unsigned int>(sizeof(indices) / sizeof(unsigned int)));
+}
+
+void Cube::Travel(float dt)
+{
+	++mNum;
+	if (mNum > 200)
+		mNum = -200;
+	mPosition.x = 0.005f * mNum;
+	mPosition.y = sin(glm::radians(static_cast<float>(mNum)));
+}
+
+void Cube::Rotate(float dt)
+{
+	mRotation += cos(dt);
+}
+
+void Cube::Scale(float dt)
+{
+	mAngle += dt;
+
+	mScale.x += cos(mAngle) * 0.005f;
+	mScale.y += cos(mAngle) * 0.005f;
+	mScale.z += cos(mAngle) * 0.005f;
+}
+
+void Cube::Reset()
+{
+	mShouldTravel = false;
+	mShouldRotate = false;
+	mShouldScale = false;
+
+	mPosition = glm::vec3{ -1.0f, sin(glm::radians(static_cast<float>(-200))), 0.0f };
+	mScale = glm::vec3{ 0.05f, 0.1f, 0.1f };
+	mRotation = 0.0f;
+	mAngle = 0.0f;
+	mNum = -200;
 }

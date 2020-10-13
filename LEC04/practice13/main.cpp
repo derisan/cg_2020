@@ -37,6 +37,8 @@ Shader* shader{ nullptr };
 
 // Program specific globals
 bool isRotate{ false };
+bool isTravel{ false };
+bool isScale{ false };
 float angle{ 0.0f };
 float dt{ 16.0f / 1000.0f };
 
@@ -77,7 +79,9 @@ void Draw()
 	shader->SetMatrixUniform("uWorld", world);
 	DrawAxis();
 	
-	angle += cos(dt);
+	if (isRotate)
+		angle += cos(dt);
+	
 	world = glm::rotate(world, glm::radians(angle), glm::vec3{ 0.0f, 1.0f, 0.0f });
 	shader->SetMatrixUniform("uWorld", world);
 	DrawSinGraph();
@@ -101,6 +105,21 @@ void Keyboard(unsigned char key, int x, int y)
 		case 'q': case 'Q':
 			UnloadData();
 			glutLeaveMainLoop();
+			break;
+		case 't': case 'T':
+			isTravel = !isTravel;
+			cube->SetShouldTravel(isTravel);
+			break;
+		case 's': case 'S':
+			isScale = !isScale;
+			cube->SetShouldScale(isScale);
+			break;
+		case 'r': case 'R':
+			isRotate = !isRotate;
+			cube->SetShouldRotate(isRotate);
+			break;
+		case 'c': case 'C':
+			Reset();
 			break;
 	}
 }
@@ -138,13 +157,17 @@ void LoadData()
 
 void UnloadData()
 {
-	
+	delete cube;
 }
 
 
 void Reset()
 {
-	
+	isTravel = false;
+	isRotate = false;
+	isScale = false;
+	angle = 0.0f;
+	cube->Reset();
 }
 
 void DrawAxis()
