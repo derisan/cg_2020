@@ -62,13 +62,18 @@ private:
 
 	// Program specific
 	float mAngle;
-	int mSinNum;
-	int mZigzagNum;
 	bool mShouldTravel;
 	void (Cube::*mPath)(float dt);
 	bool mShouldRotate;
 	bool mShouldScale;
 
+	// for sin
+	int mSinNum;
+
+	// for zigzag
+	float mZigzagNum;
+	float mZigzagVal;
+	
 	// for Spring
 	float mX;
 	int mIdx;

@@ -22,7 +22,9 @@ Cube::Cube()
 	mShouldScale{ false },
 	mPath{ &Cube::SinTravel },
 	mIdx{ 0 },
-	mX{ -0.7f }
+	mX{ -0.7f },
+	mZigzagNum{ -1.0f },
+	mZigzagVal{ 0.5f }
 
 {
 	Load();
@@ -178,5 +180,26 @@ void Cube::SpringTravel(float dt)
 
 void Cube::ZigzagTravel(float dt)
 {
+	mPosition.x = mZigzagNum;
+	if (mZigzagNum < -0.5f)
+		mPosition.y = mZigzagNum + 1.0f;
+	else if (-0.5f < mZigzagNum && mZigzagNum < 0.5f)
+	{
+		mPosition.y = mZigzagVal;
+		mZigzagVal -= 0.01f;
+	}
+	else
+	{
+		mPosition.y = mZigzagVal;
+		mZigzagVal += 0.01f;
+	}
+	mPosition.z = 0.0f;
 
+	mZigzagNum += 0.01f;
+
+	if (mPosition.x > 1.0f)
+	{
+		mZigzagNum = -1.0f;
+		mZigzagVal = 0.5f;
+	}
 }
