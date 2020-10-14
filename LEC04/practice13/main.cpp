@@ -126,12 +126,15 @@ void Keyboard(unsigned char key, int x, int y)
 			break;
 		case 49: // Numpad 1
 			curPath = DrawSinGraph;
+			cube->SetPath(1);
 			break;
 		case 50: // Numpad 2
 			curPath = DrawSpring;
+			cube->SetPath(2);
 			break;
 		case 51: // Numpad 3
 			curPath = DrawZigzag;
+			cube->SetPath(3);
 			break;
 	}
 

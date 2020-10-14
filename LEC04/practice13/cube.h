@@ -22,7 +22,9 @@ public:
 	void Load();
 
 	//Program specific
-	void Travel(float dt);
+	void SinTravel(float dt);
+	void SpringTravel(float dt);
+	void ZigzagTravel(float dt);
 	void Rotate(float dt);
 	void Scale(float dt);
 	void Reset();
@@ -43,6 +45,7 @@ public:
 	void SetShouldTravel(bool value) { mShouldTravel = value; }
 	void SetShouldRotate(bool value) { mShouldRotate = value; }
 	void SetShouldScale(bool value) { mShouldScale = value; }
+	void SetPath(int value);
 
 private:
 	State mState;
@@ -59,8 +62,11 @@ private:
 
 	// Program specific
 	float mAngle;
-	int mNum;
+	int mSinNum;
+	int mSpringNum;
+	int mZigzagNum;
 	bool mShouldTravel;
+	void (Cube::*mPath)(float dt);
 	bool mShouldRotate;
 	bool mShouldScale;
 };
