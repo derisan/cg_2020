@@ -86,8 +86,9 @@ void Draw()
 	world = glm::rotate(world, glm::radians(angle), glm::vec3{ 0.0f, 1.0f, 0.0f });
 	shader->SetMatrixUniform("uWorld", world);
 
-	DrawSpring();
+	//DrawSpring();
 	//DrawSinGraph();
+	DrawZigzag();
 
 	//cube->Update(dt);
 	//cube->Draw(shader);
@@ -196,7 +197,7 @@ void DrawSpring()
 	glBegin(GL_LINE_STRIP);
 	float r{ 0.5f };
 	float a{ -0.7f };
-	for (int i = 0; i < 1440; i += 14, a += 0.01f)
+	for (int i = 0; i < 1440; i += 10, a += 0.01f)
 		glVertex3f(a + r * cos(glm::radians(float(i))), r * sin(glm::radians(float(i))), 0.0f);
 	
 	glEnd();
@@ -205,5 +206,24 @@ void DrawSpring()
 void DrawZigzag()
 {
 	glBegin(GL_LINE_STRIP);
+
+	for (float i = -1.0f; i < -0.5f; i += 0.01f)
+		glVertex3f(i, i + 1.0f, 0.0f);
+
+	float val{ 0.5f };
+	for (float i = -0.5f; i < 0.5f; i += 0.01f)
+	{
+		glVertex3f(i, val, 0.0f);
+		val -= 0.01f;
+	}
+
+	val = -0.5f;
+	for (float i = 0.5f; i < 1.0f; i += 0.01f)
+	{
+		glVertex3f(i, val, 0.0f);
+		val += 0.01f;
+	}
+
+	glEnd();
 
 }
