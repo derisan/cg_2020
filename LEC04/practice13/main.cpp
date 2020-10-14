@@ -27,6 +27,8 @@ void UnloadData();
 void Reset();
 void DrawAxis();
 void DrawSinGraph();
+void DrawSpring();
+void DrawZigzag();
 
 // Settings
 const int kScrWidth{ 800 };
@@ -81,13 +83,14 @@ void Draw()
 	
 	if (isRotate)
 		angle += cos(dt);
-	
 	world = glm::rotate(world, glm::radians(angle), glm::vec3{ 0.0f, 1.0f, 0.0f });
 	shader->SetMatrixUniform("uWorld", world);
-	DrawSinGraph();
 
-	cube->Update(dt);
-	cube->Draw(shader);
+	DrawSpring();
+	//DrawSinGraph();
+
+	//cube->Update(dt);
+	//cube->Draw(shader);
 
 	glutSwapBuffers();
 }
@@ -102,7 +105,7 @@ void Keyboard(unsigned char key, int x, int y)
 	switch (key)
 	{
 		// Á¾·á
-		case 'q': case 'Q':
+		case 27: // Escape key
 			UnloadData();
 			glutLeaveMainLoop();
 			break;
@@ -186,4 +189,21 @@ void DrawSinGraph()
 	for (int i = -200; i < 200; i += 3)
 		glVertex3f(0.005 * i, sin(glm::radians((float)i)), 0.0f);
 	glEnd();
+}
+
+void DrawSpring()
+{
+	glBegin(GL_LINE_STRIP);
+	float r{ 0.5f };
+	float a{ -0.7f };
+	for (int i = 0; i < 1440; i += 14, a += 0.01f)
+		glVertex3f(a + r * cos(glm::radians(float(i))), r * sin(glm::radians(float(i))), 0.0f);
+	
+	glEnd();
+}
+
+void DrawZigzag()
+{
+	glBegin(GL_LINE_STRIP);
+
 }

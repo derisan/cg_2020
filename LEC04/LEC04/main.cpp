@@ -41,6 +41,7 @@ Camera camera;
 // Settings
 const int kScrWidth{ 800 };
 const int kScrHeight{ 600 };
+const float dt{ 16.0f / 1000.0f };
 
 // Shader
 Shader* meshShader{ nullptr };
@@ -82,12 +83,6 @@ void Draw()
 	glEnable(GL_DEPTH_TEST);
 	
 	meshShader->SetActive();
-
-	glm::mat4 view = glm::lookAt(camera.position, camera.target, camera.up);
-	meshShader->SetMatrixUniform("uView", view);
-
-	float dt = 16.0f / 1000.0f;
-
 	// Object update & drawing
 	curObj->Update(dt);
 	curObj->Draw(meshShader);
@@ -195,10 +190,16 @@ void Timer(int value)
 
 void LoadData()
 {
+	camera.position = glm::vec3{ 0.0f, 0.0f, 3.0f };
+	camera.target = glm::vec3{ 0.0f, 0.0f, -1.0f };
+	camera.up = glm::vec3{ 0.0f, 1.0f, 0.0f };
+
 	meshShader = new Shader();
 	meshShader->Load("Shaders/basic.vert", "Shaders/basic.frag");
 
 	meshShader->SetActive();
+	glm::mat4 view = glm::lookAt(camera.position, camera.target, camera.up);
+	meshShader->SetMatrixUniform("uView", view);
 	glm::mat4 proj = glm::perspective(glm::radians(45.0f),
 		static_cast<float>(kScrWidth) / static_cast<float>(kScrHeight),
 		0.1f,
@@ -210,16 +211,15 @@ void LoadData()
 
 	objs.emplace_back(new Cube());
 	objs.emplace_back(new Pyramid());
+	for (auto obj : objs)
+		obj->SetScale(glm::vec3{ 0.5f, 0.5f, 0.5f });
 	curObj = objs[0];
-
-	camera.position = glm::vec3{ 0.0f, 0.0f, 3.0f };
-	camera.target = glm::vec3{ 0.0f, 0.0f, -1.0f };
-	camera.up = glm::vec3{ 0.0f, 1.0f, 0.0f };
 }
 
 void UnloadData()
 {
 	delete meshShader;
+	delete spriteShader;
 
 	for (auto obj : objs)
 		delete obj;
