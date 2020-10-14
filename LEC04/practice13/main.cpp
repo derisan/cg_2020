@@ -45,6 +45,7 @@ float angle{ 0.0f };
 float dt{ 16.0f / 1000.0f };
 
 Cube* cube{ nullptr };
+void (*curPath) () { DrawSinGraph };
 
 int main(int argc, char** argv)
 {
@@ -86,12 +87,10 @@ void Draw()
 	world = glm::rotate(world, glm::radians(angle), glm::vec3{ 0.0f, 1.0f, 0.0f });
 	shader->SetMatrixUniform("uWorld", world);
 
-	//DrawSpring();
-	//DrawSinGraph();
-	DrawZigzag();
+	curPath();
 
-	//cube->Update(dt);
-	//cube->Draw(shader);
+	cube->Update(dt);
+	cube->Draw(shader);
 
 	glutSwapBuffers();
 }
@@ -125,7 +124,18 @@ void Keyboard(unsigned char key, int x, int y)
 		case 'c': case 'C':
 			Reset();
 			break;
+		case 49: // Numpad 1
+			curPath = DrawSinGraph;
+			break;
+		case 50: // Numpad 2
+			curPath = DrawSpring;
+			break;
+		case 51: // Numpad 3
+			curPath = DrawZigzag;
+			break;
 	}
+
+	
 }
 
 void ArrowKey(int key, int x, int y)
@@ -199,7 +209,6 @@ void DrawSpring()
 	float a{ -0.7f };
 	for (int i = 0; i < 1440; i += 10, a += 0.01f)
 		glVertex3f(a + r * cos(glm::radians(float(i))), r * sin(glm::radians(float(i))), 0.0f);
-	
 	glEnd();
 }
 
