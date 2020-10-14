@@ -20,7 +20,9 @@ Cube::Cube()
 	mShouldTravel{ false },
 	mShouldRotate{ false },
 	mShouldScale{ false },
-	mPath{ &Cube::SinTravel }
+	mPath{ &Cube::SinTravel },
+	mIdx{ 0 },
+	mX{ -0.7f }
 
 {
 	Load();
@@ -160,9 +162,18 @@ void Cube::SetPath(int value)
 void Cube::SpringTravel(float dt)
 {
 	float r{ 0.5f };
-	float a{ -0.7f };
-	for (int i = 0; i < 1440; i += 10, a += 0.01f)
-		glVertex3f(a + r * cos(glm::radians(float(i))), r * sin(glm::radians(float(i))), 0.0f);
+
+	mPosition.x = mX + r * cos(glm::radians(static_cast<float>(mIdx)));
+	mPosition.y = r * sin(glm::radians(static_cast<float>(mIdx)));
+	mPosition.z = 0.0f;
+
+	mX += 0.01f;
+	if (mX > 0.75f)
+	{
+		mX = -0.7f;
+		mIdx = 0;
+	}
+	mIdx += 10;
 }
 
 void Cube::ZigzagTravel(float dt)
