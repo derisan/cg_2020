@@ -40,7 +40,7 @@ void LoadData();
 
 // Program specific
 void ChangeDrawStyle();
-void MoveObjects(unsigned char key);
+void MoveCamera(unsigned char key);
 void RotateObjects();
 void StopObjects();
 
@@ -72,12 +72,22 @@ void DisplayFunc()
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glEnable(GL_DEPTH_TEST);
 
+	// Set view & proj matrix
+	meshShader->SetActive();
+	glm::mat4 view{ 1.0f };
+	view = glm::lookAt(camera.position, camera.position + camera.target, camera.up);
+	meshShader->SetMatrixUniform("uView", view);
+
+	glm::mat4 proj{ 1.0f };
+	proj = glm::perspective(45.0f, static_cast<float>(kScrWidth) / static_cast<float>(kScrHeight), 0.1f, 100.0f);
+	meshShader->SetMatrixUniform("uProj", proj);
+
+
 	for (auto obj : objs)
 	{
 		obj->Update(dt);
 		obj->Draw(meshShader);
 	}
-
 
 	glutSwapBuffers();
 }
@@ -107,7 +117,7 @@ void KeyboardFunc(unsigned char key, int x, int y)
 		case 's': case 'S':
 		case 'a': case 'A':
 		case 'd': case 'D':
-			MoveObjects(key);
+			MoveCamera(key);
 			break;
 		case 'c': case 'C':
 			StopObjects();
@@ -129,7 +139,7 @@ void Shutdown()
 void LoadData()
 {
 	// Set cameara elements
-	camera.position = glm::vec3{ 0.0f, 0.50f, 3.0f };
+	camera.position = glm::vec3{ 0.0f, 0.5f, 3.0f };
 	camera.target = glm::vec3{ 0.0f, 0.0f, -1.0f };
 	camera.up = glm::vec3{ 0.0f, 1.0f, 0.0f };
 
@@ -140,16 +150,6 @@ void LoadData()
 		std::cout << "Failed to load Shaders" << std::endl;
 		return;
 	}
-
-	// Set view & proj matrix
-	meshShader->SetActive();
-	glm::mat4 view{ 1.0f };
-	view = glm::lookAt(camera.position, camera.target, camera.up);
-	meshShader->SetMatrixUniform("uView", view);
-
-	glm::mat4 proj{ 1.0f };
-	proj = glm::perspective(45.0f, static_cast<float>(kScrWidth) / static_cast<float>(kScrHeight), 0.1f, 100.0f);
-	meshShader->SetMatrixUniform("uProj", proj);
 
 	// Create 3 Orbit
 	auto orbit_xz{ new Orbit{} };
@@ -200,34 +200,31 @@ void ChangeDrawStyle()
 	glPolygonMode(GL_FRONT_AND_BACK, drawMode);
 }
 
-void MoveObjects(unsigned char key)
+void MoveCamera(unsigned char key)
 {
 	glm::vec3 pos{ 0.0f };
 
 	switch (key)
 	{
 		case 'w': case 'W':
-			pos.y = 0.1f;
+			camera.position.y += 0.1f;
 			break;
 		case 's': case 'S':
-			pos.y = -0.1f;
+			camera.position.y -= 0.1f;
 			break;
 		case 'a': case 'A':
-			pos.x = -0.1f;
+			camera.position.x -= 0.1f;
 			break;
 		case 'd': case 'D':
-			pos.x = 0.1f;
+			camera.position.x += 0.1f;
 			break;
 		case 'z': case 'Z':
-			pos.z = 0.1f;
+			camera.position.z += 0.1f;
 			break;
 		case 'x': case 'X':
-			pos.z = -0.1f;
+			camera.position.z -= 0.1f;
 			break;
 	}
-
-	for (auto obj : objs)
-		obj->SetPosition(obj->GetPosition() + pos);
 }
 
 void RotateObjects()

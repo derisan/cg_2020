@@ -20,7 +20,5 @@ private:
     float mAngle;
     glm::vec3 mRevAxis;
     glm::vec3 mPrevPosition;
-
-    class Moon* mMoon;
 };
 

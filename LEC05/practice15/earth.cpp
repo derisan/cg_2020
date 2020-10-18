@@ -8,20 +8,17 @@
 #include "random.h"
 #include "shader.h"
 #include "vertexarray.h"
-#include "moon.h"
 
 Earth::Earth()
 	: Planet{},
 	mSpeed{ Random::GetFloatRange(0.3f, 1.5f) },
 	mAngle{ 0.0f },
 	mRevAxis{ 0.0f, 1.0f, 0.0f },
-	mPrevPosition{ GetPosition() },
-	mMoon{ nullptr }
+	mPrevPosition{ GetPosition() }
 {
 	SetScale(0.1f);
 
-	mMoon = new Moon{ this };
-	mMoon->SetState(State::kActive);
+	
 }
 
 void Earth::Update(float dt)
@@ -31,7 +28,7 @@ void Earth::Update(float dt)
 	if (GetState() == State::kActive)
 	{
 		mAngle += cos(dt) * mSpeed;
-		mMoon->Update(dt);
+		
 	}
 }
 
@@ -44,8 +41,6 @@ void Earth::Draw(Shader* shader)
 
 	GetVertexArray()->SetActive();
 	glDrawElements(GL_TRIANGLES, GetVertexArray()->GetNumIndices(), GL_UNSIGNED_INT, nullptr);
-
-	mMoon->Draw(shader);
 }
 
 void Earth::OnUpdateWorldTransform()
