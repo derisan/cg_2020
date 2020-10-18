@@ -133,6 +133,12 @@ void TimerFunc(int value)
 
 void Shutdown()
 {
+	for (auto obj : objs)
+		delete obj;
+	objs.clear();
+
+	delete meshShader;
+
 	glutLeaveMainLoop();
 }
 
@@ -188,6 +194,26 @@ void LoadData()
 	orbit = glm::rotate(orbit, glm::radians(-45.0f), glm::vec3{ 0.0f, 0.0f, 1.0f });
 	earth_three->SetRevAxis(orbit);
 	objs.emplace_back(earth_three);
+
+	// Create moon's orbit
+	auto orbit_moon_one{ new Orbit{} };
+	orbit_moon_one->SetScale(0.15f);
+	orbit_moon_one->SetPosition(glm::vec3{ 1.5f, 0.0f, 0.0f });
+	objs.emplace_back(orbit_moon_one);
+
+	auto orbit_moon_two{ new Orbit{} };
+	orbit_moon_two->SetScale(0.15f);
+	orbit_moon_two->SetPosition(glm::vec3{ 0.0f, 0.0f, 1.5f });
+	orbit_moon_two->SetRotation(45.0f);
+	orbit_moon_two->SetAxis(glm::vec3{ 0.0f, 0.0f, 1.0f });
+	objs.emplace_back(orbit_moon_two);
+
+	auto orbit_moon_three{ new Orbit{} };
+	orbit_moon_three->SetScale(0.15f);
+	orbit_moon_three->SetPosition(glm::vec3{ 0.0f, 0.0f, -1.5f });
+	orbit_moon_three->SetRotation(-45.0f);
+	orbit_moon_three->SetAxis(glm::vec3{ 0.0f, 0.0f, 1.0f });
+	objs.emplace_back(orbit_moon_three);
 }
 
 void ChangeDrawStyle()
