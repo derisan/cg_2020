@@ -6,10 +6,14 @@
 #include <vector>
 
 #include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtx/rotate_vector.hpp>
 
 #include "utils.h"
 #include "shader.h"
-#include "sun.h"
+#include "object.h"
+#include "orbit.h"
+#include "planet.h"
+#include "earth.h"
 
 // Camera things
 struct Camera
@@ -36,9 +40,12 @@ void LoadData();
 
 // Program specific
 void ChangeDrawStyle();
+void MoveObjects(unsigned char key);
+void RotateObjects();
+void StopObjects();
 
-Sun* sun{ nullptr };
 Shader* meshShader{ nullptr };
+std::vector<Object*> objs;
 
 auto drawMode = GL_FILL;
 
@@ -47,14 +54,13 @@ int main(int argc, char** argv)
 	bool success = Init(kScrWidth, kScrHeight, &argc, argv);
 	if (success == false)
 		return -1;
-	
+	Random::Init();
 	LoadData();
 
 	glutDisplayFunc(DisplayFunc);
 	glutReshapeFunc(ReshapeFunc);
 	glutKeyboardFunc(KeyboardFunc);
 	glutTimerFunc(16, TimerFunc, 1);
-
 
 	glutMainLoop();
 	return 0;
@@ -66,8 +72,12 @@ void DisplayFunc()
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glEnable(GL_DEPTH_TEST);
 
-	sun->Update(dt);
-	sun->Draw(meshShader);
+	for (auto obj : objs)
+	{
+		obj->Update(dt);
+		obj->Draw(meshShader);
+	}
+
 
 	glutSwapBuffers();
 }
@@ -88,16 +98,19 @@ void KeyboardFunc(unsigned char key, int x, int y)
 		case 'm': case 'M':
 			ChangeDrawStyle();
 			break;
-		case 'z': case 'Z':
-			break;
-		case 'x': case 'X':
-			break;
 		case 'y': case 'Y':
+			RotateObjects();
 			break;
+		case 'z': case 'Z':
+		case 'x': case 'X':
 		case 'w': case 'W':
 		case 's': case 'S':
 		case 'a': case 'A':
 		case 'd': case 'D':
+			MoveObjects(key);
+			break;
+		case 'c': case 'C':
+			StopObjects();
 			break;
 	}
 }
@@ -115,10 +128,12 @@ void Shutdown()
 
 void LoadData()
 {
-	camera.position = glm::vec3{ 0.0f, 0.0f, 3.0f };
+	// Set cameara elements
+	camera.position = glm::vec3{ 0.0f, 0.50f, 3.0f };
 	camera.target = glm::vec3{ 0.0f, 0.0f, -1.0f };
 	camera.up = glm::vec3{ 0.0f, 1.0f, 0.0f };
 
+	// Create shader
 	meshShader = new Shader();
 	if (!meshShader->Load("Shaders/mesh.vert", "Shaders/mesh.frag"))
 	{
@@ -126,6 +141,7 @@ void LoadData()
 		return;
 	}
 
+	// Set view & proj matrix
 	meshShader->SetActive();
 	glm::mat4 view{ 1.0f };
 	view = glm::lookAt(camera.position, camera.target, camera.up);
@@ -134,8 +150,44 @@ void LoadData()
 	glm::mat4 proj{ 1.0f };
 	proj = glm::perspective(45.0f, static_cast<float>(kScrWidth) / static_cast<float>(kScrHeight), 0.1f, 100.0f);
 	meshShader->SetMatrixUniform("uProj", proj);
-	sun = new Sun();
+
+	// Create 3 Orbit
+	auto orbit_xz{ new Orbit{} };
+	auto orbit_45{ new Orbit{} };
+	auto orbit_minus_45{ new Orbit{} };
+	orbit_45->SetRotation(45.0f);
+	orbit_45->SetAxis(glm::vec3{ 0.0f, 0.0f, 1.0f });
+	orbit_minus_45->SetRotation(-45.0f);
+	orbit_minus_45->SetAxis(glm::vec3{ 0.0f, 0.0f, 1.0f });
+
+	objs.emplace_back(orbit_xz);
+	objs.emplace_back(orbit_45);
+	objs.emplace_back(orbit_minus_45);
+
+	// Create sun
+	auto sun{ new Planet{} };
 	sun->SetScale(0.3f);
+	objs.emplace_back(sun);
+
+	// Create 3 earth
+	auto earth_one{ new Earth() };
+	earth_one->SetPosition(glm::vec3{ 1.5f, 0.0f, 0.0f });
+	earth_one->SetRevAxis(glm::vec3{ 0.0f, 1.0f, 0.0f });
+	objs.emplace_back(earth_one);
+
+	auto earth_two{ new Earth() };
+	earth_two->SetPosition(glm::vec3{ 0.0f, 0.0f, 1.5f });
+	glm::vec3 orbit{ 0.0f, 1.0f, 0.0f };
+	orbit = glm::rotate(orbit, glm::radians(45.0f), glm::vec3{ 0.0f, 0.0f, 1.0f });
+	earth_two->SetRevAxis(orbit);
+	objs.emplace_back(earth_two);
+
+	auto earth_three{ new Earth() };
+	earth_three->SetPosition(glm::vec3{ 0.0f, 0.0f, -1.5f });
+	orbit = glm::vec3{ 0.0f, 1.0f, 0.0f };
+	orbit = glm::rotate(orbit, glm::radians(-45.0f), glm::vec3{ 0.0f, 0.0f, 1.0f });
+	earth_three->SetRevAxis(orbit);
+	objs.emplace_back(earth_three);
 }
 
 void ChangeDrawStyle()
@@ -146,4 +198,46 @@ void ChangeDrawStyle()
 		drawMode = GL_LINE;
 		
 	glPolygonMode(GL_FRONT_AND_BACK, drawMode);
+}
+
+void MoveObjects(unsigned char key)
+{
+	glm::vec3 pos{ 0.0f };
+
+	switch (key)
+	{
+		case 'w': case 'W':
+			pos.y = 0.1f;
+			break;
+		case 's': case 'S':
+			pos.y = -0.1f;
+			break;
+		case 'a': case 'A':
+			pos.x = -0.1f;
+			break;
+		case 'd': case 'D':
+			pos.x = 0.1f;
+			break;
+		case 'z': case 'Z':
+			pos.z = 0.1f;
+			break;
+		case 'x': case 'X':
+			pos.z = -0.1f;
+			break;
+	}
+
+	for (auto obj : objs)
+		obj->SetPosition(obj->GetPosition() + pos);
+}
+
+void RotateObjects()
+{
+	for (auto obj : objs)
+		obj->SetState(Object::State::kActive);
+}
+
+void StopObjects()
+{
+	for (auto obj : objs)
+		obj->SetState(Object::State::kPaused);
 }

@@ -29,8 +29,6 @@ bool Init(int w, int h, int* argc, char** argv)
 		std::cout << "GLEW Initialization" << std::endl;
 		return true;
 	}
-
-	Random::Init();
 }
 
 glm::vec2 ScreenToNDC(int x, int y, float w, float h)

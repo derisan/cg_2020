@@ -5,7 +5,7 @@
 VertexArray::VertexArray(const float* verts, unsigned int numVerts,
 	const unsigned int* indices, unsigned int numIndices)
 	:mNumVerts(numVerts)
-	,mNumIndices(numIndices)
+	, mNumIndices(numIndices)
 {
 	// Create vertex array
 	glGenVertexArrays(1, &mVertexArray);
@@ -17,9 +17,12 @@ VertexArray::VertexArray(const float* verts, unsigned int numVerts,
 	glBufferData(GL_ARRAY_BUFFER, numVerts * 6 * sizeof(float), verts, GL_STATIC_DRAW);
 
 	// Create index buffer
-	glGenBuffers(1, &mIndexBuffer);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mIndexBuffer);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, numIndices * sizeof(unsigned int), indices, GL_STATIC_DRAW);
+	if (indices)
+	{
+		glGenBuffers(1, &mIndexBuffer);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mIndexBuffer);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, numIndices * sizeof(unsigned int), indices, GL_STATIC_DRAW);
+	}
 
 	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 6, 0);
