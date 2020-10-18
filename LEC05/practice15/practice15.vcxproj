@@ -139,22 +139,18 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="earth.cpp" />
+    <ClCompile Include="cube.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="moon.cpp" />
     <ClCompile Include="object.cpp" />
     <ClCompile Include="orbit.cpp" />
-    <ClCompile Include="planet.cpp" />
     <ClCompile Include="random.cpp" />
     <ClCompile Include="shader.cpp" />
     <ClCompile Include="vertexarray.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="earth.h" />
-    <ClInclude Include="moon.h" />
+    <ClInclude Include="cube.h" />
     <ClInclude Include="object.h" />
     <ClInclude Include="orbit.h" />
-    <ClInclude Include="planet.h" />
     <ClInclude Include="random.h" />
     <ClInclude Include="shader.h" />
     <ClInclude Include="utils.h" />
@@ -163,8 +159,6 @@
   <ItemGroup>
     <None Include="Shaders\mesh.frag" />
     <None Include="Shaders\mesh.vert" />
-    <None Include="Shaders\sprite.frag" />
-    <None Include="Shaders\sprite.vert" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

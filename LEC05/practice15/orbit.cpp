@@ -9,8 +9,7 @@
 
 Orbit::Orbit()
 	: Object{},
-	mVertexArray{ nullptr },
-	mRadius(1.5f)
+	mVertexArray{ nullptr }
 {
 	Load();
 }
@@ -20,16 +19,10 @@ Orbit::~Orbit()
 	delete mVertexArray;
 }
 
-void Orbit::Update(float dt)
-{
-	Object::Update(dt);
-}
-
 void Orbit::Draw(Shader* shader)
 {
+	shader->SetActive();
 	shader->SetMatrixUniform("uWorld", GetWorldTransform());
-	glm::mat4 rev{ 1.0f };
-	shader->SetMatrixUniform("uRev", rev);
 	mVertexArray->SetActive();
 	glDrawArrays(GL_LINE_STRIP, 0, 360);
 }
@@ -41,9 +34,9 @@ void Orbit::Load()
 
 	for (float i = 0.0f; i < 360.0f; i += 1.0f)
 	{
-		vertices.push_back(mRadius * cos(glm::radians(i)));
+		vertices.push_back(cos(glm::radians(i)));
 		vertices.push_back(0);
-		vertices.push_back(mRadius * sin(glm::radians(i)));
+		vertices.push_back(sin(glm::radians(i)));
 		vertices.push_back(1.0f);
 		vertices.push_back(1.0f);
 		vertices.push_back(1.0f);

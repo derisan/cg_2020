@@ -1,44 +1,32 @@
-#include "planet.h"
+#include "cube.h"
 
-#include <gl/glew.h>
+#include <GL/glew.h>
 
 #include "vertexarray.h"
 #include "shader.h"
 
-Planet::Planet()
+Cube::Cube()
 	: Object{},
 	mVertexArray{ nullptr }
 {
 	Load();
 }
 
-Planet::~Planet()
+Cube::~Cube()
 {
 	delete mVertexArray;
 }
 
-void Planet::Update(float dt)
-{
-	Object::Update(dt);
 
-	if (GetState() == State::kActive)
-	{
-		auto rotation = GetRotation();
-		rotation += cos(dt);
-		SetRotation(rotation);
-	}
-}
-
-void Planet::Draw(Shader* shader)
+void Cube::Draw(Shader* shader)
 {
+	shader->SetActive();
 	shader->SetMatrixUniform("uWorld", GetWorldTransform());
-	glm::mat4 rev{ 1.0f };
-	shader->SetMatrixUniform("uRev", rev);
 	mVertexArray->SetActive();
 	glDrawElements(GL_TRIANGLES, mVertexArray->GetNumIndices(), GL_UNSIGNED_INT, nullptr);
 }
 
-void Planet::Load()
+void Cube::Load()
 {
 	const float vertices[] = {
 		// pos				// color

@@ -6,14 +6,11 @@
 #include <vector>
 
 #include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtx/rotate_vector.hpp>
 
 #include "utils.h"
 #include "shader.h"
-#include "object.h"
+#include "cube.h"
 #include "orbit.h"
-#include "planet.h"
-#include "earth.h"
 
 // Camera things
 struct Camera
@@ -41,13 +38,18 @@ void LoadData();
 // Program specific
 void ChangeDrawStyle();
 void MoveObjects(unsigned char key);
-void RotateObjects();
-void StopObjects();
 
 Shader* meshShader{ nullptr };
+
 std::vector<Object*> objs;
 
 auto drawMode = GL_FILL;
+
+float angle{ 0.0f };
+float speedOne{ 0.0f };
+float speedTwo{ 0.0f };
+float speedThree{ 0.0f };
+bool isRotate{ true };
 
 int main(int argc, char** argv)
 {
@@ -71,13 +73,83 @@ void DisplayFunc()
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_CULL_FACE);
+	glPolygonMode(GL_FRONT_AND_BACK, drawMode);
 
-	for (auto obj : objs)
+	// Set view & proj matrix
+	meshShader->SetActive();
+	glm::mat4 view{ 1.0f };
+	view = glm::lookAt(camera.position, camera.position + camera.target, camera.up);
+	meshShader->SetMatrixUniform("uView", view);
+
+	glm::mat4 proj{ 1.0f };
+	proj = glm::perspective(45.0f, static_cast<float>(kScrWidth) / static_cast<float>(kScrHeight), 0.1f, 100.0f);
+	meshShader->SetMatrixUniform("uProj", proj);
+
+	if (isRotate)
+		angle += cos(dt);
+
+	float speed{ 1.5f };
+
+	glm::mat4 mat{ 1.0f };
+	meshShader->SetMatrixUniform("uOut", mat);
+
+	// ÀÚÀü
+	objs[0]->SetWorldRotate(1.5f, glm::vec3{ 0.0f, 1.0f, 0.0f });
+	objs[0]->Draw(meshShader);
+
+	// 1¹ø ±Ëµµ
 	{
-		obj->Update(dt);
-		obj->Draw(meshShader);
+		objs[3]->Draw(meshShader);
+		// Áö±¸
+		mat = glm::rotate(mat, glm::radians(angle * speedOne), 
+			glm::vec3{ 0.0f, 1.0f, 0.0f });
+		meshShader->SetMatrixUniform("uOut", mat);
+		objs[1]->Draw(meshShader);
+		objs[4]->Draw(meshShader);
+
+		// ´Þ
+		mat = glm::translate(mat, glm::vec3{ -1.0f, 0.0f, 0.0f });
+		mat = glm::rotate(mat, glm::radians(angle), glm::vec3{ 0.0f, 1.0f, 0.0f });
+		meshShader->SetMatrixUniform("uOut", mat);
+		objs[2]->Draw(meshShader);
 	}
 
+	// 2¹ø ±Ëµµ
+	{
+		mat = glm::mat4{ 1.0f };
+		mat = glm::rotate(mat, glm::radians(45.0f), glm::vec3{ 0.0f, 0.0f, 1.0f });
+		meshShader->SetMatrixUniform("uOut", mat);
+		objs[7]->Draw(meshShader);
+
+		mat = glm::rotate(mat, glm::radians(angle * speedTwo), glm::vec3{ 0.0f, 1.0f, 0.0f });
+		meshShader->SetMatrixUniform("uOut", mat);
+		objs[5]->Draw(meshShader);
+		objs[8]->Draw(meshShader);
+
+		mat = glm::translate(mat, glm::vec3{ -1.0f, 0.0f, 0.0f });
+		mat = glm::rotate(mat, glm::radians(angle), glm::vec3{ 0.0f, 1.0f, 0.0f });
+		meshShader->SetMatrixUniform("uOut", mat);
+		objs[6]->Draw(meshShader);
+	}
+
+	// 3¹ø ±Ëµµ
+	{
+		mat = glm::mat4{ 1.0f };
+		mat = glm::rotate(mat, glm::radians(-45.0f), glm::vec3{ 0.0f, 0.0f, 1.0f });
+		meshShader->SetMatrixUniform("uOut", mat);
+		objs[11]->Draw(meshShader);
+
+		mat = glm::rotate(mat, glm::radians(angle * speedThree), glm::vec3{ 0.0f, 1.0f, 0.0f });
+		meshShader->SetMatrixUniform("uOut", mat);
+		objs[9]->Draw(meshShader);
+		objs[12]->Draw(meshShader);
+
+		mat = glm::translate(mat, glm::vec3{ -1.0f, 0.0f, 0.0f });
+		mat = glm::rotate(mat, glm::radians(angle), glm::vec3{ 0.0f, 1.0f, 0.0f });
+		meshShader->SetMatrixUniform("uOut", mat);
+		objs[10]->Draw(meshShader);
+	}
 
 	glutSwapBuffers();
 }
@@ -99,7 +171,7 @@ void KeyboardFunc(unsigned char key, int x, int y)
 			ChangeDrawStyle();
 			break;
 		case 'y': case 'Y':
-			RotateObjects();
+			isRotate = !isRotate;
 			break;
 		case 'z': case 'Z':
 		case 'x': case 'X':
@@ -108,9 +180,6 @@ void KeyboardFunc(unsigned char key, int x, int y)
 		case 'a': case 'A':
 		case 'd': case 'D':
 			MoveObjects(key);
-			break;
-		case 'c': case 'C':
-			StopObjects();
 			break;
 	}
 }
@@ -141,53 +210,61 @@ void LoadData()
 		return;
 	}
 
-	// Set view & proj matrix
-	meshShader->SetActive();
-	glm::mat4 view{ 1.0f };
-	view = glm::lookAt(camera.position, camera.target, camera.up);
-	meshShader->SetMatrixUniform("uView", view);
+	Cube* sun{ new Cube{} };
+	sun->SetWorldScale(glm::vec3{ 0.6f, 0.6f, 0.6f });
 
-	glm::mat4 proj{ 1.0f };
-	proj = glm::perspective(45.0f, static_cast<float>(kScrWidth) / static_cast<float>(kScrHeight), 0.1f, 100.0f);
-	meshShader->SetMatrixUniform("uProj", proj);
+	Cube* earthOne{ new Cube{} };
+	earthOne->SetWorldTranslate(glm::vec3{ -1.0f, 0.0f, 0.0f });
+	earthOne->SetWorldScale(glm::vec3{ 0.3f, 0.3f, 0.3f });
+	Cube* moonOne{ new Cube{} };
+	moonOne->SetWorldTranslate(glm::vec3{ -0.3f, 0.0f, 0.0f });
+	moonOne->SetWorldScale(glm::vec3{ 0.1f, 0.1f, 0.1f });
+	Orbit* orbitBigOne{ new Orbit{} };
+	Orbit* orbitSmallOne{ new Orbit{} };
+	orbitSmallOne->SetWorldTranslate(glm::vec3{ -1.0f, 0.0f, 0.0f });
+	orbitSmallOne->SetWorldScale(glm::vec3{ 0.3f, 0.3f, 0.3f });
 
-	// Create 3 Orbit
-	auto orbit_xz{ new Orbit{} };
-	auto orbit_45{ new Orbit{} };
-	auto orbit_minus_45{ new Orbit{} };
-	orbit_45->SetRotation(45.0f);
-	orbit_45->SetAxis(glm::vec3{ 0.0f, 0.0f, 1.0f });
-	orbit_minus_45->SetRotation(-45.0f);
-	orbit_minus_45->SetAxis(glm::vec3{ 0.0f, 0.0f, 1.0f });
+	Cube* earthTwo{ new Cube{} };
+	earthTwo->SetWorldTranslate(glm::vec3{ -1.0f, 0.0f, 0.0f });
+	earthTwo->SetWorldScale(glm::vec3{ 0.3f, 0.3f, 0.3f });
+	Cube* moonTwo{ new Cube{} };
+	moonTwo->SetWorldTranslate(glm::vec3{ -0.3f, 0.0f, 0.0f });
+	moonTwo->SetWorldScale(glm::vec3{ 0.1f, 0.1f, 0.1f });
+	Orbit* orbitBigTwo{ new Orbit{} };
+	Orbit* orbitSmallTwo{ new Orbit{} };
+	orbitSmallTwo->SetWorldTranslate(glm::vec3{ -1.0f, 0.0f, 0.0f });
+	orbitSmallTwo->SetWorldScale(glm::vec3{ 0.3f, 0.3f, 0.3f });
 
-	objs.emplace_back(orbit_xz);
-	objs.emplace_back(orbit_45);
-	objs.emplace_back(orbit_minus_45);
+	Cube* earthThree{ new Cube{} };
+	earthThree->SetWorldTranslate(glm::vec3{ -1.0f, 0.0f, 0.0f });
+	earthThree->SetWorldScale(glm::vec3{ 0.3f, 0.3f, 0.3f });
+	Cube* moonThree{ new Cube{} };
+	moonThree->SetWorldTranslate(glm::vec3{ -0.3f, 0.0f, 0.0f });
+	moonThree->SetWorldScale(glm::vec3{ 0.1f, 0.1f, 0.1f });
+	Orbit* orbitBigThree{ new Orbit{} };
+	Orbit* orbitSmallThree{ new Orbit{} };
+	orbitSmallThree->SetWorldTranslate(glm::vec3{ -1.0f, 0.0f, 0.0f });
+	orbitSmallThree->SetWorldScale(glm::vec3{ 0.3f, 0.3f, 0.3f });
 
-	// Create sun
-	auto sun{ new Planet{} };
-	sun->SetScale(0.3f);
 	objs.emplace_back(sun);
+	objs.emplace_back(earthOne);
+	objs.emplace_back(moonOne);
+	objs.emplace_back(orbitBigOne);
+	objs.emplace_back(orbitSmallOne);
 
-	// Create 3 earth
-	auto earth_one{ new Earth() };
-	earth_one->SetPosition(glm::vec3{ 1.5f, 0.0f, 0.0f });
-	earth_one->SetRevAxis(glm::vec3{ 0.0f, 1.0f, 0.0f });
-	objs.emplace_back(earth_one);
+	objs.emplace_back(earthTwo); // 5
+	objs.emplace_back(moonTwo); // 6
+	objs.emplace_back(orbitBigTwo); // 7
+	objs.emplace_back(orbitSmallTwo); // 8
 
-	auto earth_two{ new Earth() };
-	earth_two->SetPosition(glm::vec3{ 0.0f, 0.0f, 1.5f });
-	glm::vec3 orbit{ 0.0f, 1.0f, 0.0f };
-	orbit = glm::rotate(orbit, glm::radians(45.0f), glm::vec3{ 0.0f, 0.0f, 1.0f });
-	earth_two->SetRevAxis(orbit);
-	objs.emplace_back(earth_two);
+	objs.emplace_back(earthThree); // 9
+	objs.emplace_back(moonThree); // 10
+	objs.emplace_back(orbitBigThree); // 11
+	objs.emplace_back(orbitSmallThree); // 12
 
-	auto earth_three{ new Earth() };
-	earth_three->SetPosition(glm::vec3{ 0.0f, 0.0f, -1.5f });
-	orbit = glm::vec3{ 0.0f, 1.0f, 0.0f };
-	orbit = glm::rotate(orbit, glm::radians(-45.0f), glm::vec3{ 0.0f, 0.0f, 1.0f });
-	earth_three->SetRevAxis(orbit);
-	objs.emplace_back(earth_three);
+	speedOne = Random::GetFloatRange(0.5f, 1.5f);
+	speedTwo= Random::GetFloatRange(0.5f, 1.5f);
+	speedThree= Random::GetFloatRange(0.5f, 1.5f);
 }
 
 void ChangeDrawStyle()
@@ -196,8 +273,6 @@ void ChangeDrawStyle()
 		drawMode = GL_FILL;
 	else
 		drawMode = GL_LINE;
-		
-	glPolygonMode(GL_FRONT_AND_BACK, drawMode);
 }
 
 void MoveObjects(unsigned char key)
@@ -207,37 +282,22 @@ void MoveObjects(unsigned char key)
 	switch (key)
 	{
 		case 'w': case 'W':
-			pos.y = 0.1f;
+			camera.position.y += 0.1f;
 			break;
 		case 's': case 'S':
-			pos.y = -0.1f;
+			camera.position.y -= 0.1f;
 			break;
 		case 'a': case 'A':
-			pos.x = -0.1f;
+			camera.position.x -= 0.1f;
 			break;
 		case 'd': case 'D':
-			pos.x = 0.1f;
+			camera.position.x += 0.1f;
 			break;
 		case 'z': case 'Z':
-			pos.z = 0.1f;
+			camera.position.z += 0.1f;
 			break;
 		case 'x': case 'X':
-			pos.z = -0.1f;
+			camera.position.z -= 0.1f;
 			break;
 	}
-
-	for (auto obj : objs)
-		obj->SetPosition(obj->GetPosition() + pos);
-}
-
-void RotateObjects()
-{
-	for (auto obj : objs)
-		obj->SetState(Object::State::kActive);
-}
-
-void StopObjects()
-{
-	for (auto obj : objs)
-		obj->SetState(Object::State::kPaused);
 }
