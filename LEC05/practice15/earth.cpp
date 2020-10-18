@@ -13,8 +13,7 @@ Earth::Earth()
 	: Planet{},
 	mSpeed{ Random::GetFloatRange(0.3f, 1.5f) },
 	mAngle{ 0.0f },
-	mRevAxis{ 0.0f, 1.0f, 0.0f },
-	mPrevPosition{ GetPosition() }
+	mRevAxis{ 0.0f, 1.0f, 0.0f }
 {
 	SetScale(0.1f);
 

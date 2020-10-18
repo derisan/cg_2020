@@ -13,12 +13,13 @@ public:
     void OnUpdateWorldTransform() override;
 
     const glm::vec3& GetRevAxis() const { return mRevAxis; }
+    float GetSpeed() const { return mSpeed; }
+
     void SetRevAxis(const glm::vec3& axis) { mRevAxis = axis; }
 
 private:
     float mSpeed;
     float mAngle;
     glm::vec3 mRevAxis;
-    glm::vec3 mPrevPosition;
 };
 

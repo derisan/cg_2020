@@ -14,6 +14,7 @@
 #include "orbit.h"
 #include "planet.h"
 #include "earth.h"
+#include "moonOrbit.h"
 
 // Camera things
 struct Camera
@@ -196,23 +197,30 @@ void LoadData()
 	objs.emplace_back(earth_three);
 
 	// Create moon's orbit
-	auto orbit_moon_one{ new Orbit{} };
-	orbit_moon_one->SetScale(0.15f);
+	auto orbit_moon_one{ new MoonOrbit{} };
 	orbit_moon_one->SetPosition(glm::vec3{ 1.5f, 0.0f, 0.0f });
+	orbit_moon_one->SetSpeed(earth_one->GetSpeed());
+	orbit_moon_one->SetRevAxis(glm::vec3{ 0.0f, 1.0f, 0.0f });
 	objs.emplace_back(orbit_moon_one);
 
-	auto orbit_moon_two{ new Orbit{} };
-	orbit_moon_two->SetScale(0.15f);
+	auto orbit_moon_two{ new MoonOrbit{} };
 	orbit_moon_two->SetPosition(glm::vec3{ 0.0f, 0.0f, 1.5f });
 	orbit_moon_two->SetRotation(45.0f);
 	orbit_moon_two->SetAxis(glm::vec3{ 0.0f, 0.0f, 1.0f });
+	orbit_moon_two->SetSpeed(earth_two->GetSpeed());
+	orbit = glm::vec3{ 0.0f, 1.0f, 0.0f };
+	orbit = glm::rotate(orbit, glm::radians(45.0f), glm::vec3{ 0.0f, 0.0f, 1.0f });
+	orbit_moon_two->SetRevAxis(orbit);
 	objs.emplace_back(orbit_moon_two);
 
-	auto orbit_moon_three{ new Orbit{} };
-	orbit_moon_three->SetScale(0.15f);
+	auto orbit_moon_three{ new MoonOrbit{} };
 	orbit_moon_three->SetPosition(glm::vec3{ 0.0f, 0.0f, -1.5f });
 	orbit_moon_three->SetRotation(-45.0f);
 	orbit_moon_three->SetAxis(glm::vec3{ 0.0f, 0.0f, 1.0f });
+	orbit_moon_three->SetSpeed(earth_three->GetSpeed());
+	orbit = glm::vec3{ 0.0f, 1.0f, 0.0f };
+	orbit = glm::rotate(orbit, glm::radians(-45.0f), glm::vec3{ 0.0f, 0.0f, 1.0f });
+	orbit_moon_three->SetRevAxis(orbit);
 	objs.emplace_back(orbit_moon_three);
 }
 
