@@ -1,29 +1,29 @@
-#include "moon.h"
+#include "moonOrbit.h"
 
-#include <glm/gtc/matrix_transform.hpp>
 #include <GL/glew.h>
+#include <glm/gtc/matrix_transform.hpp>
 
 #include "shader.h"
 #include "vertexarray.h"
 
-Moon::Moon()
-	: Planet{},
-	mSpeed{ 0.0f },
+MoonOrbit::MoonOrbit()
+	: Orbit{},
 	mAngle{ 0.0f },
+	mSpeed{ 0.0f },
 	mRevAxis{ 0.0f }
 {
-	SetScale(0.03f);
+	SetScale(0.15f);
 }
 
-void Moon::Update(float dt)
+void MoonOrbit::Update(float dt)
 {
-	Planet::Update(dt);
+	Orbit::Update(dt);
 
 	if (GetState() == State::kActive)
 		mAngle += cos(dt) * mSpeed;
 }
 
-void Moon::Draw(Shader* shader)
+void MoonOrbit::Draw(Shader* shader)
 {
 	shader->SetMatrixUniform("uWorld", GetWorldTransform());
 
@@ -32,5 +32,5 @@ void Moon::Draw(Shader* shader)
 	shader->SetMatrixUniform("uRev", rev);
 
 	GetVertexArray()->SetActive();
-	glDrawElements(GL_TRIANGLES, GetVertexArray()->GetNumIndices(), GL_UNSIGNED_INT, nullptr);
+	glDrawArrays(GL_LINE_STRIP, 0, 360);
 }

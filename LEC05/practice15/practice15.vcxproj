@@ -142,6 +142,7 @@
     <ClCompile Include="earth.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="moon.cpp" />
+    <ClCompile Include="moonOrbit.cpp" />
     <ClCompile Include="object.cpp" />
     <ClCompile Include="orbit.cpp" />
     <ClCompile Include="planet.cpp" />
@@ -152,6 +153,7 @@
   <ItemGroup>
     <ClInclude Include="earth.h" />
     <ClInclude Include="moon.h" />
+    <ClInclude Include="moonOrbit.h" />
     <ClInclude Include="object.h" />
     <ClInclude Include="orbit.h" />
     <ClInclude Include="planet.h" />

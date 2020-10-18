@@ -42,6 +42,9 @@
     <ClCompile Include="planet.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="moonOrbit.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="random.h">
@@ -69,6 +72,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="planet.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="moonOrbit.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
