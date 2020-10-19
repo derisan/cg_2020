@@ -39,6 +39,12 @@
     <ClCompile Include="axis.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="frontplane.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="pyramid.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="cube.h">
@@ -63,6 +69,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="axis.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="frontplane.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="pyramid.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

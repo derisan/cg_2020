@@ -141,9 +141,11 @@
   <ItemGroup>
     <ClCompile Include="axis.cpp" />
     <ClCompile Include="cube.cpp" />
+    <ClCompile Include="frontplane.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="object.cpp" />
     <ClCompile Include="plane.cpp" />
+    <ClCompile Include="pyramid.cpp" />
     <ClCompile Include="random.cpp" />
     <ClCompile Include="shader.cpp" />
     <ClCompile Include="vertexarray.cpp" />
@@ -151,8 +153,10 @@
   <ItemGroup>
     <ClInclude Include="axis.h" />
     <ClInclude Include="cube.h" />
+    <ClInclude Include="frontplane.h" />
     <ClInclude Include="object.h" />
     <ClInclude Include="plane.h" />
+    <ClInclude Include="pyramid.h" />
     <ClInclude Include="random.h" />
     <ClInclude Include="shader.h" />
     <ClInclude Include="utils.h" />

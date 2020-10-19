@@ -1,5 +1,5 @@
 // -----------------------------------
-// 실습15
+// 실습16
 // 2016180007 김명규
 // -----------------------------------
 
@@ -10,7 +10,9 @@
 #include "utils.h"
 #include "shader.h"
 #include "plane.h"
+#include "frontplane.h"
 #include "axis.h"
+#include "pyramid.h"
 
 // Camera things
 struct Camera
@@ -39,15 +41,25 @@ void LoadData();
 void ChangeDrawStyle();
 void MoveObjects(unsigned char key);
 
+
 Shader* meshShader{ nullptr };
 
 std::vector<Object*> objs;
 
 auto drawMode = GL_FILL;
 
-float angle{ 0.0f };
+float topAngle{ 0.0f };
 float frontAngle{ 0.0f };
+float rotateAngle{ 0.0f };
+float openAngle{ 0.0f };
+constexpr float speed{ 0.5f };
+
+bool isChange{ false };
 bool isRotate{ false };
+bool isTopAnimPlay{ false };
+bool isFrontAnimPlay{ false };
+bool isPyramidOpen{ false };
+bool isPerspective{ true };
 
 int main(int argc, char** argv)
 {
@@ -81,45 +93,127 @@ void DisplayFunc()
 	meshShader->SetMatrixUniform("uView", view);
 
 	glm::mat4 proj{ 1.0f };
-	proj = glm::perspective(45.0f, static_cast<float>(kScrWidth) / static_cast<float>(kScrHeight), 0.1f, 100.0f);
+	if(isPerspective)
+		proj = glm::perspective(45.0f, static_cast<float>(kScrWidth) / static_cast<float>(kScrHeight), 0.1f, 100.0f);
+	else
+		proj = glm::ortho(-2.0f, 2.0f, -2.0f, 2.0f, 0.1f, 100.0f);
 	meshShader->SetMatrixUniform("uProj", proj);
 
-
-	float speed{ 0.5f };
-	
-	
 	if (isRotate)
-	{
-		angle += cos(dt);
-		frontAngle += speed;
-		if (frontAngle > 90.0f)
-			frontAngle = 90.0f;
-	}
+		rotateAngle += speed;
 
+	// axis
 	glm::mat4 mat{ 1.0f };
 	mat = glm::rotate(mat, glm::radians(30.0f), glm::vec3{ 0.0f, 1.0f, 0.0f });
 	meshShader->SetMatrixUniform("uOut", mat);
-	objs[2]->Draw(meshShader);
-	objs[3]->Draw(meshShader);
-	objs[4]->Draw(meshShader);
-	objs[5]->Draw(meshShader);
-	objs[6]->Draw(meshShader);
-	
-	mat = glm::mat4{ 1.0f };
-	mat = glm::rotate(mat, glm::radians(30.0f), glm::vec3{ 0.0f, 1.0f, 0.0f });
-	mat = glm::translate(mat, glm::vec3{ 0.0f, 0.0f, 1.0f });
-	mat = glm::rotate(mat, glm::radians(frontAngle), glm::vec3{ 1.0f, 0.0f, 0.0f });
-	meshShader->SetMatrixUniform("uOut", mat);
 	objs[0]->Draw(meshShader);
 
-	mat = glm::mat4{ 1.0f };
-	mat = glm::rotate(mat, glm::radians(30.0f), glm::vec3{ 0.0f, 1.0f, 0.0f });
-	mat = glm::translate(mat, glm::vec3{ 0.0f, 1.0f, 0.0f });
-	mat = glm::rotate(mat, glm::radians(angle), glm::vec3{ 1.0f, 0.0f, 0.0f });
+	mat = glm::rotate(mat, glm::radians(rotateAngle), glm::vec3{ 0.0f, 1.0f, 0.0f });
 	meshShader->SetMatrixUniform("uOut", mat);
-	objs[1]->Draw(meshShader);
 
+	// Draw Cube
+	if (!isChange)
+	{
+		if (isTopAnimPlay)
+			topAngle += speed;
 
+		if (isFrontAnimPlay)
+		{
+			frontAngle += speed;
+			if (frontAngle > 90.0f)
+				frontAngle = 90.0f;
+		}
+		else
+		{
+			frontAngle -= speed;
+			if (frontAngle < 0.0f)
+				frontAngle = 0.0f;
+		}
+
+		// bottom-side
+		objs[3]->Draw(meshShader);
+
+		// left-side
+		mat = glm::mat4{ 1.0f };
+		mat = glm::translate(mat, glm::vec3{ -0.5f, 0.5f, 0.0f });
+		mat = glm::rotate(mat, glm::radians(90.0f), glm::vec3{ 0.0f, 0.0f, 1.0f });
+		objs[4]->SetWorldTransform(mat);
+		objs[4]->Draw(meshShader);
+
+		// right-side
+		mat = glm::mat4{ 1.0f };
+		mat = glm::translate(mat, glm::vec3{ 0.5f, 0.5f, 0.0f });
+		mat = glm::rotate(mat, glm::radians(-90.0f), glm::vec3{ 0.0f, 0.0f, 1.0f });
+		objs[5]->SetWorldTransform(mat);
+		objs[5]->Draw(meshShader);
+
+		// back-side
+		mat = glm::mat4{ 1.0f };
+		mat = glm::translate(mat, glm::vec3{ 0.0f, 0.5f, -0.5f });
+		mat = glm::rotate(mat, glm::radians(90.0f), glm::vec3{ 1.0f, 0.0f, 0.0f });
+		objs[6]->SetWorldTransform(mat);
+		objs[6]->Draw(meshShader);
+
+		// top-side
+		mat = glm::mat4{ 1.0f };
+		mat = glm::translate(mat, glm::vec3{ 0.0f, 1.0f, 0.0f });
+		mat = glm::rotate(mat, glm::radians(topAngle), glm::vec3{ 1.0f, 0.0f, 0.0f });
+		objs[1]->SetWorldTransform(mat);
+		objs[1]->Draw(meshShader);
+
+		// front-side
+		mat = glm::mat4{ 1.0f };
+		mat = glm::translate(mat, glm::vec3{ 0.0f, 0.0f, 0.5f });
+		mat = glm::rotate(mat, glm::radians(frontAngle), glm::vec3{ 1.0f, 0.0f, 0.0f });
+		objs[2]->SetWorldTransform(mat);
+		objs[2]->Draw(meshShader);
+	}
+	// Let's draw pyramid
+	else
+	{
+		if (isPyramidOpen)
+		{
+			openAngle += speed;
+			if (openAngle > 117.0f)
+				openAngle = 117.0f;
+		}
+		else
+		{
+			openAngle -= speed;
+			if (openAngle < 0.0f)
+				openAngle = 0.0f;
+		}
+
+		objs[3]->Draw(meshShader);
+
+		// front
+		mat = glm::mat4{ 1.0f };
+		mat = glm::translate(mat, glm::vec3{ -0.5f, 0.0f, 0.0f });
+		mat = glm::rotate(mat, glm::radians(openAngle), glm::vec3{ 0.0f, 0.0f, 1.0f });
+		objs[7]->SetWorldTransform(mat);
+		objs[7]->Draw(meshShader);
+
+		// back
+		mat = glm::mat4{ 1.0f };
+		mat = glm::translate(mat, glm::vec3{ 0.5f, 0.0f, 0.0f });
+		mat = glm::rotate(mat, glm::radians(openAngle), glm::vec3{ 0.0f, 0.0f, -1.0f });
+		objs[8]->SetWorldTransform(mat);
+		objs[8]->Draw(meshShader);
+
+		// left
+		mat = glm::mat4{ 1.0f };
+		mat = glm::translate(mat, glm::vec3{ 0.0f, 0.0f, -0.5f });
+		mat = glm::rotate(mat, glm::radians(openAngle), glm::vec3{ -1.0f, 0.0f, 0.0f });
+		objs[9]->SetWorldTransform(mat);
+		objs[9]->Draw(meshShader);
+
+		// right
+		mat = glm::mat4{ 1.0f };
+		mat = glm::translate(mat, glm::vec3{ 0.0f, 0.0f, 0.5f });
+		mat = glm::rotate(mat, glm::radians(openAngle), glm::vec3{ 1.0f, 0.0f, 0.0f });
+		objs[10]->SetWorldTransform(mat);
+		objs[10]->Draw(meshShader);
+	}
 	glutSwapBuffers();
 }
 
@@ -142,6 +236,18 @@ void KeyboardFunc(unsigned char key, int x, int y)
 		case 'y': case 'Y':
 			isRotate = !isRotate;
 			break;
+		case 't': case 'T':
+			isTopAnimPlay = !isTopAnimPlay;
+			break;
+		case 'f': case 'F':
+			isFrontAnimPlay = !isFrontAnimPlay;
+			break;
+		case 'o': case 'O':
+			isPyramidOpen = !isPyramidOpen;
+			break;
+		case 'p': case 'P':
+			isPerspective = !isPerspective;
+			break;
 		case 'z': case 'Z':
 		case 'x': case 'X':
 		case 'w': case 'W':
@@ -149,6 +255,9 @@ void KeyboardFunc(unsigned char key, int x, int y)
 		case 'a': case 'A':
 		case 'd': case 'D':
 			MoveObjects(key);
+			break;
+		case 'c': case 'C':
+			isChange = !isChange;
 			break;
 	}
 }
@@ -161,13 +270,17 @@ void TimerFunc(int value)
 
 void Shutdown()
 {
+	for (auto obj : objs)
+		delete obj;
+	//objs.clear();
+
 	glutLeaveMainLoop();
 }
 
 void LoadData()
 {
 	// Set cameara elements
-	camera.position = glm::vec3{ 0.0f, 1.0f, 5.0f };
+	camera.position = glm::vec3{ 0.0f, 0.5f, 5.0f };
 	camera.target = glm::vec3{ 0.0f, 0.0f, -1.0f };
 	camera.up = glm::vec3{ 0.0f, 1.0f, 0.0f };
 
@@ -179,33 +292,21 @@ void LoadData()
 		return;
 	}
 
-	auto plane_front = new Plane{};
-	plane_front->SetWorldRotate(270.0f, glm::vec3{ 1.0f, 0.0f, 0.0f });
-	objs.emplace_back(plane_front);
+	objs.emplace_back(new Axis{});		// axis
 
-	auto plane_top = new Plane{};
-	//plane_top->SetWorldTranslate(glm::vec3{ 0.0f, 1.0f, 0.0f });
-	objs.emplace_back(plane_top);
+	// Cube planes
+	objs.emplace_back(new Plane{Plane::kRed});		// top
+	objs.emplace_back(new FrontPlane{Plane::kGreen});// front
+	objs.emplace_back(new Plane{Plane::kMagenta});		// bottom 3
+	objs.emplace_back(new Plane{Plane::kYellow});		// left 4
+	objs.emplace_back(new Plane{Plane::kBlue});		// right 5
+	objs.emplace_back(new Plane{Plane::kCyan});		// back 6
 
-	auto plane_left = new Plane{};
-	plane_left->SetWorldTranslate(glm::vec3{ -0.5f, 0.5f, 0.0f });
-	plane_left->SetWorldRotate(90.0f, glm::vec3{ 0.0f, 0.0f, 1.0f });
-	objs.emplace_back(plane_left);
-
-	auto plane_bottom = new Plane{};
-	objs.emplace_back(plane_bottom);
-
-	auto plane_right= new Plane{};
-	plane_right->SetWorldTranslate(glm::vec3{ 0.5f, 0.5f, 0.0f });
-	plane_right->SetWorldRotate(90.0f, glm::vec3{ 0.0f, 0.0f, 1.0f });
-	objs.emplace_back(plane_right);
-
-	auto plane_back = new Plane{};
-	plane_back->SetWorldRotate(-90.0f, glm::vec3{ 1.0f, 0.0f, 0.0f });
-	objs.emplace_back(plane_back);
-
-	auto axis = new Axis{};
-	objs.emplace_back(axis);
+	// Pyramid planes
+	objs.emplace_back(new Pyramid{ Pyramid::kFront }); // 7
+	objs.emplace_back(new Pyramid{ Pyramid::kBack }); // 8
+	objs.emplace_back(new Pyramid{ Pyramid::kLeft }); // 9
+	objs.emplace_back(new Pyramid{ Pyramid::kRight }); // 10
 }
 
 void ChangeDrawStyle()
