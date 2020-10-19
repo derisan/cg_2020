@@ -139,6 +139,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="axis.cpp" />
     <ClCompile Include="cube.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="object.cpp" />
@@ -148,6 +149,7 @@
     <ClCompile Include="vertexarray.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="axis.h" />
     <ClInclude Include="cube.h" />
     <ClInclude Include="object.h" />
     <ClInclude Include="plane.h" />

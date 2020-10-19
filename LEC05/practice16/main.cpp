@@ -10,6 +10,7 @@
 #include "utils.h"
 #include "shader.h"
 #include "plane.h"
+#include "axis.h"
 
 // Camera things
 struct Camera
@@ -95,14 +96,24 @@ void DisplayFunc()
 			frontAngle = 90.0f;
 	}
 
-	
 	glm::mat4 mat{ 1.0f };
+	mat = glm::rotate(mat, glm::radians(30.0f), glm::vec3{ 0.0f, 1.0f, 0.0f });
+	meshShader->SetMatrixUniform("uOut", mat);
+	objs[2]->Draw(meshShader);
+	objs[3]->Draw(meshShader);
+	objs[4]->Draw(meshShader);
+	objs[5]->Draw(meshShader);
+	objs[6]->Draw(meshShader);
+	
+	mat = glm::mat4{ 1.0f };
+	mat = glm::rotate(mat, glm::radians(30.0f), glm::vec3{ 0.0f, 1.0f, 0.0f });
 	mat = glm::translate(mat, glm::vec3{ 0.0f, 0.0f, 1.0f });
 	mat = glm::rotate(mat, glm::radians(frontAngle), glm::vec3{ 1.0f, 0.0f, 0.0f });
 	meshShader->SetMatrixUniform("uOut", mat);
 	objs[0]->Draw(meshShader);
 
 	mat = glm::mat4{ 1.0f };
+	mat = glm::rotate(mat, glm::radians(30.0f), glm::vec3{ 0.0f, 1.0f, 0.0f });
 	mat = glm::translate(mat, glm::vec3{ 0.0f, 1.0f, 0.0f });
 	mat = glm::rotate(mat, glm::radians(angle), glm::vec3{ 1.0f, 0.0f, 0.0f });
 	meshShader->SetMatrixUniform("uOut", mat);
@@ -176,7 +187,25 @@ void LoadData()
 	//plane_top->SetWorldTranslate(glm::vec3{ 0.0f, 1.0f, 0.0f });
 	objs.emplace_back(plane_top);
 
+	auto plane_left = new Plane{};
+	plane_left->SetWorldTranslate(glm::vec3{ -0.5f, 0.5f, 0.0f });
+	plane_left->SetWorldRotate(90.0f, glm::vec3{ 0.0f, 0.0f, 1.0f });
+	objs.emplace_back(plane_left);
 
+	auto plane_bottom = new Plane{};
+	objs.emplace_back(plane_bottom);
+
+	auto plane_right= new Plane{};
+	plane_right->SetWorldTranslate(glm::vec3{ 0.5f, 0.5f, 0.0f });
+	plane_right->SetWorldRotate(90.0f, glm::vec3{ 0.0f, 0.0f, 1.0f });
+	objs.emplace_back(plane_right);
+
+	auto plane_back = new Plane{};
+	plane_back->SetWorldRotate(-90.0f, glm::vec3{ 1.0f, 0.0f, 0.0f });
+	objs.emplace_back(plane_back);
+
+	auto axis = new Axis{};
+	objs.emplace_back(axis);
 }
 
 void ChangeDrawStyle()
