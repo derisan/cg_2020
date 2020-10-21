@@ -11,6 +11,7 @@
 #include "utils.h"
 #include "shader.h"
 #include "cube.h"
+#include "plane.h"
 
 // Camera things
 struct Camera
@@ -79,7 +80,7 @@ void DisplayFunc()
 	glm::mat4 view{ 1.0f };
 
 	if (isRotateCamera)
-		camera.position = glm::rotate(camera.position, glm::radians(speed), glm::vec3{ 0.0f, 1.0f, 0.0f });
+		camera.target = glm::rotate(camera.target, glm::radians(speed), glm::vec3{ 0.0f, 1.0f, 0.0f });
 
 	view = glm::lookAt(camera.position, camera.position + camera.target, camera.up);
 	meshShader->SetMatrixUniform("uView", view);
@@ -160,7 +161,14 @@ void LoadData()
 		return;
 	}
 
-	objs.emplace_back(new Cube{});
+	Cube* leg{ new Cube{} };
+	leg->SetWorldScale(glm::vec3{ 1.0f, 0.5f, 1.0f });
+	objs.emplace_back(leg);
+
+	Plane* plane{ new Plane{Plane::kCyan} };
+	plane->SetWorldScale(glm::vec3{ 10.0f, 1.0f, 10.0f });
+	plane->SetWorldTranslate(glm::vec3{ 0.0f, -0.25f, 0.0f });
+	objs.emplace_back(plane);
 }
 
 void ChangeDrawStyle()
