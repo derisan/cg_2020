@@ -5,8 +5,8 @@
 #include "vertexarray.h"
 #include "shader.h"
 
-Cube::Cube(Color color)
-	: Object{color},
+Cube::Cube(Color color, bool rotateX)
+	: Object{color, rotateX},
 	mVertexArray{ nullptr }
 {
 	Load();
@@ -36,14 +36,14 @@ void Cube::Load()
 
 	const float vertices[] = {
 		// pos				// color
-		-0.5, -0.5,  0.5,	color.x, color.y, color.z,
-		 0.5, -0.5,  0.5,	color.x, color.y, color.z,
-		 0.5,  0.5,  0.5,	color.x, color.y, color.z,
-		-0.5,  0.5,  0.5,	color.x, color.y, color.z,
-		-0.5, -0.5, -0.5,	color.x, color.y, color.z,
-		 0.5, -0.5, -0.5,	color.x, color.y, color.z,
-		 0.5,  0.5, -0.5,	color.x, color.y, color.z,
-		-0.5,  0.5, -0.5,	color.x, color.y, color.z,
+		-0.5,  0.0,  0.5,	color.x, color.y, color.z,
+		 0.5,  0.0,  0.5,	color.x, color.y, color.z,
+		 0.5,  1.0,  0.5,	color.x, color.y, color.z,
+		-0.5,  1.0,  0.5,	color.x, color.y, color.z,
+		-0.5,  0.0, -0.5,	color.x, color.y, color.z,
+		 0.5,  0.0, -0.5,	color.x, color.y, color.z,
+		 0.5,  1.0, -0.5,	color.x, color.y, color.z,
+		-0.5,  1.0, -0.5,	color.x, color.y, color.z,
 	};
 
 	const unsigned int indices[] = {

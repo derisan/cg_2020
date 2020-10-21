@@ -1,13 +1,15 @@
 #include "object.h"
 
-Object::Object(Color color)
+Object::Object(Color color, bool rotateX)
 	: mState{State::kActive},
 	mWorldTransform{ 1.0f },
 	mPosition{ 0.0f },
 	mScale{ 1.0f },
 	mRotation{ 0.0f },
 	mColor{},
-	mRecomputeWorldTransform{ true }
+	mRecomputeWorldTransform{ true },
+	mIsRotateX{ rotateX },
+	mXRotation{ 0.0f }
 {
 	switch (color)
 	{
@@ -47,6 +49,8 @@ void Object::ComputeWorldTransform()
 
 	mWorldTransform = glm::mat4{ 1.0f };
 	mWorldTransform = glm::translate(mWorldTransform, mPosition);
+	if (mIsRotateX)
+		mWorldTransform = glm::rotate(mWorldTransform, glm::radians(mXRotation), glm::vec3(1.0f, 0.0f, 0.0f));
 	mWorldTransform = glm::rotate(mWorldTransform, glm::radians(mRotation), glm::vec3{ 0.0f, 1.0f, 0.0f });
 	mWorldTransform = glm::scale(mWorldTransform, mScale);
 }

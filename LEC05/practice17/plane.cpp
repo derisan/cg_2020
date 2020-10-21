@@ -6,7 +6,7 @@
 #include "vertexarray.h"
 
 Plane::Plane(Color color)
-	: Object{},
+	: Object{color},
 	mVertexArray{ nullptr }
 {
 	Load();

@@ -39,11 +39,18 @@ void LoadData();
 void ChangeDrawStyle();
 void MoveCamera(unsigned char key);
 
-
 // Program specific
 void MoveCrane(unsigned char key);
+void Reset();
+void StopAnimation();
 
 bool isRotateCamera{ false };
+bool isRotateCWBody{ false };
+bool isRotateCCWBody{ false };
+bool isRotateArm{ false };
+
+float bodyAngle{ 0.0f };
+float armAngle{ 0.0f };
 
 Shader* meshShader{ nullptr };
 
@@ -52,6 +59,7 @@ std::vector<Object*> objs;
 auto drawMode = GL_FILL;
 
 constexpr float speed{ 1.5f };
+float armSpeed{ 1.5f };
 
 int main(int argc, char** argv)
 {
@@ -95,13 +103,39 @@ void DisplayFunc()
 	out = glm::rotate(out, glm::radians(30.0f), glm::vec3{ 0.0f, 1.0f, 0.0f });
 	meshShader->SetMatrixUniform("uOut", out);
 
+	if (isRotateCWBody)
+		bodyAngle += speed;
+	else if (isRotateCCWBody)
+		bodyAngle -= speed;
+
+	if (isRotateArm)
+	{
+		if (armAngle > 90)
+			armSpeed = -armSpeed;
+
+		if (armAngle < -90)
+			armSpeed = -armSpeed;
+
+		armAngle += armSpeed;
+	}
+		
+	// body
+	objs[1]->SetRotation(bodyAngle);
+
+	// left arm
+	objs[2]->SetRotation(bodyAngle);
+	objs[2]->SetXRotation(armAngle);
+
+	// right arm
+	objs[3]->SetRotation(bodyAngle);
+	objs[3]->SetXRotation(-armAngle);
+
 	for (auto obj : objs)
 		obj->Update(dt);
 
 	for (auto obj : objs)
 		obj->Draw(meshShader);
-
-
+	
 	glutSwapBuffers();
 }
 
@@ -134,8 +168,23 @@ void KeyboardFunc(unsigned char key, int x, int y)
 	case 'y': case 'Y':
 		isRotateCamera = !isRotateCamera;
 		break;
-		// 크레인 x축 이동
-	case 'b': case 'B':
+	// Rotate body clockwise
+	case 'e': case 'E':
+		isRotateCWBody = !isRotateCWBody;
+		break;
+	case 'q': case 'Q':
+		isRotateCCWBody = !isRotateCCWBody;
+		break;
+	case 'r': case 'R':
+		isRotateArm = !isRotateArm;
+		break;
+	// Stop animation
+	case 'c': case 'C':
+		StopAnimation();
+		break;
+	// Reset things
+	case 'f': case 'F':
+		Reset();
 		break;
 	}
 }
@@ -157,7 +206,7 @@ void Shutdown()
 void LoadData()
 {
 	// Set cameara elements
-	camera.position = glm::vec3{ 0.0f, 0.5f, 6.0f };
+	camera.position = glm::vec3{ 0.0f, 1.0f, 6.0f };
 	camera.target = glm::vec3{ 0.0f, 0.0f, -1.0f };
 	camera.up = glm::vec3{ 0.0f, 1.0f, 0.0f };
 
@@ -169,12 +218,35 @@ void LoadData()
 		return;
 	}
 
-	objs.emplace_back(new Cube{ Object::kRed });
-	objs.emplace_back(new Axis{});
+	// Robot
+	Cube* leg{ new Cube{Object::kRed} };
+	leg->SetScale(glm::vec3{ 1.0f, 0.5f, 1.0f });
+	objs.emplace_back(leg);
+
+	Cube* body{ new Cube{Object::kBlue} };
+	body->SetScale(glm::vec3{ 0.5f, 0.25f, 0.5f });
+	body->SetPosition(glm::vec3{ 0.0f, 0.5f, 0.0f });
+	objs.emplace_back(body);
+
+	Cube* leftArm{ new Cube{Object::kMagenta, true} };
+	leftArm->SetScale(glm::vec3{ 0.1f, 0.5f, 0.1f });
+	leftArm->SetPosition(glm::vec3{ -0.2f, 0.75f, 0.0f });
+	objs.emplace_back(leftArm);
+
+	Cube* rightArm{ new Cube{Object::kMagenta, true} };
+	rightArm->SetScale(glm::vec3{ 0.1f, 0.5f, 0.1f });
+	rightArm->SetPosition(glm::vec3{ 0.2f, 0.75f, 0.0f });
+	objs.emplace_back(rightArm);
+	
+	// Axis
+	Axis* axis{ new Axis{} };
+	axis->SetScale(glm::vec3{ 5.0f, 1.0f, 5.0f });
+	objs.emplace_back(axis);
+
+	// Floor
 	Plane* plane{ new Plane{Object::kCyan} };
 	plane->SetScale(glm::vec3{ 10.0f, 1.0f, 10.0f });
 	objs.emplace_back(plane);
-	//plane->SetPosition();
 }
 
 void ChangeDrawStyle()
@@ -187,20 +259,33 @@ void ChangeDrawStyle()
 
 void MoveCrane(unsigned char key)
 {
+	float forwardSpeed{ 0.0f };
+	float strafeSpeed{ 0.0f };
+
 	switch (key)
 	{
-	case 'w': case 'W':
-		camera.position.y += 0.2f;
-		break;
-	case 's': case 'S':
-		camera.position.y -= 0.2f;
-		break;
-	case 'a': case 'A':
-		camera.position.x -= 0.2f;
-		break;
-	case 'd': case 'D':
-		camera.position.x += 0.2f;
-		break;
+		case 'w': case 'W':
+			forwardSpeed -= 0.1f;
+			break;
+		case 's': case 'S':
+			forwardSpeed += 0.1f;
+			break;
+		case 'a': case 'A':
+			strafeSpeed -= 0.1f;
+			break;
+		case 'd': case 'D':
+			strafeSpeed += 0.1f;
+			break;
+	}
+
+	for (int i = 0; i < 4; ++i)
+	{
+		glm::vec3 pos = objs[i]->GetPosition();
+
+		pos.x += strafeSpeed;
+		pos.z += forwardSpeed;
+
+		objs[i]->SetPosition(pos);
 	}
 }
 
@@ -215,4 +300,38 @@ void MoveCamera(unsigned char key)
 		camera.position.z -= 0.2f;
 		break;
 	}
+}
+
+void Reset()
+{
+	StopAnimation();
+
+	// Reset angle
+	bodyAngle = 0.0f;
+	armAngle = 0.0f;
+
+	// Reset leg position
+	objs[0]->SetPosition(glm::vec3{ 0.0f, 0.0f, 0.0f });
+
+	// Reset body
+	objs[1]->SetPosition(glm::vec3{ 0.0f, 0.5f, 0.0f });
+	objs[1]->SetRotation(0.0f);
+
+	// Reset left arm
+	objs[2]->SetPosition(glm::vec3{ -0.2f, 0.75f, 0.0f });
+	objs[2]->SetRotation(0.0f);
+	objs[2]->SetXRotation(0.0f);
+	
+	// Reset right arm
+	objs[3]->SetPosition(glm::vec3{ 0.2f, 0.75f, 0.0f });
+	objs[3]->SetRotation(0.0f);
+	objs[3]->SetXRotation(0.0f);
+}
+
+void StopAnimation()
+{
+	isRotateCamera = false;
+	isRotateCWBody = false;
+	isRotateCCWBody = false;
+	isRotateArm = false;
 }

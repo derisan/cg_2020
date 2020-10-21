@@ -23,7 +23,7 @@ public:
 		kBlack
 	};
 
-	Object(Color color = Color::kBlack);
+	Object(Color color = Color::kBlack, bool rotateX = false);
 	virtual ~Object() = default;
 
 	virtual void Update(float dt);
@@ -45,6 +45,8 @@ public:
 	void SetPosition(const glm::vec3& position) { mPosition = position; mRecomputeWorldTransform = true; }
 	void SetScale(const glm::vec3& scale) { mScale = scale; mRecomputeWorldTransform = true; }
 	void SetRotation(float rotation) { mRotation = rotation; mRecomputeWorldTransform = true; }
+	void SetXRotation(float rotation) { mXRotation = rotation; mRecomputeWorldTransform = true; }
+	
 
 private:
 	State mState;
@@ -58,5 +60,9 @@ private:
 	glm::vec3 mColor;
 
 	bool mRecomputeWorldTransform;
+
+	// Program specific
+	bool mIsRotateX;
+	float mXRotation;
 };
 
