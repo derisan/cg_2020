@@ -7,34 +7,8 @@
 
 Plane::Plane(Color color)
 	: Object{},
-	mVertexArray{ nullptr },
-	mColor{ 0.0f }
+	mVertexArray{ nullptr }
 {
-	switch (color)
-	{
-		case kRed:
-			mColor = glm::vec3{ 1.0f, 0.0f, 0.0f };
-			break;
-		case kGreen:
-			mColor = glm::vec3{ 0.0f, 1.0f, 0.0f };
-			break;
-		case kBlue:
-			mColor = glm::vec3{ 0.0f, 0.0f, 1.0f };
-			break;
-		case kYellow:
-			mColor = glm::vec3{ 1.0f, 1.0f, 0.0f };
-			break;
-		case kMagenta:
-			mColor = glm::vec3{ 1.0f, 0.0f, 1.0f };
-			break;
-		case kCyan:
-			mColor = glm::vec3{ 0.0f, 1.0f, 1.0f };
-			break;
-		case kBlack:
-			mColor = glm::vec3{ 0.0f, 0.0f, 0.0f };
-			break;
-	}
-
 	Load();
 }
 
@@ -45,12 +19,14 @@ Plane::~Plane()
 
 void Plane::Load()
 {
+	glm::vec3 color{ GetColor() };
+
 	const float vertices[] = {
 		// pos				// color
-		-0.5, 0.0, -0.5,	mColor.x, mColor.y, mColor.z,
-		 0.5, 0.0, -0.5,	mColor.x, mColor.y, mColor.z,
-		 0.5, 0.0,  0.5,	mColor.x, mColor.y, mColor.z,
-		-0.5, 0.0,  0.5,	mColor.x, mColor.y, mColor.z
+		-0.5, 0.0, -0.5,	color.x, color.y, color.z,
+		 0.5, 0.0, -0.5,	color.x, color.y, color.z,
+		 0.5, 0.0,  0.5,	color.x, color.y, color.z,
+		-0.5, 0.0,  0.5,	color.x, color.y, color.z
 	};
 
 	const unsigned int indices[] = {
@@ -67,4 +43,9 @@ void Plane::Draw(Shader* shader)
 	shader->SetMatrixUniform("uWorld", GetWorldTransform());
 	mVertexArray->SetActive();
 	glDrawElements(GL_TRIANGLES, mVertexArray->GetNumIndices(), GL_UNSIGNED_INT, nullptr);
+}
+
+void Plane::Update(float dt)
+{
+	Object::Update(dt);
 }

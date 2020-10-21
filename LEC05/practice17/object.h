@@ -12,39 +12,51 @@ public:
 		kPaused
 	};
 
-	Object();
+	enum Color
+	{
+		kRed,
+		kGreen,
+		kBlue,
+		kYellow,
+		kMagenta,
+		kCyan,
+		kBlack
+	};
+
+	Object(Color color = Color::kBlack);
 	virtual ~Object() = default;
 
 	virtual void Update(float dt);
 	virtual void Draw(class Shader* shader) { };
 	virtual void Load() { };
 
+	void ComputeWorldTransform();
+
 	// Getters
 	State GetState() const { return mState; }
-	float GetAngle() const { return mAngle; }
 	const glm::mat4& GetWorldTransform() { return mWorldTransform; }
+	const glm::vec3& GetPosition() const { return mPosition; }
+	const glm::vec3& GetScale() const { return mScale; }
+	float GetRotation() const { return mRotation; }
+	const glm::vec3& GetColor() const { return mColor; }
 
 	// Setters
 	void SetState(State state) { mState = state; }
-	void SetWorldTransform(const glm::mat4& world) { mWorldTransform = world; }
+	void SetPosition(const glm::vec3& position) { mPosition = position; mRecomputeWorldTransform = true; }
+	void SetScale(const glm::vec3& scale) { mScale = scale; mRecomputeWorldTransform = true; }
+	void SetRotation(float rotation) { mRotation = rotation; mRecomputeWorldTransform = true; }
 
-	void SetWorldRotate(float angle, const glm::vec3& vec)
-	{
-		mWorldTransform = glm::rotate(mWorldTransform, glm::radians(angle), vec);
-	}
-
-	void SetWorldTranslate(const glm::vec3& vec)
-	{
-		mWorldTransform = glm::translate(mWorldTransform, vec);
-	}
-
-	void SetWorldScale(const glm::vec3& vec)
-	{
-		mWorldTransform = glm::scale(mWorldTransform, vec);
-	}
 private:
 	State mState;
+	
+	// Transform
 	glm::mat4 mWorldTransform;
-	float mAngle;
+	glm::vec3 mPosition;
+	glm::vec3 mScale;
+	float mRotation;
+
+	glm::vec3 mColor;
+
+	bool mRecomputeWorldTransform;
 };
 

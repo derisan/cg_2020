@@ -1,13 +1,12 @@
 #pragma once
 #include "object.h"
-class Cube :
+class Axis :
     public Object
 {
 public:
-    Cube(Color color = Color::kBlack);
-    ~Cube();
+    Axis(Color color = kBlack);
+    ~Axis();
 
-    void Update(float dt) override;
     void Draw(class Shader* shader) override;
     void Load() override;
 

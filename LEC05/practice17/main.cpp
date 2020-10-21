@@ -12,6 +12,7 @@
 #include "shader.h"
 #include "cube.h"
 #include "plane.h"
+#include "axis.h"
 
 // Camera things
 struct Camera
@@ -24,8 +25,8 @@ struct Camera
 Camera camera;
 
 // Settings
-constexpr int kScrWidth{ 800 };
-constexpr int kScrHeight{ 800 };
+constexpr int kScrWidth{ 1024 };
+constexpr int kScrHeight{ 768 };
 constexpr float dt{ 16.0f / 1000.0f };
 
 // Callback functions
@@ -40,6 +41,8 @@ void MoveCamera(unsigned char key);
 
 
 // Program specific
+void MoveCrane(unsigned char key);
+
 bool isRotateCamera{ false };
 
 Shader* meshShader{ nullptr };
@@ -72,7 +75,6 @@ void DisplayFunc()
 	glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glEnable(GL_DEPTH_TEST);
-	//glEnable(GL_CULL_FACE);
 	glPolygonMode(GL_FRONT_AND_BACK, drawMode);
 
 	// Set view & proj matrix
@@ -90,6 +92,7 @@ void DisplayFunc()
 	meshShader->SetMatrixUniform("uProj", proj);
 
 	glm::mat4 out{ 1.0f };
+	out = glm::rotate(out, glm::radians(30.0f), glm::vec3{ 0.0f, 1.0f, 0.0f });
 	meshShader->SetMatrixUniform("uOut", out);
 
 	for (auto obj : objs)
@@ -112,23 +115,28 @@ void KeyboardFunc(unsigned char key, int x, int y)
 	switch (key)
 	{
 		// 27 == Escape key
-		case 27:
-			Shutdown();
-			break;
-		case 'm': case 'M':
-			ChangeDrawStyle();
-			break;
-		case 'z': case 'Z':
-		case 'x': case 'X':
-		case 'w': case 'W':
-		case 's': case 'S':
-		case 'a': case 'A':
-		case 'd': case 'D':
-			MoveCamera(key);
-			break;
-		case 'y': case 'Y':
-			isRotateCamera = !isRotateCamera;
-			break;
+	case 27:
+		Shutdown();
+		break;
+	case 'm': case 'M':
+		ChangeDrawStyle();
+		break;
+	case 'z': case 'Z':
+	case 'x': case 'X':
+		MoveCamera(key);
+		break;
+	case 'w': case 'W':
+	case 's': case 'S':
+	case 'a': case 'A':
+	case 'd': case 'D':
+		MoveCrane(key);
+		break;
+	case 'y': case 'Y':
+		isRotateCamera = !isRotateCamera;
+		break;
+		// 크레인 x축 이동
+	case 'b': case 'B':
+		break;
 	}
 }
 
@@ -142,14 +150,14 @@ void Shutdown()
 {
 	for (auto obj : objs)
 		delete obj;
-	
+
 	glutLeaveMainLoop();
 }
 
 void LoadData()
 {
 	// Set cameara elements
-	camera.position = glm::vec3{ 0.0f, 0.5f, 5.0f };
+	camera.position = glm::vec3{ 0.0f, 0.5f, 6.0f };
 	camera.target = glm::vec3{ 0.0f, 0.0f, -1.0f };
 	camera.up = glm::vec3{ 0.0f, 1.0f, 0.0f };
 
@@ -161,14 +169,12 @@ void LoadData()
 		return;
 	}
 
-	Cube* leg{ new Cube{} };
-	leg->SetWorldScale(glm::vec3{ 1.0f, 0.5f, 1.0f });
-	objs.emplace_back(leg);
-
-	Plane* plane{ new Plane{Plane::kCyan} };
-	plane->SetWorldScale(glm::vec3{ 10.0f, 1.0f, 10.0f });
-	plane->SetWorldTranslate(glm::vec3{ 0.0f, -0.25f, 0.0f });
+	objs.emplace_back(new Cube{ Object::kRed });
+	objs.emplace_back(new Axis{});
+	Plane* plane{ new Plane{Object::kCyan} };
+	plane->SetScale(glm::vec3{ 10.0f, 1.0f, 10.0f });
 	objs.emplace_back(plane);
+	//plane->SetPosition();
 }
 
 void ChangeDrawStyle()
@@ -179,29 +185,34 @@ void ChangeDrawStyle()
 		drawMode = GL_LINE;
 }
 
-void MoveCamera(unsigned char key)
+void MoveCrane(unsigned char key)
 {
-	glm::vec3 pos{ 0.0f };
-
 	switch (key)
 	{
-		case 'w': case 'W':
-			camera.position.y += 0.2f;
-			break;
-		case 's': case 'S':
-			camera.position.y -= 0.2f;
-			break;
-		case 'a': case 'A':
-			camera.position.x -= 0.2f;
-			break;
-		case 'd': case 'D':
-			camera.position.x += 0.2f;
-			break;
-		case 'z': case 'Z':
-			camera.position.z += 0.2f;
-			break;
-		case 'x': case 'X':
-			camera.position.z -= 0.2f;
-			break;
+	case 'w': case 'W':
+		camera.position.y += 0.2f;
+		break;
+	case 's': case 'S':
+		camera.position.y -= 0.2f;
+		break;
+	case 'a': case 'A':
+		camera.position.x -= 0.2f;
+		break;
+	case 'd': case 'D':
+		camera.position.x += 0.2f;
+		break;
+	}
+}
+
+void MoveCamera(unsigned char key)
+{
+	switch (key)
+	{
+	case 'z': case 'Z':
+		camera.position.z += 0.2f;
+		break;
+	case 'x': case 'X':
+		camera.position.z -= 0.2f;
+		break;
 	}
 }

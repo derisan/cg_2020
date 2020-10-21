@@ -5,8 +5,8 @@
 #include "vertexarray.h"
 #include "shader.h"
 
-Cube::Cube()
-	: Object{},
+Cube::Cube(Color color)
+	: Object{color},
 	mVertexArray{ nullptr }
 {
 	Load();
@@ -17,6 +17,10 @@ Cube::~Cube()
 	delete mVertexArray;
 }
 
+void Cube::Update(float dt)
+{
+	Object::Update(dt);
+}
 
 void Cube::Draw(Shader* shader)
 {
@@ -28,16 +32,18 @@ void Cube::Draw(Shader* shader)
 
 void Cube::Load()
 {
+	glm::vec3 color{ GetColor() };
+
 	const float vertices[] = {
 		// pos				// color
-		-0.5, -0.5,  0.5,	1.0, 0.0, 0.0,
-		 0.5, -0.5,  0.5,	0.0, 1.0, 0.0,
-		 0.5,  0.5,  0.5,	0.0, 0.0, 1.0,
-		-0.5,  0.5,  0.5,	0.5, 0.5, 0.5,
-		-0.5, -0.5, -0.5,	0.5, 0.0, 0.0,
-		 0.5, -0.5, -0.5,	0.0, 0.5, 0.0,
-		 0.5,  0.5, -0.5,	0.0, 0.0, 0.5,
-		-0.5,  0.5, -0.5,	0.5, 0.5, 0.5
+		-0.5, -0.5,  0.5,	color.x, color.y, color.z,
+		 0.5, -0.5,  0.5,	color.x, color.y, color.z,
+		 0.5,  0.5,  0.5,	color.x, color.y, color.z,
+		-0.5,  0.5,  0.5,	color.x, color.y, color.z,
+		-0.5, -0.5, -0.5,	color.x, color.y, color.z,
+		 0.5, -0.5, -0.5,	color.x, color.y, color.z,
+		 0.5,  0.5, -0.5,	color.x, color.y, color.z,
+		-0.5,  0.5, -0.5,	color.x, color.y, color.z,
 	};
 
 	const unsigned int indices[] = {
