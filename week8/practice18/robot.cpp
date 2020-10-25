@@ -14,6 +14,13 @@ Robot::Robot()
 	Load();
 }
 
+Robot::~Robot()
+{
+	for (auto cube : mCubes)
+		delete cube;
+	mCubes.clear();
+}
+
 void Robot::Update(float dt)
 {
 	for (auto cube : mCubes)

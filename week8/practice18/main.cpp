@@ -41,23 +41,18 @@ void MoveCamera(unsigned char key);
 
 // Program specific
 void Reset();
-void StopAnimation();
+
 
 // Control camera rotations
 bool isRotateCameraTarget{ false };
 bool isRotateCameraPosition{ false };
 
-bool isRotateCWBody{ false };
-bool isRotateCCWBody{ false };
-bool isRotateArm{ false };
 
-float bodyAngle{ 0.0f };
-float armAngle{ 0.0f };
 float cameraRotateAngle{ 0.0f };
 
 Shader* meshShader{ nullptr };
 
-std::vector<Object*> objs;
+Axis* axis{ nullptr };
 Stage* stage{ nullptr };
 Robot* robot{ nullptr };
 
@@ -112,16 +107,12 @@ void DisplayFunc()
 	out = glm::rotate(out, glm::radians(cameraRotateAngle), glm::vec3{ 0.0f, 1.0f, 0.0f });
 	meshShader->SetMatrixUniform("uOut", out);
 
-
-	for (auto obj : objs)
-		obj->Update(dt);
-
-	for (auto obj : objs)
-		obj->Draw(meshShader);
-
+	
+	axis->Update(dt);
 	stage->Update(dt);
 	robot->Update(dt);
 
+	axis->Draw(meshShader);
 	stage->Draw(meshShader);
 	robot->Draw(meshShader);
 	
@@ -169,22 +160,8 @@ void KeyboardFunc(unsigned char key, int x, int y)
 	case 'j': case 'J':
 		robot->SetShouldJump(true);
 		break;
-	// Rotate body clockwise
-	case 'e': case 'E':
-		isRotateCWBody = !isRotateCWBody;
-		break;
-	case 'q': case 'Q':
-		isRotateCCWBody = !isRotateCCWBody;
-		break;
-	case 'r': case 'R':
-		isRotateArm = !isRotateArm;
-		break;
-	// Stop animation
-	case 'c': case 'C':
-		StopAnimation();
-		break;
 	// Reset things
-	case 'f': case 'F':
+	case 'i': case 'I':
 		Reset();
 		break;
 	}
@@ -198,8 +175,9 @@ void TimerFunc(int value)
 
 void Shutdown()
 {
-	for (auto obj : objs)
-		delete obj;
+	delete axis;
+	delete stage;
+	delete robot;
 
 	glutLeaveMainLoop();
 }
@@ -220,10 +198,9 @@ void LoadData()
 	}
 
 	// Axis
-	Axis* axis{ new Axis{} };
+	axis = new Axis{};
 	axis->SetScale(glm::vec3{ 1.0f, 1.0f, 1.0f });
-	objs.emplace_back(axis);
-
+	
 	// Stage
 	stage = new Stage{};
 
@@ -254,34 +231,5 @@ void MoveCamera(unsigned char key)
 
 void Reset()
 {
-	StopAnimation();
-
-	// Reset angle
-	bodyAngle = 0.0f;
-	armAngle = 0.0f;
-
-	// Reset leg position
-	objs[0]->SetPosition(glm::vec3{ 0.0f, 0.0f, 0.0f });
-
-	// Reset body
-	objs[1]->SetPosition(glm::vec3{ 0.0f, 0.5f, 0.0f });
-	objs[1]->SetYRotation(0.0f);
-
-	// Reset left arm
-	objs[2]->SetPosition(glm::vec3{ -0.2f, 0.75f, 0.0f });
-	objs[2]->SetYRotation(0.0f);
-	objs[2]->SetXRotation(0.0f);
 	
-	// Reset right arm
-	objs[3]->SetPosition(glm::vec3{ 0.2f, 0.75f, 0.0f });
-	objs[3]->SetYRotation(0.0f);
-	objs[3]->SetXRotation(0.0f);
-}
-
-void StopAnimation()
-{
-	isRotateCameraTarget = false;
-	isRotateCWBody = false;
-	isRotateCCWBody = false;
-	isRotateArm = false;
 }
