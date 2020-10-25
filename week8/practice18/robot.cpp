@@ -8,7 +8,8 @@
 Robot::Robot()
 	: mJumpSpeed{ 0.1f },
 	mShouldJump{ false },
-	mAngle{ 0.0f }
+	mAngle{ 0.0f },
+	mSpeed{ 1.0f }
 {
 	Load();
 }
@@ -21,7 +22,11 @@ void Robot::Update(float dt)
 	if (mShouldJump)
 		Jump();
 
-	mAngle += 1.0f;
+	if (mAngle > 60.0f)
+		mSpeed *= -1;
+	if (mAngle < -60.0f)
+		mSpeed *= -1;
+	mAngle += mSpeed;
 
 	Swing();
 }
@@ -53,12 +58,12 @@ void Robot::Load()
 	rightArm->SetPosition(glm::vec3{ 0.0f, 0.6f, 0.0f });
 	mCubes.emplace_back(rightArm);
 
-	Cube* leftLeg{ new Cube{Cube::kLeftLeg, Object::kGray} };
+	Cube* leftLeg{ new Cube{Cube::kLeftLeg, Object::kGreen} };
 	leftLeg->SetPosition(glm::vec3{ 0.0f, 0.4f, 0.00f });
 	leftLeg->SetZRotate(true);
 	mCubes.emplace_back(leftLeg);
 
-	Cube* rightLeg{ new Cube{Cube::kRightLeg, Object::kGray} };
+	Cube* rightLeg{ new Cube{Cube::kRightLeg, Object::kGreen} };
 	rightLeg->SetPosition(glm::vec3{ 0.0f, 0.4f, 0.0f });
 	rightLeg->SetZRotate(true);
 	mCubes.emplace_back(rightLeg);
@@ -125,6 +130,6 @@ void Robot::Swing()
 		if (cube->IsZRotate())
 		{
 			cube->SetZRotation(mAngle);
-			//mAngle = -mAngle;
+			mAngle = -mAngle;
 		}
 }

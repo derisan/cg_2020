@@ -26,6 +26,7 @@ private:
 	const float mGravity = 0.02f;
 
 	float mAngle;
+	float mSpeed;
 
 	bool mShouldJump;
 };
