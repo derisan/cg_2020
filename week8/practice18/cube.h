@@ -4,7 +4,7 @@ class Cube :
     public Object
 {
 public:
-    Cube(Color color = Color::kBlack, bool rotateX = false);
+    Cube(Color color = Color::kBlack);
     ~Cube();
 
     void Update(float dt) override;

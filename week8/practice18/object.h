@@ -20,10 +20,12 @@ public:
 		kYellow,
 		kMagenta,
 		kCyan,
-		kBlack
+		kBlack,
+		kWhite,
+		kGray
 	};
 
-	Object(Color color = Color::kBlack, bool rotateX = false);
+	Object(Color color = Color::kBlack);
 	virtual ~Object() = default;
 
 	virtual void Update(float dt);
@@ -37,17 +39,19 @@ public:
 	const glm::mat4& GetWorldTransform() { return mWorldTransform; }
 	const glm::vec3& GetPosition() const { return mPosition; }
 	const glm::vec3& GetScale() const { return mScale; }
-	float GetRotation() const { return mRotation; }
+	float GetRotation() const { return mYRotation; }
 	const glm::vec3& GetColor() const { return mColor; }
 
 	// Setters
 	void SetState(State state) { mState = state; }
 	void SetPosition(const glm::vec3& position) { mPosition = position; mRecomputeWorldTransform = true; }
 	void SetScale(const glm::vec3& scale) { mScale = scale; mRecomputeWorldTransform = true; }
-	void SetRotation(float rotation) { mRotation = rotation; mRecomputeWorldTransform = true; }
+	void SetYRotation(float rotation) { mYRotation = rotation; mRecomputeWorldTransform = true; }
 	void SetXRotation(float rotation) { mXRotation = rotation; mRecomputeWorldTransform = true; }
+	void SetZRotation(float rotation) { mZRotation = rotation; mRecomputeWorldTransform = true; }
+	void SetXRotate(bool value) { mIsRotateX = value; }
+	void SetZRotate(bool value) { mIsRotateZ = value; }
 	
-
 private:
 	State mState;
 	
@@ -55,7 +59,7 @@ private:
 	glm::mat4 mWorldTransform;
 	glm::vec3 mPosition;
 	glm::vec3 mScale;
-	float mRotation;
+	float mYRotation;
 
 	glm::vec3 mColor;
 
@@ -63,6 +67,8 @@ private:
 
 	// Program specific
 	bool mIsRotateX;
+	bool mIsRotateZ;
 	float mXRotation;
+	float mZRotation;
 };
 

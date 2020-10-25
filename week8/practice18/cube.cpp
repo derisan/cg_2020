@@ -5,8 +5,8 @@
 #include "vertexarray.h"
 #include "shader.h"
 
-Cube::Cube(Color color, bool rotateX)
-	: Object{color, rotateX},
+Cube::Cube(Color color)
+	: Object{color},
 	mVertexArray{ nullptr }
 {
 	Load();
