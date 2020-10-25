@@ -36,14 +36,14 @@ void Cube::Load()
 
 	const float vertices[] = {
 		// pos				// color
-		 0.0,  0.0,  1.0,	color.x, color.y, color.z,
-		 1.0,  0.0,  1.0,	color.x, color.y, color.z,
-		 1.0,  1.0,  1.0,	color.x, color.y, color.z,
-		 0.0,  1.0,  1.0,	color.x, color.y, color.z,
-		 0.0,  0.0, 0.0,	color.x, color.y, color.z,
-		 1.0,  0.0, 0.0,	color.x, color.y, color.z,
-		 1.0,  1.0, 0.0,	color.x, color.y, color.z,
-		 0.0,  1.0, 0.0,	color.x, color.y, color.z,
+		 -0.5,  0.0,  0.5,	color.x, color.y, color.z,
+		 0.5,  0.0,  0.5,	color.x, color.y, color.z,
+		 0.5,  1.0,  0.5,	color.x, color.y, color.z,
+		-0.5,  1.0,  0.5,	color.x, color.y, color.z,
+		-0.5,  0.0, -0.5,	color.x, color.y, color.z,
+		 0.5,  0.0, -0.5,	color.x, color.y, color.z,
+		 0.5,  1.0, -0.5,	color.x, color.y, color.z,
+		-0.5,  1.0, -0.5,	color.x, color.y, color.z,
 	};
 
 	const unsigned int indices[] = {
