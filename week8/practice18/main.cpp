@@ -40,7 +40,6 @@ void ChangeDrawStyle();
 void MoveCamera(unsigned char key);
 
 // Program specific
-void MoveCrane(unsigned char key);
 void Reset();
 void StopAnimation();
 
@@ -153,7 +152,7 @@ void KeyboardFunc(unsigned char key, int x, int y)
 	case 's': case 'S':
 	case 'a': case 'A':
 	case 'd': case 'D':
-		MoveCrane(key);
+		robot->Move(key);
 		break;
 	// Rotate camera things
 	case 'y': case 'Y':
@@ -234,38 +233,6 @@ void ChangeDrawStyle()
 		drawMode = GL_FILL;
 	else
 		drawMode = GL_LINE;
-}
-
-void MoveCrane(unsigned char key)
-{
-	float forwardSpeed{ 0.0f };
-	float strafeSpeed{ 0.0f };
-
-	switch (key)
-	{
-		case 'w': case 'W':
-			forwardSpeed -= 0.1f;
-			break;
-		case 's': case 'S':
-			forwardSpeed += 0.1f;
-			break;
-		case 'a': case 'A':
-			strafeSpeed -= 0.1f;
-			break;
-		case 'd': case 'D':
-			strafeSpeed += 0.1f;
-			break;
-	}
-
-	for (int i = 0; i < 4; ++i)
-	{
-		glm::vec3 pos = objs[i]->GetPosition();
-
-		pos.x += strafeSpeed;
-		pos.z += forwardSpeed;
-
-		objs[i]->SetPosition(pos);
-	}
 }
 
 void MoveCamera(unsigned char key)
