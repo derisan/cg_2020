@@ -146,6 +146,7 @@
     <ClCompile Include="plane.cpp" />
     <ClCompile Include="random.cpp" />
     <ClCompile Include="shader.cpp" />
+    <ClCompile Include="stage.cpp" />
     <ClCompile Include="vertexarray.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -155,6 +156,7 @@
     <ClInclude Include="plane.h" />
     <ClInclude Include="random.h" />
     <ClInclude Include="shader.h" />
+    <ClInclude Include="stage.h" />
     <ClInclude Include="utils.h" />
     <ClInclude Include="vertexarray.h" />
   </ItemGroup>

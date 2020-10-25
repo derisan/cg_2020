@@ -39,6 +39,9 @@
     <ClCompile Include="vertexarray.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="stage.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="axis.h">
@@ -63,6 +66,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="vertexarray.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="stage.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

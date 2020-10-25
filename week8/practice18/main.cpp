@@ -13,6 +13,7 @@
 #include "cube.h"
 #include "plane.h"
 #include "axis.h"
+#include "stage.h"
 
 // Camera things
 struct Camera
@@ -59,6 +60,7 @@ float cameraRotateAngle{ 0.0f };
 Shader* meshShader{ nullptr };
 
 std::vector<Object*> objs;
+Stage* stage{ nullptr };
 
 auto drawMode = GL_FILL;
 
@@ -112,13 +114,14 @@ void DisplayFunc()
 	meshShader->SetMatrixUniform("uOut", out);
 
 
-		
-
 	for (auto obj : objs)
 		obj->Update(dt);
 
 	for (auto obj : objs)
 		obj->Draw(meshShader);
+
+	stage->Update(dt);
+	stage->Draw(meshShader);
 	
 	glutSwapBuffers();
 }
@@ -149,11 +152,16 @@ void KeyboardFunc(unsigned char key, int x, int y)
 	case 'd': case 'D':
 		MoveCrane(key);
 		break;
+	// Rotate camera things
 	case 'y': case 'Y':
 		isRotateCameraTarget = !isRotateCameraTarget;
 		break;
 	case 'u': case 'U':
 		isRotateCameraPosition = !isRotateCameraPosition;
+		break;
+	// Open stage
+	case 'o': case 'O':
+		stage->SetShouldOpenFront(true);
 		break;
 	// Rotate body clockwise
 	case 'e': case 'E':
@@ -193,7 +201,7 @@ void Shutdown()
 void LoadData()
 {
 	// Set cameara elements
-	camera.position = glm::vec3{ 0.0f, 1.0f, 6.0f };
+	camera.position = glm::vec3{ 0.0f, 0.5f, 6.0f };
 	camera.target = glm::vec3{ 0.0f, 0.0f, -1.0f };
 	camera.up = glm::vec3{ 0.0f, 1.0f, 0.0f };
 
@@ -207,8 +215,11 @@ void LoadData()
 
 	// Axis
 	Axis* axis{ new Axis{} };
-	axis->SetScale(glm::vec3{ 5.0f, 1.0f, 5.0f });
+	axis->SetScale(glm::vec3{ 1.0f, 1.0f, 1.0f });
 	objs.emplace_back(axis);
+
+	// Stage
+	stage = new Stage{};
 }
 
 void ChangeDrawStyle()
@@ -277,16 +288,16 @@ void Reset()
 
 	// Reset body
 	objs[1]->SetPosition(glm::vec3{ 0.0f, 0.5f, 0.0f });
-	objs[1]->SetRotation(0.0f);
+	objs[1]->SetYRotation(0.0f);
 
 	// Reset left arm
 	objs[2]->SetPosition(glm::vec3{ -0.2f, 0.75f, 0.0f });
-	objs[2]->SetRotation(0.0f);
+	objs[2]->SetYRotation(0.0f);
 	objs[2]->SetXRotation(0.0f);
 	
 	// Reset right arm
 	objs[3]->SetPosition(glm::vec3{ 0.2f, 0.75f, 0.0f });
-	objs[3]->SetRotation(0.0f);
+	objs[3]->SetYRotation(0.0f);
 	objs[3]->SetXRotation(0.0f);
 }
 
