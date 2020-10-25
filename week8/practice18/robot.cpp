@@ -167,3 +167,42 @@ void Robot::Swing()
 		}
 	}
 }
+
+void Robot::Reset()
+{
+	for (auto cube : mCubes)
+	{
+		cube->SetXRotation(0.0f);
+		cube->SetZRotation(0.0f);
+		cube->SetYRotation(0.0f);
+		
+		auto part = cube->GetPart();
+		if (part == Cube::kHead || part == Cube::kNose || part == Cube::kBody)
+			cube->SetPosition(glm::vec3{ 0.0f, 0.0f, 0.0f });
+		
+		else if (part == Cube::kLeftArm) {
+			cube->SetPosition(glm::vec3{ 0.0f, 0.6f, 0.0f });
+			cube->SetZRotate(true);
+			cube->SetXRotate(false);
+		}
+		else if (part == Cube::kRightArm)
+		{
+			cube->SetPosition(glm::vec3{ 0.0f, 0.6f, 0.0f });
+			cube->SetZRotate(true);
+			cube->SetXRotate(false);
+		}
+		else if (part == Cube::kLeftLeg)
+		{
+			cube->SetPosition(glm::vec3{ 0.0f, 0.4f, 0.00f });
+			cube->SetZRotate(true);
+			cube->SetXRotate(false);
+		}
+		else if (part == Cube::kRightLeg)
+		{
+			cube->SetPosition(glm::vec3{ 0.0f, 0.4f, 0.00f });
+			cube->SetZRotate(true);
+			cube->SetXRotate(false);
+		}	
+		mAngle = 0.0f;
+	}
+}

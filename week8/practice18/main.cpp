@@ -39,9 +39,6 @@ void LoadData();
 void ChangeDrawStyle();
 void MoveCamera(unsigned char key);
 
-// Program specific
-void Reset();
-
 
 // Control camera rotations
 bool isRotateCameraTarget{ false };
@@ -162,7 +159,7 @@ void KeyboardFunc(unsigned char key, int x, int y)
 		break;
 	// Reset things
 	case 'i': case 'I':
-		Reset();
+		robot->Reset();
 		break;
 	}
 }
@@ -227,9 +224,4 @@ void MoveCamera(unsigned char key)
 		camera.position.z -= 0.2f;
 		break;
 	}
-}
-
-void Reset()
-{
-	
 }

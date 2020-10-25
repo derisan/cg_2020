@@ -16,6 +16,7 @@ public:
 	void Jump();
 	void Move(unsigned char key);
 	void Swing();
+	void Reset();
 
 	void SetShouldJump(bool value) { mShouldJump = value; }
 private:

@@ -30,6 +30,8 @@ public:
     void LeftLegLoad();
     void RightLegLoad();
 
+    Part GetPart() const { return mPart; }
+
 private:
     class VertexArray* mVertexArray;
     Part mPart;
