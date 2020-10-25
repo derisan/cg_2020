@@ -25,6 +25,10 @@ public:
     void HeadLoad();
     void NoseLoad();
     void BodyLoad();
+    void LeftArmLoad();
+    void RightArmLoad();
+    void LeftLegLoad();
+    void RightLegLoad();
 
 private:
     class VertexArray* mVertexArray;

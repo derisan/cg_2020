@@ -15,13 +15,17 @@ public:
 	// Program specific
 	void Jump();
 	void Move(unsigned char key);
+	void Swing();
 
 	void SetShouldJump(bool value) { mShouldJump = value; }
 private:
 	std::vector<class Cube*> mCubes;
 
+	// Jump things
 	float mJumpSpeed;
 	const float mGravity = 0.02f;
+
+	float mAngle;
 
 	bool mShouldJump;
 };

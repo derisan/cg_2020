@@ -45,12 +45,16 @@ void Cube::Load()
 			BodyLoad();
 			break;
 		case kLeftArm:
+			LeftArmLoad();
 			break;
 		case kRightArm:
+			RightArmLoad();
 			break;
 		case kLeftLeg:
+			LeftLegLoad();
 			break;
 		case kRightLeg:
+			RightLegLoad();
 			break;
 	}
 
@@ -164,6 +168,142 @@ void Cube::BodyLoad()
 		 0.2,  0.4, -0.2,	color.x, color.y, color.z,
 		 0.2,  0.6, -0.2,	color.x, color.y, color.z,
 		-0.2,  0.6, -0.2,	color.x, color.y, color.z,
+	};
+
+	const unsigned int indices[] = {
+		0, 1, 2,
+		2, 3, 0,
+		1, 5, 6,
+		6, 2, 1,
+		7, 6, 5,
+		5, 4, 7,
+		4, 0, 3,
+		3, 7, 4,
+		4, 5, 1,
+		1, 0, 4,
+		3, 2, 6,
+		6, 7, 3
+	};
+
+	mVertexArray = new VertexArray(vertices, 8, indices, static_cast<unsigned int>(sizeof(indices) / sizeof(unsigned int)));
+}
+
+void Cube::LeftArmLoad()
+{
+	glm::vec3 color{ GetColor() };
+
+	const float vertices[] = {
+		// pos				// color
+		-0.05,  -0.2,  -0.2,	color.x, color.y, color.z,
+		 0.05,  -0.2,  -0.2,	color.x, color.y, color.z,
+		 0.05,  0.0,  -0.2,	color.x, color.y, color.z,
+		-0.05,  0.0,  -0.2,	color.x, color.y, color.z,
+		-0.05,  -0.2,  -0.3,	color.x, color.y, color.z,
+		 0.05,  -0.2,  -0.3,	color.x, color.y, color.z,
+		 0.05,  0.0,  -0.3,	color.x, color.y, color.z,
+		-0.05,  0.0,  -0.3,	color.x, color.y, color.z,
+	};
+
+	const unsigned int indices[] = {
+		0, 1, 2,
+		2, 3, 0,
+		1, 5, 6,
+		6, 2, 1,
+		7, 6, 5,
+		5, 4, 7,
+		4, 0, 3,
+		3, 7, 4,
+		4, 5, 1,
+		1, 0, 4,
+		3, 2, 6,
+		6, 7, 3
+	};
+
+	mVertexArray = new VertexArray(vertices, 8, indices, static_cast<unsigned int>(sizeof(indices) / sizeof(unsigned int)));
+}
+
+void Cube::RightArmLoad()
+{
+	glm::vec3 color{ GetColor() };
+
+	const float vertices[] = {
+		// pos				// color
+		-0.05,  -0.2,  0.2,	color.x, color.y, color.z,
+		 0.05,  -0.2,  0.2,	color.x, color.y, color.z,
+		 0.05,  0.0,  0.2,	color.x, color.y, color.z,
+		-0.05,  0.0,  0.2,	color.x, color.y, color.z,
+		-0.05,  -0.2,  0.3,	color.x, color.y, color.z,
+		 0.05,  -0.2,  0.3,	color.x, color.y, color.z,
+		 0.05,  0.0,  0.3,	color.x, color.y, color.z,
+		-0.05,  0.0,  0.3,	color.x, color.y, color.z,
+	};
+
+	const unsigned int indices[] = {
+		0, 1, 2,
+		2, 3, 0,
+		1, 5, 6,
+		6, 2, 1,
+		7, 6, 5,
+		5, 4, 7,
+		4, 0, 3,
+		3, 7, 4,
+		4, 5, 1,
+		1, 0, 4,
+		3, 2, 6,
+		6, 7, 3
+	};
+
+	mVertexArray = new VertexArray(vertices, 8, indices, static_cast<unsigned int>(sizeof(indices) / sizeof(unsigned int)));
+}
+
+void Cube::LeftLegLoad()
+{
+	glm::vec3 color{ GetColor() };
+
+	const float vertices[] = {
+		// pos				// color
+		-0.05,  -0.4,  -0.1,	color.x, color.y, color.z,
+		 0.05,  -0.4,  -0.1,	color.x, color.y, color.z,
+		 0.05,  0.0,   -0.1,	color.x, color.y, color.z,
+		-0.05,  0.0,   -0.1,	color.x, color.y, color.z,
+		-0.05,  -0.4,  -0.05,	color.x, color.y, color.z,
+		 0.05,  -0.4,  -0.05,	color.x, color.y, color.z,
+		 0.05,  0.0,   -0.05,	color.x, color.y, color.z,
+		-0.05,  0.0,   -0.05,	color.x, color.y, color.z,
+	};
+
+	const unsigned int indices[] = {
+		0, 1, 2,
+		2, 3, 0,
+		1, 5, 6,
+		6, 2, 1,
+		7, 6, 5,
+		5, 4, 7,
+		4, 0, 3,
+		3, 7, 4,
+		4, 5, 1,
+		1, 0, 4,
+		3, 2, 6,
+		6, 7, 3
+	};
+
+	mVertexArray = new VertexArray(vertices, 8, indices, static_cast<unsigned int>(sizeof(indices) / sizeof(unsigned int)));
+}
+
+void Cube::RightLegLoad()
+{
+	glm::vec3 color{ GetColor() };
+
+	const float vertices[] = {
+		// pos				// color
+		-0.05,  -0.4,  0.05,	color.x, color.y, color.z,
+		 0.05,  -0.4,  0.05,	color.x, color.y, color.z,
+		 0.05,  0.0,   0.05,	color.x, color.y, color.z,
+		-0.05,  0.0,   0.05,	color.x, color.y, color.z,
+		-0.05,  -0.4,  0.1,	color.x, color.y, color.z,
+		 0.05,  -0.4,  0.1,	color.x, color.y, color.z,
+		 0.05,  0.0,   0.1,	color.x, color.y, color.z,
+		-0.05,  0.0,   0.1,	color.x, color.y, color.z,
 	};
 
 	const unsigned int indices[] = {

@@ -7,7 +7,8 @@
 
 Robot::Robot()
 	: mJumpSpeed{ 0.1f },
-	mShouldJump{ false }
+	mShouldJump{ false },
+	mAngle{ 0.0f }
 {
 	Load();
 }
@@ -19,6 +20,10 @@ void Robot::Update(float dt)
 
 	if (mShouldJump)
 		Jump();
+
+	mAngle += 1.0f;
+
+	Swing();
 }
 
 void Robot::Draw(Shader* shader)
@@ -38,29 +43,25 @@ void Robot::Load()
 	Cube* body{ new Cube{Cube::kBody, Object::kRed} };
 	mCubes.emplace_back(body);
 
-	//Cube* leftArm{ new Cube{Object::kYellow} };
-	//leftArm->SetScale(glm::vec3{ 0.1f, 0.2f, 0.1f });
-	//leftArm->SetPosition(glm::vec3{ 0.1f, 0.30f, -0.1f });
-	//leftArm->SetZRotate(true);
-	//mCubes.emplace_back(leftArm);
+	Cube* leftArm{ new Cube{Cube::kLeftArm, Object::kYellow} };
+	leftArm->SetZRotate(true);
+	leftArm->SetPosition(glm::vec3{ 0.0f, 0.6f, 0.0f });
+	mCubes.emplace_back(leftArm);
 
-	//Cube* rightArm{ new Cube{Object::kYellow} };
-	//rightArm->SetScale(glm::vec3{ 0.1f, 0.2f, 0.1f });
-	//rightArm->SetPosition(glm::vec3{ 0.1f, 0.30f, 0.3f });
-	//rightArm->SetZRotate(true);
-	//mCubes.emplace_back(rightArm);
+	Cube* rightArm{ new Cube{Cube::kRightArm, Object::kYellow} };
+	rightArm->SetZRotate(true);
+	rightArm->SetPosition(glm::vec3{ 0.0f, 0.6f, 0.0f });
+	mCubes.emplace_back(rightArm);
 
-	//Cube* leftLeg{ new Cube{Object::kBlue} };
-	//leftLeg->SetScale(glm::vec3{ 0.1f, 0.2f, 0.1f });
-	//leftLeg->SetPosition(glm::vec3{ 0.1f, 0.0f, 0.00f });
-	//leftLeg->SetZRotate(true);
-	//mCubes.emplace_back(leftLeg);
+	Cube* leftLeg{ new Cube{Cube::kLeftLeg, Object::kGray} };
+	leftLeg->SetPosition(glm::vec3{ 0.0f, 0.4f, 0.00f });
+	leftLeg->SetZRotate(true);
+	mCubes.emplace_back(leftLeg);
 
-	//Cube* rightLeg{ new Cube{Object::kBlue} };
-	//rightLeg->SetScale(glm::vec3{ 0.1f, 0.2f, 0.1f });
-	//rightLeg->SetPosition(glm::vec3{ 0.1f, 0.0f, 0.2f });
-	//rightLeg->SetZRotate(true);
-	//mCubes.emplace_back(rightLeg);
+	Cube* rightLeg{ new Cube{Cube::kRightLeg, Object::kGray} };
+	rightLeg->SetPosition(glm::vec3{ 0.0f, 0.4f, 0.0f });
+	rightLeg->SetZRotate(true);
+	mCubes.emplace_back(rightLeg);
 }
 
 void Robot::Jump()
@@ -116,4 +117,14 @@ void Robot::Move(unsigned char key)
 		cube->SetYRotation(dir);
 		cube->SetPosition(pos);
 	}
+}
+
+void Robot::Swing()
+{
+	for (auto cube : mCubes)
+		if (cube->IsZRotate())
+		{
+			cube->SetZRotation(mAngle);
+			//mAngle = -mAngle;
+		}
 }

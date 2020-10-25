@@ -41,6 +41,7 @@ public:
 	const glm::vec3& GetScale() const { return mScale; }
 	float GetRotation() const { return mYRotation; }
 	const glm::vec3& GetColor() const { return mColor; }
+	bool IsZRotate() const { return mIsRotateZ; }
 
 	// Setters
 	void SetState(State state) { mState = state; }
