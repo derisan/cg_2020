@@ -4,14 +4,30 @@ class Cube :
     public Object
 {
 public:
-    Cube(Color color = Color::kBlack);
+    enum Part
+    {
+        kHead,
+        kNose,
+        kBody,
+        kLeftArm,
+        kRightArm,
+        kLeftLeg,
+        kRightLeg
+    };
+
+    Cube(Part part, Color color = Color::kBlack);
     ~Cube();
 
     void Update(float dt) override;
     void Draw(class Shader* shader) override;
     void Load() override;
 
+    void HeadLoad();
+    void NoseLoad();
+    void BodyLoad();
+
 private:
     class VertexArray* mVertexArray;
+    Part mPart;
 };
 
