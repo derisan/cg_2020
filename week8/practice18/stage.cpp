@@ -63,7 +63,7 @@ void Stage::Load()
 	back->SetScale(glm::vec3{ 5.0f, 1.0f, 1.0f });
 	mPlanes.emplace_back(back);
 
-	Plane* front{ new Plane{Object::kBlack} };
+	Plane* front{ new Plane{Object::kWhite} };
 	front->SetXRotate(true);
 	front->SetXRotation(-90.0f);
 	front->SetPosition(glm::vec3{ 0.0f, 0.5f, 2.5f });

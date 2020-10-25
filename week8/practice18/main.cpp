@@ -10,10 +10,9 @@
 
 #include "utils.h"
 #include "shader.h"
-#include "cube.h"
-#include "plane.h"
 #include "axis.h"
 #include "stage.h"
+#include "robot.h"
 
 // Camera things
 struct Camera
@@ -61,6 +60,7 @@ Shader* meshShader{ nullptr };
 
 std::vector<Object*> objs;
 Stage* stage{ nullptr };
+Robot* robot{ nullptr };
 
 auto drawMode = GL_FILL;
 
@@ -86,7 +86,7 @@ int main(int argc, char** argv)
 
 void DisplayFunc()
 {
-	glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glEnable(GL_DEPTH_TEST);
 	glPolygonMode(GL_FRONT_AND_BACK, drawMode);
@@ -121,7 +121,10 @@ void DisplayFunc()
 		obj->Draw(meshShader);
 
 	stage->Update(dt);
+	robot->Update(dt);
+
 	stage->Draw(meshShader);
+	robot->Draw(meshShader);
 	
 	glutSwapBuffers();
 }
@@ -220,6 +223,9 @@ void LoadData()
 
 	// Stage
 	stage = new Stage{};
+
+	// Robot
+	robot = new Robot{};
 }
 
 void ChangeDrawStyle()

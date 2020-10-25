@@ -22,7 +22,6 @@ private:
 	std::vector<class Plane*> mPlanes;
 	int mFrontIdx;
 
-
 	bool mShouldOpenFront;
 };
 
