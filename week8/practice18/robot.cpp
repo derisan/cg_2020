@@ -113,6 +113,26 @@ void Robot::Move(unsigned char key)
 			break;
 	}
 
+	if (key == 'w' || key == 's')
+	{
+		for (auto cube : mCubes)
+			if (cube->IsZRotate())
+			{
+				cube->SetZRotate(false);
+				cube->SetXRotate(true);
+			}
+	}
+
+	if (key == 'a' || key == 'd')
+	{
+		for (auto cube : mCubes)
+			if (cube->IsXRotate())
+			{
+				cube->SetZRotate(true);
+				cube->SetXRotate(false);
+			}
+	}
+
 	for (auto cube : mCubes)
 	{
 		glm::vec3 pos{ cube->GetPosition() };
@@ -127,9 +147,16 @@ void Robot::Move(unsigned char key)
 void Robot::Swing()
 {
 	for (auto cube : mCubes)
+	{
 		if (cube->IsZRotate())
 		{
 			cube->SetZRotation(mAngle);
 			mAngle = -mAngle;
 		}
+		else if (cube->IsXRotate())
+		{
+			cube->SetXRotation(mAngle);
+			mAngle = -mAngle;
+		}
+	}
 }
