@@ -1,5 +1,5 @@
 // -----------------------------------
-// 실습17
+// 실습18
 // 2016180007 김명규
 // -----------------------------------
 
@@ -44,7 +44,10 @@ void MoveCrane(unsigned char key);
 void Reset();
 void StopAnimation();
 
-bool isRotateCamera{ false };
+// Control camera rotations
+bool isRotateCameraTarget{ false };
+bool isRotateCameraPosition{ false };
+
 bool isRotateCWBody{ false };
 bool isRotateCCWBody{ false };
 bool isRotateArm{ false };
@@ -88,11 +91,20 @@ void DisplayFunc()
 	// Set view & proj matrix
 	meshShader->SetActive();
 	glm::mat4 view{ 1.0f };
+	view = glm::lookAt(camera.position, camera.target, camera.up);
 
-	if (isRotateCamera)
+	if (isRotateCameraTarget)
+	{
 		camera.target = glm::rotate(camera.target, glm::radians(speed), glm::vec3{ 0.0f, 1.0f, 0.0f });
+		view = glm::lookAt(camera.position, camera.position + camera.target, camera.up);
+	}
+		
+	if (isRotateCameraPosition)
+	{
+		camera.position = glm::rotate(camera.position, glm::radians(speed), glm::vec3{ 0.0f, 1.0f, 0.0f });
+		view = glm::lookAt(camera.position, camera.target, camera.up);
+	}
 
-	view = glm::lookAt(camera.position, camera.position + camera.target, camera.up);
 	meshShader->SetMatrixUniform("uView", view);
 
 	glm::mat4 proj{ 1.0f };
@@ -166,7 +178,14 @@ void KeyboardFunc(unsigned char key, int x, int y)
 		MoveCrane(key);
 		break;
 	case 'y': case 'Y':
-		isRotateCamera = !isRotateCamera;
+		isRotateCameraTarget = !isRotateCameraTarget;
+		if (isRotateCameraTarget)
+			camera.target = glm::vec3{ 0.0f, 0.0f, -1.0f };
+		break;
+	case 'u': case 'U':
+		isRotateCameraPosition = !isRotateCameraPosition;
+		if (isRotateCameraPosition)
+			camera.target = glm::vec3{ 0.0f, 0.0f, 0.0f };
 		break;
 	// Rotate body clockwise
 	case 'e': case 'E':
@@ -207,7 +226,7 @@ void LoadData()
 {
 	// Set cameara elements
 	camera.position = glm::vec3{ 0.0f, 1.0f, 6.0f };
-	camera.target = glm::vec3{ 0.0f, 0.0f, -1.0f };
+	camera.target = glm::vec3{ 0.0f, 0.0f, 0.0f };
 	camera.up = glm::vec3{ 0.0f, 1.0f, 0.0f };
 
 	// Create shader
@@ -330,7 +349,7 @@ void Reset()
 
 void StopAnimation()
 {
-	isRotateCamera = false;
+	isRotateCameraTarget = false;
 	isRotateCWBody = false;
 	isRotateCCWBody = false;
 	isRotateArm = false;
