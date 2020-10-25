@@ -1,9 +1,13 @@
 #include "robot.h"
 
+#include <iostream>
+
 #include "cube.h"
 #include "shader.h"
 
 Robot::Robot()
+	: mJumpSpeed{ 0.1f },
+	mShouldJump{ false }
 {
 	Load();
 }
@@ -12,6 +16,9 @@ void Robot::Update(float dt)
 {
 	for (auto cube : mCubes)
 		cube->Update(dt);
+
+	if (mShouldJump)
+		Jump();
 }
 
 void Robot::Draw(Shader* shader)
@@ -64,14 +71,27 @@ void Robot::Load()
 
 void Robot::Jump()
 {
+	for (auto cube : mCubes)
+	{
+		glm::vec3 pos{ cube->GetPosition() };
+		pos.y += mJumpSpeed;
+		cube->SetPosition(pos);
+	}
+	mJumpSpeed -= mGravity;
 
+	std::cout << "asdf" << std::endl;
+	if (mJumpSpeed < 0 && mCubes[0]->GetPosition().y < 0.6f)
+	{
+		mShouldJump = false;
+		mJumpSpeed = 0.1f;
+	}
 }
 
 void Robot::Move(unsigned char key)
 {
 	float forwardSpeed{ 0.0f };
 	float strafeSpeed{ 0.0f };
-
+	
 	switch (key)
 	{
 		case 'w': case 'W':

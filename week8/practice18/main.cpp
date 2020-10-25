@@ -165,6 +165,10 @@ void KeyboardFunc(unsigned char key, int x, int y)
 	case 'o': case 'O':
 		stage->SetShouldOpenFront(true);
 		break;
+	// Robot jump
+	case 'j': case 'J':
+		robot->SetShouldJump(true);
+		break;
 	// Rotate body clockwise
 	case 'e': case 'E':
 		isRotateCWBody = !isRotateCWBody;

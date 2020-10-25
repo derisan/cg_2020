@@ -16,7 +16,13 @@ public:
 	void Jump();
 	void Move(unsigned char key);
 
+	void SetShouldJump(bool value) { mShouldJump = value; }
 private:
 	std::vector<class Cube*> mCubes;
+
+	float mJumpSpeed;
+	const float mGravity = 0.02f;
+
+	bool mShouldJump;
 };
 
