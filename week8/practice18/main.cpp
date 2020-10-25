@@ -54,6 +54,7 @@ bool isRotateArm{ false };
 
 float bodyAngle{ 0.0f };
 float armAngle{ 0.0f };
+float cameraRotateAngle{ 0.0f };
 
 Shader* meshShader{ nullptr };
 
@@ -91,56 +92,27 @@ void DisplayFunc()
 	// Set view & proj matrix
 	meshShader->SetActive();
 	glm::mat4 view{ 1.0f };
-	view = glm::lookAt(camera.position, camera.target, camera.up);
-
+	// 카메라 자전
 	if (isRotateCameraTarget)
-	{
 		camera.target = glm::rotate(camera.target, glm::radians(speed), glm::vec3{ 0.0f, 1.0f, 0.0f });
-		view = glm::lookAt(camera.position, camera.position + camera.target, camera.up);
-	}
-		
-	if (isRotateCameraPosition)
-	{
-		camera.position = glm::rotate(camera.position, glm::radians(speed), glm::vec3{ 0.0f, 1.0f, 0.0f });
-		view = glm::lookAt(camera.position, camera.target, camera.up);
-	}
-
+	view = glm::lookAt(camera.position, camera.position + camera.target, camera.up);
 	meshShader->SetMatrixUniform("uView", view);
+		
+	// 카메라 공전
+	if (isRotateCameraPosition)
+		cameraRotateAngle += speed;
+
 
 	glm::mat4 proj{ 1.0f };
 	proj = glm::perspective(45.0f, static_cast<float>(kScrWidth) / static_cast<float>(kScrHeight), 0.1f, 100.0f);
 	meshShader->SetMatrixUniform("uProj", proj);
 
 	glm::mat4 out{ 1.0f };
-	out = glm::rotate(out, glm::radians(30.0f), glm::vec3{ 0.0f, 1.0f, 0.0f });
+	out = glm::rotate(out, glm::radians(cameraRotateAngle), glm::vec3{ 0.0f, 1.0f, 0.0f });
 	meshShader->SetMatrixUniform("uOut", out);
 
-	if (isRotateCWBody)
-		bodyAngle += speed;
-	else if (isRotateCCWBody)
-		bodyAngle -= speed;
 
-	if (isRotateArm)
-	{
-		if (armAngle > 90)
-			armSpeed = -armSpeed;
-
-		if (armAngle < -90)
-			armSpeed = -armSpeed;
-
-		armAngle += armSpeed;
-	}
 		
-	// body
-	objs[1]->SetRotation(bodyAngle);
-
-	// left arm
-	objs[2]->SetRotation(bodyAngle);
-	objs[2]->SetXRotation(armAngle);
-
-	// right arm
-	objs[3]->SetRotation(bodyAngle);
-	objs[3]->SetXRotation(-armAngle);
 
 	for (auto obj : objs)
 		obj->Update(dt);
@@ -179,13 +151,9 @@ void KeyboardFunc(unsigned char key, int x, int y)
 		break;
 	case 'y': case 'Y':
 		isRotateCameraTarget = !isRotateCameraTarget;
-		if (isRotateCameraTarget)
-			camera.target = glm::vec3{ 0.0f, 0.0f, -1.0f };
 		break;
 	case 'u': case 'U':
 		isRotateCameraPosition = !isRotateCameraPosition;
-		if (isRotateCameraPosition)
-			camera.target = glm::vec3{ 0.0f, 0.0f, 0.0f };
 		break;
 	// Rotate body clockwise
 	case 'e': case 'E':
@@ -226,7 +194,7 @@ void LoadData()
 {
 	// Set cameara elements
 	camera.position = glm::vec3{ 0.0f, 1.0f, 6.0f };
-	camera.target = glm::vec3{ 0.0f, 0.0f, 0.0f };
+	camera.target = glm::vec3{ 0.0f, 0.0f, -1.0f };
 	camera.up = glm::vec3{ 0.0f, 1.0f, 0.0f };
 
 	// Create shader
@@ -237,35 +205,10 @@ void LoadData()
 		return;
 	}
 
-	// Robot
-	Cube* leg{ new Cube{Object::kRed} };
-	leg->SetScale(glm::vec3{ 1.0f, 0.5f, 1.0f });
-	objs.emplace_back(leg);
-
-	Cube* body{ new Cube{Object::kBlue} };
-	body->SetScale(glm::vec3{ 0.5f, 0.25f, 0.5f });
-	body->SetPosition(glm::vec3{ 0.0f, 0.5f, 0.0f });
-	objs.emplace_back(body);
-
-	Cube* leftArm{ new Cube{Object::kMagenta, true} };
-	leftArm->SetScale(glm::vec3{ 0.1f, 0.5f, 0.1f });
-	leftArm->SetPosition(glm::vec3{ -0.2f, 0.75f, 0.0f });
-	objs.emplace_back(leftArm);
-
-	Cube* rightArm{ new Cube{Object::kMagenta, true} };
-	rightArm->SetScale(glm::vec3{ 0.1f, 0.5f, 0.1f });
-	rightArm->SetPosition(glm::vec3{ 0.2f, 0.75f, 0.0f });
-	objs.emplace_back(rightArm);
-	
 	// Axis
 	Axis* axis{ new Axis{} };
 	axis->SetScale(glm::vec3{ 5.0f, 1.0f, 5.0f });
 	objs.emplace_back(axis);
-
-	// Floor
-	Plane* plane{ new Plane{Object::kCyan} };
-	plane->SetScale(glm::vec3{ 10.0f, 1.0f, 10.0f });
-	objs.emplace_back(plane);
 }
 
 void ChangeDrawStyle()
