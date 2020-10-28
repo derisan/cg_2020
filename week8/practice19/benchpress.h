@@ -12,11 +12,13 @@ public:
 	void Draw(class Shader* shader);
 	void Load();
 
+	void Move();
 private:
 	std::vector<class Sphere*> mSpheres;
 	std::vector<class Cube*> mCubes;
 
 	float mAngle;
-	float mSpeed;
+	float mRotationSpeed;
+	float mMoveSpeed;
 };
 

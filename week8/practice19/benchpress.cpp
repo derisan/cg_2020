@@ -6,7 +6,8 @@
 
 BenchPress::BenchPress()
 	: mAngle{ 0.0f },
-	mSpeed{ 1.5f }
+	mRotationSpeed{ 1.5f },
+	mMoveSpeed{ 0.0066f }
 {
 	Load();
 }
@@ -23,11 +24,13 @@ BenchPress::~BenchPress()
 void BenchPress::Update(float dt)
 {
 	if (mAngle > 90.0f)
-		mSpeed = -mSpeed;
+		mRotationSpeed = -mRotationSpeed;
 	if (mAngle < 0.0f)
-		mSpeed = -mSpeed;
+		mRotationSpeed = -mRotationSpeed;
 
-	mAngle += mSpeed;
+	mAngle += mRotationSpeed;
+
+	Move();
 
 	for (auto sphere : mSpheres)
 		sphere->Update(dt);
@@ -90,14 +93,35 @@ void BenchPress::Load()
 	mCubes.push_back(body);
 
 	Cube* leftArm{ new Cube{Cube::kDefault, Object::kGreen} };
-	leftArm->SetScale(glm::vec3{ 0.1f, 0.5f, 0.1f });
+	leftArm->SetScale(glm::vec3{ 0.1f, 0.4f, 0.1f });
 	leftArm->SetPosition(glm::vec3{ -2.2f, 0.1f, -2.0f });
 	leftArm->SetZRotate(true);
 	mCubes.push_back(leftArm);
 
 	Cube* rightArm{ new Cube{Cube::kDefault, Object::kGreen} };
-	rightArm->SetScale(glm::vec3{ 0.1f, 0.5f, 0.1f });
+	rightArm->SetScale(glm::vec3{ 0.1f, 0.4f, 0.1f });
 	rightArm->SetPosition(glm::vec3{ -1.8f, 0.1f, -2.0f });
 	rightArm->SetZRotate(true);
 	mCubes.push_back(rightArm);
+}
+
+void BenchPress::Move()
+{
+	glm::vec3 pos;
+	for (auto sphere : mSpheres)
+	{
+		pos = sphere->GetPosition();
+		pos.y += mMoveSpeed;
+		sphere->SetPosition(pos);
+	}
+
+	pos = mCubes[0]->GetPosition();
+	pos.y += mMoveSpeed;
+	mCubes[0]->SetPosition(pos);
+
+	if (pos.y > 0.5f)
+		mMoveSpeed = -mMoveSpeed;
+	
+	if (pos.y < 0.1f)
+		mMoveSpeed = -mMoveSpeed;
 }

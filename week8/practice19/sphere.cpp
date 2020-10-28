@@ -111,3 +111,4 @@ void Sphere::Load()
 
 	mVertexArray = new VertexArray(vertices.data(), vertices.size() / 6, indices.data(), indices.size());
 }
+
