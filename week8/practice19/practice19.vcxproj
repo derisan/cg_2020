@@ -140,6 +140,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="axis.cpp" />
+    <ClCompile Include="benchpress.cpp" />
     <ClCompile Include="cube.cpp" />
     <ClCompile Include="cylinder.cpp" />
     <ClCompile Include="house.cpp" />
@@ -158,6 +159,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="axis.h" />
+    <ClInclude Include="benchpress.h" />
     <ClInclude Include="cube.h" />
     <ClInclude Include="cylinder.h" />
     <ClInclude Include="house.h" />

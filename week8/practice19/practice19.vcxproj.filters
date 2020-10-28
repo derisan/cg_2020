@@ -63,6 +63,9 @@
     <ClCompile Include="running_machine.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="benchpress.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="axis.h">
@@ -111,6 +114,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="running_machine.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="benchpress.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

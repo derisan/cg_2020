@@ -17,6 +17,7 @@
 #include "house.h"
 #include "pole.h"
 #include "running_machine.h"
+#include "benchpress.h"
 
 // Camera things
 struct Camera
@@ -60,6 +61,7 @@ Tree* tree{ nullptr };
 House* house{ nullptr };
 Pole* pole{ nullptr };
 RunningMachine* rm{ nullptr };
+BenchPress* bp{ nullptr };
 
 auto drawMode = GL_FILL;
 
@@ -122,6 +124,7 @@ void DisplayFunc()
 	house->Update(dt);
 	pole->Update(dt);
 	rm->Update(dt);
+	bp->Update(dt);
 	
 	
 	stage->Draw(meshShader);
@@ -129,6 +132,7 @@ void DisplayFunc()
 	robot->Draw(meshShader);
 	house->Draw(meshShader);
 	pole->Draw(meshShader);
+	bp->Draw(meshShader);
 	rm->Draw(meshShader);
 	tree->Draw(meshShader);
 	
@@ -257,6 +261,9 @@ void LoadData()
 
 	// Running machine
 	rm = new RunningMachine{};
+
+	// Bench press
+	bp = new BenchPress{};
 }
 
 void ChangeDrawStyle()
