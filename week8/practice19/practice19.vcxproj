@@ -141,6 +141,7 @@
   <ItemGroup>
     <ClCompile Include="axis.cpp" />
     <ClCompile Include="cube.cpp" />
+    <ClCompile Include="house.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="object.cpp" />
     <ClCompile Include="plane.cpp" />
@@ -154,6 +155,7 @@
   <ItemGroup>
     <ClInclude Include="axis.h" />
     <ClInclude Include="cube.h" />
+    <ClInclude Include="house.h" />
     <ClInclude Include="object.h" />
     <ClInclude Include="plane.h" />
     <ClInclude Include="random.h" />

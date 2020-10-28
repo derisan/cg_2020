@@ -74,6 +74,9 @@ void Robot::Load()
 	rightLeg->SetPosition(glm::vec3{ 0.0f, 0.4f, 0.0f });
 	rightLeg->SetZRotate(true);
 	mCubes.emplace_back(rightLeg);
+
+	for(int i = 0; i < 20; ++i)
+		Move('s');
 }
 
 void Robot::Jump()

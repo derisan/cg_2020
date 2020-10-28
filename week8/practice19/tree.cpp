@@ -1,5 +1,7 @@
 #include "tree.h"
 
+#include <iostream>
+
 #include "cube.h"
 #include "shader.h"
 
@@ -47,11 +49,10 @@ void Tree::ScalingBush(float dt)
 	glm::vec3 scale{ mBush->GetScale() };
 	
 	mSpeed += dt;
-
+	
 	scale.x += cos(mSpeed) * 0.0025f;
 	scale.y += cos(mSpeed) * 0.0025f;
 	scale.z += cos(mSpeed) * 0.0025f;
-
 
 	mBush->SetScale(scale);
 }
