@@ -17,6 +17,7 @@
 #include "tree.h"
 #include "house.h"
 
+
 // Camera things
 struct Camera
 {
@@ -58,6 +59,7 @@ Robot* robot{ nullptr };
 Tree* tree{ nullptr };
 House* house{ nullptr };
 
+
 auto drawMode = GL_FILL;
 
 constexpr float speed{ 1.5f };
@@ -86,7 +88,7 @@ void DisplayFunc()
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_CULL_FACE);
-	glFrontFace(GL_CW);
+	//glFrontFace(GL_CCW);
 	
 	glPolygonMode(GL_FRONT_AND_BACK, drawMode);
 
@@ -119,11 +121,12 @@ void DisplayFunc()
 	tree->Update(dt);
 	house->Update(dt);
 	
-	axis->Draw(meshShader);
 	stage->Draw(meshShader);
+	axis->Draw(meshShader);
 	robot->Draw(meshShader);
-	tree->Draw(meshShader);
 	house->Draw(meshShader);
+	tree->Draw(meshShader);
+	
 
 	if (house->Collides(robot))
 	{	

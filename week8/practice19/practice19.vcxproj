@@ -148,6 +148,7 @@
     <ClCompile Include="random.cpp" />
     <ClCompile Include="robot.cpp" />
     <ClCompile Include="shader.cpp" />
+    <ClCompile Include="sphere.cpp" />
     <ClCompile Include="stage.cpp" />
     <ClCompile Include="tree.cpp" />
     <ClCompile Include="vertexarray.cpp" />
@@ -161,6 +162,7 @@
     <ClInclude Include="random.h" />
     <ClInclude Include="robot.h" />
     <ClInclude Include="shader.h" />
+    <ClInclude Include="sphere.h" />
     <ClInclude Include="stage.h" />
     <ClInclude Include="tree.h" />
     <ClInclude Include="utils.h" />

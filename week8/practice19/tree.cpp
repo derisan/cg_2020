@@ -1,8 +1,9 @@
 #include "tree.h"
 
-#include <iostream>
+#include <GL/glew.h>
 
 #include "cube.h"
+#include "sphere.h"
 #include "shader.h"
 
 Tree::Tree()
@@ -30,14 +31,15 @@ void Tree::Update(float dt)
 void Tree::Draw(Shader* shader)
 {
 	mRoot->Draw(shader);
+	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	mBush->Draw(shader);
 }
 
 void Tree::Load()
 {
-	mBush = new Cube{ Cube::kDefault, Object::kGreen };
+	mBush = new Sphere{ Object::kGreen };
 	mBush->SetPosition(glm::vec3{ 2.0f, 1.0f, 2.0f });
-	mBush->SetScale(glm::vec3{ 0.5f, 0.5f, 0.5f });
+	mBush->SetScale(glm::vec3{ 0.6f, 0.6f, 0.6f });
 
 	mRoot = new Cube{ Cube::kDefault, Object::kBrown };
 	mRoot->SetPosition(glm::vec3{ 2.0f, 0.0f, 2.0f });

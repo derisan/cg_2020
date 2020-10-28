@@ -30,8 +30,8 @@ void Plane::Load()
 	};
 
 	const unsigned int indices[] = {
-		0, 2, 1,
-		0, 3, 2
+		0, 1, 2,
+		0, 2, 3
 	};
 
 	mVertexArray = new VertexArray(vertices, 4, indices, static_cast<unsigned int>(sizeof(indices) / sizeof(unsigned int)));

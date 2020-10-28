@@ -13,7 +13,7 @@ public:
 
 private:
 	class Cube* mRoot;
-	class Cube* mBush;
+	class Sphere* mBush;
 
 	float mSpeed;
 };
