@@ -16,7 +16,7 @@
 #include "tree.h"
 #include "house.h"
 #include "pole.h"
-
+#include "running_machine.h"
 
 // Camera things
 struct Camera
@@ -59,7 +59,7 @@ Robot* robot{ nullptr };
 Tree* tree{ nullptr };
 House* house{ nullptr };
 Pole* pole{ nullptr };
-
+RunningMachine* rm{ nullptr };
 
 auto drawMode = GL_FILL;
 
@@ -88,7 +88,7 @@ void DisplayFunc()
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glEnable(GL_DEPTH_TEST);
-	glEnable(GL_CULL_FACE);
+	//glEnable(GL_CULL_FACE);
 	glPolygonMode(GL_FRONT_AND_BACK, drawMode);
 	glFrontFace(GL_CW);
 
@@ -121,12 +121,15 @@ void DisplayFunc()
 	tree->Update(dt);
 	house->Update(dt);
 	pole->Update(dt);
+	rm->Update(dt);
+	
 	
 	stage->Draw(meshShader);
 	axis->Draw(meshShader);
 	robot->Draw(meshShader);
 	house->Draw(meshShader);
 	pole->Draw(meshShader);
+	rm->Draw(meshShader);
 	tree->Draw(meshShader);
 	
 
@@ -251,6 +254,9 @@ void LoadData()
 
 	// Pole
 	pole = new Pole{};
+
+	// Running machine
+	rm = new RunningMachine{};
 }
 
 void ChangeDrawStyle()

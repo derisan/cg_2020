@@ -141,6 +141,7 @@
   <ItemGroup>
     <ClCompile Include="axis.cpp" />
     <ClCompile Include="cube.cpp" />
+    <ClCompile Include="cylinder.cpp" />
     <ClCompile Include="house.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="object.cpp" />
@@ -148,6 +149,7 @@
     <ClCompile Include="pole.cpp" />
     <ClCompile Include="random.cpp" />
     <ClCompile Include="robot.cpp" />
+    <ClCompile Include="running_machine.cpp" />
     <ClCompile Include="shader.cpp" />
     <ClCompile Include="sphere.cpp" />
     <ClCompile Include="stage.cpp" />
@@ -157,12 +159,14 @@
   <ItemGroup>
     <ClInclude Include="axis.h" />
     <ClInclude Include="cube.h" />
+    <ClInclude Include="cylinder.h" />
     <ClInclude Include="house.h" />
     <ClInclude Include="object.h" />
     <ClInclude Include="plane.h" />
     <ClInclude Include="pole.h" />
     <ClInclude Include="random.h" />
     <ClInclude Include="robot.h" />
+    <ClInclude Include="running_machine.h" />
     <ClInclude Include="shader.h" />
     <ClInclude Include="sphere.h" />
     <ClInclude Include="stage.h" />

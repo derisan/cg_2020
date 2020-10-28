@@ -11,7 +11,6 @@ public:
     void Draw(class Shader* shader) override;
     void Load() override;
 
-
 private:
     class VertexArray* mVertexArray;
 };

@@ -24,10 +24,12 @@ void Cylinder::Update(float dt)
 
 void Cylinder::Draw(Shader* shader)
 {
+    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	shader->SetActive();
 	shader->SetMatrixUniform("uWorld", GetWorldTransform());
 	mVertexArray->SetActive();
 	glDrawElements(GL_TRIANGLES, mVertexArray->GetNumIndices(), GL_UNSIGNED_INT, nullptr);
+    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 }
 
 void Cylinder::Load()

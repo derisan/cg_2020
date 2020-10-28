@@ -33,6 +33,7 @@ void Tree::Draw(Shader* shader)
 	mRoot->Draw(shader);
 	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	mBush->Draw(shader);
+	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 }
 
 void Tree::Load()

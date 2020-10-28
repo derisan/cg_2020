@@ -5,7 +5,7 @@
 
 class Object
 {
-public:
+public:	
 	enum class State
 	{
 		kActive,
