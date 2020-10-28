@@ -14,7 +14,8 @@ public:
 
 private:
 	std::vector<class Cube*> mCubes;
-	class Cylinder* cylinder;
+	std::vector<class Cylinder*> mBelts;
+
 	float mAngle;
 	float mSpeed;
 };
