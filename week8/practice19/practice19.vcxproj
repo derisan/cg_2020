@@ -148,6 +148,7 @@
     <ClCompile Include="robot.cpp" />
     <ClCompile Include="shader.cpp" />
     <ClCompile Include="stage.cpp" />
+    <ClCompile Include="tree.cpp" />
     <ClCompile Include="vertexarray.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -159,6 +160,7 @@
     <ClInclude Include="robot.h" />
     <ClInclude Include="shader.h" />
     <ClInclude Include="stage.h" />
+    <ClInclude Include="tree.h" />
     <ClInclude Include="utils.h" />
     <ClInclude Include="vertexarray.h" />
   </ItemGroup>

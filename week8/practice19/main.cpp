@@ -14,6 +14,8 @@
 #include "stage.h"
 #include "robot.h"
 
+#include "tree.h"
+
 // Camera things
 struct Camera
 {
@@ -52,6 +54,7 @@ Shader* meshShader{ nullptr };
 Axis* axis{ nullptr };
 Stage* stage{ nullptr };
 Robot* robot{ nullptr };
+Tree* tree{ nullptr };
 
 auto drawMode = GL_FILL;
 
@@ -111,10 +114,14 @@ void DisplayFunc()
 	axis->Update(dt);
 	stage->Update(dt);
 	robot->Update(dt);
+	tree->Update(dt);
+	
 
 	axis->Draw(meshShader);
 	stage->Draw(meshShader);
 	robot->Draw(meshShader);
+	tree->Draw(meshShader);
+	
 	
 	glutSwapBuffers();
 }
@@ -206,6 +213,9 @@ void LoadData()
 
 	// Robot
 	robot = new Robot{};
+
+	// Tree
+	tree = new Tree{};
 }
 
 void ChangeDrawStyle()

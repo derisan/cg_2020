@@ -12,16 +12,18 @@ public:
         kLeftArm,
         kRightArm,
         kLeftLeg,
-        kRightLeg
+        kRightLeg,
+        kDefault
     };
 
-    Cube(Part part, Color color = Color::kBlack);
+    Cube(Part part = Part::kDefault, Color color = Color::kBlack);
     ~Cube();
 
     void Update(float dt) override;
     void Draw(class Shader* shader) override;
     void Load() override;
 
+    void DefaultLoad();
     void HeadLoad();
     void NoseLoad();
     void BodyLoad();
