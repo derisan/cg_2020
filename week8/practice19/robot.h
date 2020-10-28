@@ -2,6 +2,8 @@
 
 #include <vector>
 
+#include <glm/glm.hpp>
+
 class Robot
 {
 public:
@@ -19,6 +21,7 @@ public:
 	void Reset();
 
 	void SetShouldJump(bool value) { mShouldJump = value; }
+	const glm::vec3& GetPos() const;
 private:
 	std::vector<class Cube*> mCubes;
 

@@ -12,7 +12,7 @@ public:
 	void Draw(class Shader* shader);
 	void Load();
 
-	void Collides(class Robot* robot);
+	bool Collides(class Robot* robot);
 private:
 	std::vector<class Cube*> mCubes;
 };

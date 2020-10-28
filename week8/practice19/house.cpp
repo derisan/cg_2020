@@ -1,5 +1,6 @@
 #include "house.h"
 
+#include <glm/geometric.hpp>
 
 #include "cube.h"
 #include "shader.h"
@@ -45,7 +46,12 @@ void House::Load()
 	mCubes.emplace_back(top);
 }
 
-void House::Collides(Robot* robot)
+bool House::Collides(Robot* robot)
 {
+	glm::vec3 robotPos = robot->GetPos();
 
+	if (glm::distance(robotPos, glm::vec3{ 0.0f, 0.0f, 0.0f }) < 0.7f)
+		return true;
+	else
+		return false;
 }

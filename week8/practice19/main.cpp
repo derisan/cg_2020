@@ -61,7 +61,7 @@ House* house{ nullptr };
 auto drawMode = GL_FILL;
 
 constexpr float speed{ 1.5f };
-float armSpeed{ 1.5f };
+char prevMoveKey;
 
 int main(int argc, char** argv)
 {
@@ -119,13 +119,32 @@ void DisplayFunc()
 	tree->Update(dt);
 	house->Update(dt);
 	
-
 	axis->Draw(meshShader);
 	stage->Draw(meshShader);
 	robot->Draw(meshShader);
 	tree->Draw(meshShader);
 	house->Draw(meshShader);
-	
+
+	if (house->Collides(robot))
+	{	
+		char key = 0;
+		switch (prevMoveKey)
+		{
+			case 'w': case 'W':
+				key = 's';
+				break;
+			case 's': case 'S':
+				key = 'w';
+				break;
+			case 'a': case 'A':
+				key = 'd';
+				break;
+			case 'd': case 'D':
+				key = 'a';
+				break;
+		}
+		robot->Move(key);
+	}
 	
 	glutSwapBuffers();
 }
@@ -155,6 +174,7 @@ void KeyboardFunc(unsigned char key, int x, int y)
 	case 'a': case 'A':
 	case 'd': case 'D':
 		robot->Move(key);
+		prevMoveKey = key;
 		break;
 	// Rotate camera things
 	case 'y': case 'Y':

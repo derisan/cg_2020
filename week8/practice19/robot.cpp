@@ -209,3 +209,8 @@ void Robot::Reset()
 		mAngle = 0.0f;
 	}
 }
+
+const glm::vec3& Robot::GetPos() const
+{
+	return mCubes[2]->GetPosition();
+}
