@@ -22,7 +22,9 @@ public:
 		kCyan,
 		kBlack,
 		kWhite,
-		kGray
+		kGray,
+		kDarkGray,
+		kBrown
 	};
 
 	Object(Color color = Color::kBlack);

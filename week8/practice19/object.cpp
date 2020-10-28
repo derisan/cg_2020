@@ -42,6 +42,12 @@ Object::Object(Color color)
 	case kGray:
 		mColor = glm::vec3{ 0.65f, 0.65f, 0.65f };
 		break;
+	case kBrown:
+		mColor = glm::vec3{ 0.37f, 0.15f, 0.02f };
+		break;
+	case kDarkGray:
+		mColor = glm::vec3{ 0.36f, 0.36f, 0.36f };
+		break;
 	}
 }
 
