@@ -13,6 +13,9 @@ public:
         kRightArm,
         kLeftLeg,
         kRightLeg,
+        kLeftPole,
+        kRightPole,
+        kBodyPole,
         kDefault
     };
 
@@ -24,6 +27,8 @@ public:
     void Load() override;
 
     void DefaultLoad();
+       
+    // Robot cube
     void HeadLoad();
     void NoseLoad();
     void BodyLoad();
@@ -31,6 +36,11 @@ public:
     void RightArmLoad();
     void LeftLegLoad();
     void RightLegLoad();
+
+    // Pole cube
+    void LeftPoleLoad();
+    void RightPoleLoad();
+    void BodyPoleLoad();
 
     Part GetPart() const { return mPart; }
 

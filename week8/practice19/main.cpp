@@ -13,9 +13,9 @@
 #include "axis.h"
 #include "stage.h"
 #include "robot.h"
-
 #include "tree.h"
 #include "house.h"
+#include "pole.h"
 
 
 // Camera things
@@ -58,6 +58,7 @@ Stage* stage{ nullptr };
 Robot* robot{ nullptr };
 Tree* tree{ nullptr };
 House* house{ nullptr };
+Pole* pole{ nullptr };
 
 
 auto drawMode = GL_FILL;
@@ -88,9 +89,8 @@ void DisplayFunc()
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_CULL_FACE);
-	//glFrontFace(GL_CCW);
-	
 	glPolygonMode(GL_FRONT_AND_BACK, drawMode);
+	glFrontFace(GL_CW);
 
 	// Set view & proj matrix
 	meshShader->SetActive();
@@ -120,11 +120,13 @@ void DisplayFunc()
 	robot->Update(dt);
 	tree->Update(dt);
 	house->Update(dt);
+	pole->Update(dt);
 	
 	stage->Draw(meshShader);
 	axis->Draw(meshShader);
 	robot->Draw(meshShader);
 	house->Draw(meshShader);
+	pole->Draw(meshShader);
 	tree->Draw(meshShader);
 	
 
@@ -246,6 +248,9 @@ void LoadData()
 
 	// House
 	house = new House{};
+
+	// Pole
+	pole = new Pole{};
 }
 
 void ChangeDrawStyle()
