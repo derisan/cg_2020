@@ -23,8 +23,8 @@ void Object::Update(float dt)
 void Object::Draw(Shader* shader)
 {
 	shader->SetActive();
-	shader->SetVectorUniform("uColor", mColor);
-	shader->SetMatrixUniform("uWorld", mWorldTransform);
+	shader->SetVectorUniform("uColor", GetColor());
+	shader->SetMatrixUniform("uWorld", GetWorldTransform());
 }
 
 void Object::ComputeWorldTransform()

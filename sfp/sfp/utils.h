@@ -13,7 +13,7 @@
 bool Init(int w, int h, int* argc, char** argv)
 {
 	glutInit(argc, argv);
-	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH);
+	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA);
 	glutInitWindowPosition(0, 0);
 	glutInitWindowSize(w, h);
 	glutCreateWindow("Slice flying polygons");

@@ -24,7 +24,7 @@ void Triangle::Update(float dt)
 void Triangle::Draw(Shader* shader)
 {
 	Object::Draw(shader);
-
+	mVertexArray->SetActive();
 	glDrawElements(GL_TRIANGLES, mVertexArray->GetNumIndices(), 
 		GL_UNSIGNED_INT, nullptr);
 }
