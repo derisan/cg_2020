@@ -20,18 +20,16 @@ public:
 	const glm::vec2& GetLeftPoint() const { return mLeftPoint; }
 	const glm::vec2& GetRightPoint() const { return mRightPoint; }
 	const glm::vec2& GetMidPoint() const { return mMidPoint; }
-	const std::vector<Side>& GetSides() const override { return mSides; } 
+	const std::vector<Side>& GetSides() const override { return mSides; }
+	const std::vector<glm::vec2>& GetPoints() const override { return mPoints; }
 
 private:
 	glm::vec2 mLeftPoint;
 	glm::vec2 mRightPoint;
 	glm::vec2 mMidPoint;
-
-	Side mLeftSide;
-	Side mRightSide;
-	Side mMidSide;
 	
 	std::vector<Side> mSides;
+	std::vector<glm::vec2> mPoints;
 
 	class VertexArray* mVertexArray;
 };

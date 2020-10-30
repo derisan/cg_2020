@@ -12,14 +12,15 @@ Triangle::Triangle(const glm::vec2& left, const glm::vec2& right,
 	mLeftPoint{ left },
 	mRightPoint{ right },
 	mMidPoint{ mid },
-	mLeftSide{ left, mid },
-	mRightSide{ right, mid },
-	mMidSide{ left, right },
 	mVertexArray{ nullptr }
 {
-	mSides.emplace_back(mLeftSide);
-	mSides.emplace_back(mRightSide);
-	mSides.emplace_back(mMidSide);
+	mPoints.emplace_back(mLeftPoint);
+	mPoints.emplace_back(mRightPoint);
+	mPoints.emplace_back(mMidPoint);
+
+	mSides.emplace_back(Side{ left, mid });
+	mSides.emplace_back(Side{ right, mid });
+	mSides.emplace_back(Side{ left, right });
 	Load();
 }
 
@@ -42,11 +43,17 @@ void Triangle::Update()
 	mRightPoint.y += speed;
 	mMidPoint.y += speed;
 
-	if (mLeftPoint.x < -1.3f || mRightPoint.x > 1.3f)
-		SetState(State::kDead);
+	// Update points vector
+	mPoints.clear();
+	mPoints.emplace_back(mLeftPoint);
+	mPoints.emplace_back(mRightPoint);
+	mPoints.emplace_back(mMidPoint);
 
 	UpdateSide();
 	Load();
+
+	if (mLeftPoint.x < -1.3f || mRightPoint.x > 1.3f)
+		SetState(State::kDead);
 }
 
 void Triangle::Draw()
@@ -76,12 +83,8 @@ void Triangle::Load()
 
 void Triangle::UpdateSide()
 {
-	mLeftSide = { mLeftPoint, mMidPoint };
-	mRightSide = { mRightPoint, mMidPoint };
-	mMidSide = { mLeftPoint, mRightPoint };
-
 	mSides.clear();
-	mSides.emplace_back(mLeftSide);
-	mSides.emplace_back(mRightSide);
-	mSides.emplace_back(mMidSide);
+	mSides.emplace_back(Side{ mLeftPoint, mMidPoint });
+	mSides.emplace_back(Side{ mRightPoint, mMidPoint });
+	mSides.emplace_back(Side{ mLeftPoint, mRightPoint });
 }
