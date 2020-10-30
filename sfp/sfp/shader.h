@@ -15,7 +15,8 @@ public:
 	bool Load(const std::string& vertName, const std::string& fragName);
 	void SetActive();
 	
-	void SetMatrixUniform(const std::string& name, const glm::mat4& mat);
+	void SetMatrix4Uniform(const std::string& name, const glm::mat4& mat);
+	void SetMatrix3Uniform(const std::string& name, const glm::mat3& mat);
 	void SetVectorUniform(const std::string& name, const glm::vec3& vec);
 	void SetFloatUniform(const std::string& name, float value);
 

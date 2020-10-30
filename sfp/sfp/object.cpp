@@ -1,37 +1,23 @@
 #include "object.h"
 
-#include <glm/gtc/matrix_transform.hpp>
+#include "object_manager.h"
 
-#include "shader.h"
+Object::Object(ObjectManager* manager)
+	: mManager{ manager },
+	mState{ State::kActive },
+	mXSpeed{ 0.0f },
+	mYSpeed{ 0.0f }
+{
+	mManager->AddObj(this);
+}
 
-Object::Object()
-	: mWorldTransform{ 1.0f },
-	mPosition{ 0.0f },
-	mScale{ 1.0f },
-	mColor{ 0.38f, 0.2f, 0.07f },
-	mRecomputeWorldTransform{ true }
+Object::~Object()
+{
+	mManager->RemoveObj(this);
+}
+
+void Object::Update()
 {
 
 }
 
-void Object::Update(float dt)
-{
-	if (mRecomputeWorldTransform)
-		ComputeWorldTransform();
-}
-
-void Object::Draw(Shader* shader)
-{
-	shader->SetActive();
-	shader->SetVectorUniform("uColor", GetColor());
-	shader->SetMatrixUniform("uWorld", GetWorldTransform());
-}
-
-void Object::ComputeWorldTransform()
-{
-	mRecomputeWorldTransform = false;
-
-	mWorldTransform = glm::mat4{ 1.0f };
-	mWorldTransform = glm::translate(mWorldTransform, mPosition);
-	mWorldTransform = glm::scale(mWorldTransform, mScale);
-}

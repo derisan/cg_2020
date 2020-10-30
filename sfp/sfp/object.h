@@ -1,39 +1,51 @@
 #pragma once
 
-#include <glm/glm.hpp>
+#include <vector>
+
+#include <glm/vec2.hpp>
 
 class Object
 {
 public:
-	Object();
-	virtual ~Object() = default;
+	struct Side
+	{
+		glm::vec2 p1;
+		glm::vec2 p2;
+	};
 
-	virtual void Update(float dt);
-	virtual void Draw(class Shader* shader);
-	virtual void Load() { };
+	enum class State
+	{
+		kActive,
+		kPaused,
+		kDead
+	};
 
-	void ComputeWorldTransform();
+	Object(class ObjectManager* manager);
+	virtual ~Object();
+
+	virtual void Update();
+	virtual void Draw() {};
+	virtual void Load() {};
+
+	virtual const std::vector<Side>& GetSides() const = 0;
 
 	// Getters
-	const glm::mat4& GetWorldTransform() const { return mWorldTransform; }
-	const glm::vec3& GetPosition() const { return mPosition; }
-	const glm::vec3& GetScale() const { return mScale; }
-	const glm::vec3& GetColor() const { return mColor; }
+	State GetState() const { return mState; }
+	float GetXSpeed() const { return mXSpeed; }
+	float GetYSpeed() const { return mYSpeed; }
 
 	// Setters
-	void SetPosition(const glm::vec3& pos) { mPosition = pos; mRecomputeWorldTransform = true; }
-	void SetScale(const glm::vec3& scale) { mScale = scale; mRecomputeWorldTransform = true; }
-	void SetColor(const glm::vec3& color) { mColor = color; }
+	void SetState(State state) { mState = state; }
+	void SetXSpeed(float speed) { mXSpeed = speed; }
+	void SetYSpeed(float speed) { mYSpeed = speed; }
+
+protected:
+	class ObjectManager* mManager;
 
 private:
-	// Transform
-	glm::mat4 mWorldTransform;
-	glm::vec3 mPosition;
-	glm::vec3 mScale;
+	State mState;
 
-	// Color
-	glm::vec3 mColor;
-
-	bool mRecomputeWorldTransform;
+	float mXSpeed;
+	float mYSpeed;
 };
 

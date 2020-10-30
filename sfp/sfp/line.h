@@ -1,20 +1,23 @@
 #pragma once
-#include "object.h"
-class Line :
-    public Object
+
+#include <glm/vec2.hpp>
+
+class Line
 {
 public:
-	Line(const glm::vec3& start, const glm::vec3& end);
-    ~Line();
+	Line(const glm::vec2& start, const glm::vec2& end);
+	~Line();
 
-    void Update(float dt) override;
-    void Draw(class Shader* shader) override;
-    void Load() override;
+	void Draw();
+	void Load();
+
+	const glm::vec2& GetStart() const { return mStart; }
+	const glm::vec2& GetEnd() const { return mEnd; }
 
 private:
-    class VertexArray* mVertexArray;
-    
-    glm::vec3 mStart;
-    glm::vec3 mEnd;
+	glm::vec2 mStart;
+	glm::vec2 mEnd;
+
+	class VertexArray* mVertexArray;
 };
 

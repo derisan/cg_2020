@@ -139,17 +139,22 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="game.cpp" />
     <ClCompile Include="line.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="object.cpp" />
+    <ClCompile Include="object_manager.cpp" />
     <ClCompile Include="random.cpp" />
     <ClCompile Include="shader.cpp" />
     <ClCompile Include="triangle.cpp" />
+    <ClCompile Include="utils.cpp" />
     <ClCompile Include="vertexarray.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="game.h" />
     <ClInclude Include="line.h" />
     <ClInclude Include="object.h" />
+    <ClInclude Include="object_manager.h" />
     <ClInclude Include="random.h" />
     <ClInclude Include="shader.h" />
     <ClInclude Include="triangle.h" />

@@ -1,40 +1,8 @@
 #pragma once
 
-#include <iostream>
-
-#include <GL/glew.h>
-#include <GL/freeglut.h>
-#include <GL/freeglut_ext.h>
 #include <glm/glm.hpp>
 
-#include "random.h"
+glm::vec2 ScreenToNDC(int x, int y, float w, float h);
 
-// Init freeglut and create window
-bool Init(int w, int h, int* argc, char** argv)
-{
-	glutInit(argc, argv);
-	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA);
-	glutInitWindowPosition(0, 0);
-	glutInitWindowSize(w, h);
-	glutCreateWindow("Slice flying polygons");
-
-	glewExperimental = GL_TRUE;
-	if (glewInit() != GLEW_OK)
-	{
-		std::cout << "Unable to initialize GLEW" << std::endl;
-		return false;
-	}
-	else
-	{
-		std::cout << "GLEW Initialization" << std::endl;
-		return true;
-	}
-}
-
-glm::vec2 ScreenToNDC(int x, int y, float w, float h)
-{
-	float retX = (static_cast<float>(x) - w / 2) * (2 / w);
-	float retY = (static_cast<float>(-y) + h / 2) * (2 / h);
-
-	return glm::vec2{ retX, retY };
-}
+bool IsIntersect(const glm::vec2& a1, const glm::vec2& a2,
+	const glm::vec2& b1, const glm::vec2& b2, glm::vec2& out);
