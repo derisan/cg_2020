@@ -28,6 +28,7 @@ public:
 	virtual void Load() {};
 
 	virtual const std::vector<Side>& GetSides() const = 0;
+	virtual const std::vector<glm::vec2>& GetPoints() const = 0;
 
 	// Getters
 	State GetState() const { return mState; }

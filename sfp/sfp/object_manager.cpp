@@ -39,8 +39,11 @@ void ObjectManager::Update()
 		if (obj->GetState() == Object::State::kDead)
 		{
 			deads.emplace_back(obj);
-			delete mPaths.front();
-			mPaths.erase(std::begin(mPaths));
+			if (!mPaths.empty())
+			{
+				delete mPaths.front();
+				mPaths.erase(std::begin(mPaths));
+			}
 		}
 	}
 
@@ -145,12 +148,55 @@ void ObjectManager::CollisionCheck(Line* cutter)
 void ObjectManager::DivideIntoTwo(const glm::vec2& p1, const glm::vec2& p2, 
 	const Object::Side& s1, const Object::Side& s2, Object* obj)
 {
-	//std::cout << p1.x << ", " << p1.y << std::endl;
-	//std::cout << p2.x << ", " << p2.y << std::endl;
-	//std::cout << s1.p1.x << ", " << s1.p1.y << std::endl;
-	//std::cout << s1.p2.x << ", " << s1.p2.y << std::endl;
+	// s1과 s2가 왼,오,중변인지 확인하기
+	auto sides = obj->GetSides();
+	int option{ 0 };
+	if (s1.p1 == sides[0].p1 && s1.p2 == sides[0].p2)
+	{
+		if (s2.p1 == sides[1].p1 && s2.p2 == sides[1].p2)
+		{
+			//std::cout << "좌우" << std::endl;
+			option = 0;
+		}
+		else if (s2.p1 == sides[2].p1 && s2.p2 == sides[2].p2)
+		{
+			//std::cout << "좌중" << std::endl;
+			option = 1;
+		}
+	}
+	else if (s1.p1 == sides[1].p1 && s1.p2 == sides[1].p2)
+	{
+		if (s2.p1 == sides[2].p1 && s2.p2 == sides[2].p2)
+		{
+			//std::cout << "우중" << std::endl;
+			option = 2;
+		}
+	}
 
-	// 객체의 세 점의 정보 가져오기
-	// 매개변수 s1과 s2가 왼,오,중변인지 확인하기
-	// s1과 s2에 따라 새로운 도형을 만들고 기존 객체는 삭제.
+	// 삼각형의 세 점
+	// Index 0 : left, 1 : right, 2 : mid
+	auto points = obj->GetPoints();
+
+	if (option == 0)
+	{
+		auto tri = new Triangle(p1, p2, points[2], this);
+		tri->SetXSpeed(0.0f);
+		tri->SetYSpeed(-0.005f);
+
+		// 사각형 생성
+	}
+	else if (option == 1)
+	{
+		auto tri = new Triangle(p1, p2, points[0], this);
+		tri->SetXSpeed(0.0f);
+		tri->SetYSpeed(-0.005f);
+
+	}
+	else
+	{
+		auto tri = new Triangle(p1, p2, points[1], this);
+		tri->SetXSpeed(0.0f);
+		tri->SetYSpeed(-0.005f);
+	}
+	obj->SetState(Object::State::kDead);
 }
