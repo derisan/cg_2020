@@ -7,6 +7,7 @@
 #include "random.h"
 #include "triangle.h"
 #include "rect.h"
+#include "pentagon.h"
 #include "line.h"
 #include "utils.h"
 
@@ -150,8 +151,6 @@ void ObjectManager::CheckSide(const glm::vec2& p1, const glm::vec2& p2,
 	if (type == Object::Type::kPentagon)
 		return;
 
-	// s1과 s2가 왼,오,중변인지 확인하기
-	
 	int option{ 0 };
 	if (type == Object::Type::kTriangle)
 	{
@@ -256,7 +255,70 @@ void ObjectManager::DivideTriangleIntoTwo(const glm::vec2& p1, const glm::vec2& 
 	obj->SetState(Object::State::kDead);
 }
 
-void ObjectManager::DivideRectIntoTwo(const glm::vec2& p1, const glm::vec2& p2, int option, class Object* obj)
+void ObjectManager::DivideRectIntoTwo(const glm::vec2& p1, const glm::vec2& p2, int option, Object* obj)
 {
+	auto points = obj->GetPoints();
 
+	// 상좌
+	if (option == 0)
+	{
+		auto tri = new Triangle(p2, p1, points[Rect::kLeftTopPoint], this);
+		tri->SetXSpeed(0.0f);
+		tri->SetYSpeed(-0.0025f);
+
+		auto penta = new Pentagon(p1, p2, points[Rect::kLeftBottomPoint],
+			points[Rect::kRightBottomPoint], points[Rect::kRightTopPoint], this);
+		penta->SetYSpeed(-0.00125f);
+	}
+	// 상하
+	else if (option == 1)
+	{
+		auto rect = new Rect(points[Rect::kLeftTopPoint], p1, points[Rect::kLeftBottomPoint], p2, this);
+		rect->SetYSpeed(-0.0025f);
+
+		rect = new Rect(p1, points[Rect::kRightTopPoint], p2, points[Rect::kRightBottomPoint], this);
+		rect->SetYSpeed(-0.00125f);
+	}
+	// 상우
+	else if (option == 2)
+	{
+		auto tri = new Triangle(p1, p2, points[Rect::kRightTopPoint], this);
+		tri->SetXSpeed(0.0f);
+		tri->SetYSpeed(-0.0025f);
+
+		auto penta = new Pentagon(p1, points[Rect::kLeftTopPoint], points[Rect::kLeftBottomPoint],
+			points[Rect::kRightBottomPoint], p2, this);
+		penta->SetYSpeed(-0.00125f);
+	}
+	// 우좌
+	else if (option == 3)
+	{
+		auto rect = new Rect(points[Rect::kLeftTopPoint], points[Rect::kRightTopPoint], 
+			p2, p1, this);
+		rect->SetYSpeed(-0.0025f);
+
+		rect = new Rect(p2, p1, points[Rect::kLeftBottomPoint], points[Rect::kRightBottomPoint], this);
+		rect->SetYSpeed(-0.00125f);
+	}
+	// 우하
+	else if (option == 4)
+	{
+		auto tri = new Triangle(p2, points[Rect::kRightBottomPoint], p1, this);
+		tri->SetXSpeed(0.0f);
+		tri->SetYSpeed(-0.0025f);
+
+		auto penta = new Pentagon(points[Rect::kLeftTopPoint], points[Rect::kLeftBottomPoint], p2, p1, points[Rect::kRightTopPoint], this);
+		penta->SetYSpeed(-0.00125f);
+	}
+	// 좌하
+	else
+	{
+		auto tri = new Triangle(points[Rect::kLeftBottomPoint], p1, p2, this);
+		tri->SetXSpeed(0.0f);
+		tri->SetYSpeed(-0.0025f);
+
+		auto penta = new Pentagon(points[Rect::kRightTopPoint], points[Rect::kLeftTopPoint], p2, p1, points[Rect::kRightBottomPoint], this);
+		penta->SetYSpeed(-0.00125f);
+	}
+	obj->SetState(Object::State::kDead);
 }
