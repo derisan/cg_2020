@@ -6,6 +6,7 @@
 #include "game.h"
 #include "random.h"
 #include "triangle.h"
+#include "rect.h"
 #include "line.h"
 #include "utils.h"
 
@@ -177,6 +178,7 @@ void ObjectManager::DivideIntoTwo(const glm::vec2& p1, const glm::vec2& p2,
 	// Index 0 : left, 1 : right, 2 : mid
 	auto points = obj->GetPoints();
 
+	// 좌우 슬라이스
 	if (option == 0)
 	{
 		auto tri = new Triangle(p1, p2, points[2], this);
@@ -184,19 +186,31 @@ void ObjectManager::DivideIntoTwo(const glm::vec2& p1, const glm::vec2& p2,
 		tri->SetYSpeed(-0.005f);
 
 		// 사각형 생성
+		auto rect = new Rect(p1, p2, points[0], points[1], this);
+		rect->SetXSpeed(0.0f);
+		rect->SetYSpeed(-0.0025f);
 	}
+	// 좌중 슬라이스
 	else if (option == 1)
 	{
 		auto tri = new Triangle(p1, p2, points[0], this);
 		tri->SetXSpeed(0.0f);
 		tri->SetYSpeed(-0.005f);
 
+		auto rect = new Rect(p1, points[2], p2, points[1], this);
+		rect->SetXSpeed(0.0f);
+		rect->SetYSpeed(-0.0025f);
 	}
+	// 우중 슬라이스
 	else
 	{
 		auto tri = new Triangle(p1, p2, points[1], this);
 		tri->SetXSpeed(0.0f);
 		tri->SetYSpeed(-0.005f);
+
+		auto rect = new Rect(points[0], points[2], p2, p1, this);
+		rect->SetXSpeed(0.0f);
+		rect->SetYSpeed(-0.0025f);
 	}
 	obj->SetState(Object::State::kDead);
 }

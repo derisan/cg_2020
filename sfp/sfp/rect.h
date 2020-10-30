@@ -1,14 +1,12 @@
 #pragma once
-
 #include "object.h"
-
-class Triangle 
-	: public Object
+class Rect :
+    public Object
 {
 public:
-	Triangle(const glm::vec2& left, const glm::vec2& right, 
-		const glm::vec2& mid, class ObjectManager* manager);
-	~Triangle();
+	Rect(const glm::vec2& leftTop, const glm::vec2& rightTop,
+		const glm::vec2& leftBottom, const glm::vec2& rightBottom, class ObjectManager* manager);
+	~Rect();
 
 	void Update() override;
 	void Draw() override;
@@ -19,12 +17,12 @@ public:
 
 	const std::vector<Side>& GetSides() const override { return mSides; }
 	const std::vector<glm::vec2>& GetPoints() const override { return mPoints; }
-
 private:
-	glm::vec2 mLeftPoint;
-	glm::vec2 mRightPoint;
-	glm::vec2 mMidPoint;
-	
+	glm::vec2 mLeftTopPoint;
+	glm::vec2 mRightTopPoint;
+	glm::vec2 mLeftBottomPoint;
+	glm::vec2 mRightBottomPoint;
+
 	std::vector<Side> mSides;
 	std::vector<glm::vec2> mPoints;
 

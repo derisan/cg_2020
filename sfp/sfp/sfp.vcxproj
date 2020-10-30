@@ -145,6 +145,7 @@
     <ClCompile Include="object.cpp" />
     <ClCompile Include="object_manager.cpp" />
     <ClCompile Include="random.cpp" />
+    <ClCompile Include="rect.cpp" />
     <ClCompile Include="shader.cpp" />
     <ClCompile Include="triangle.cpp" />
     <ClCompile Include="utils.cpp" />
@@ -156,6 +157,7 @@
     <ClInclude Include="object.h" />
     <ClInclude Include="object_manager.h" />
     <ClInclude Include="random.h" />
+    <ClInclude Include="rect.h" />
     <ClInclude Include="shader.h" />
     <ClInclude Include="triangle.h" />
     <ClInclude Include="utils.h" />

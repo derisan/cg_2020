@@ -4,7 +4,7 @@
 
 #include "object_manager.h"
 #include "vertexarray.h"
-#include "shader.h"
+
 
 Triangle::Triangle(const glm::vec2& left, const glm::vec2& right,
 	const glm::vec2& mid, ObjectManager* manager)
@@ -43,16 +43,11 @@ void Triangle::Update()
 	mRightPoint.y += speed;
 	mMidPoint.y += speed;
 
-	// Update points vector
-	mPoints.clear();
-	mPoints.emplace_back(mLeftPoint);
-	mPoints.emplace_back(mRightPoint);
-	mPoints.emplace_back(mMidPoint);
-
 	UpdateSide();
 	Load();
 
-	if (mLeftPoint.x < -1.3f || mRightPoint.x > 1.3f)
+	if (mLeftPoint.x < -1.3f || mRightPoint.x > 1.3f
+		|| mLeftPoint.y < -1.3f)
 		SetState(State::kDead);
 }
 
@@ -83,6 +78,11 @@ void Triangle::Load()
 
 void Triangle::UpdateSide()
 {
+	mPoints.clear();
+	mPoints.emplace_back(mLeftPoint);
+	mPoints.emplace_back(mRightPoint);
+	mPoints.emplace_back(mMidPoint);
+
 	mSides.clear();
 	mSides.emplace_back(Side{ mLeftPoint, mMidPoint });
 	mSides.emplace_back(Side{ mRightPoint, mMidPoint });
