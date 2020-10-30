@@ -113,7 +113,7 @@ void Game::Update()
 		return;
 
 	mObjManager->Update();
-	mObjManager->CollisionCheck(mCutter);
+	mObjManager->CheckCollision(mCutter);
 }
 
 

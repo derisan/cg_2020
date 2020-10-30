@@ -14,15 +14,7 @@ Rect::Rect(const glm::vec2& leftTop, const glm::vec2& rightTop,
 	mRightBottomPoint{ rightBottom },
 	mVertexArray{ nullptr }
 {
-	//mPoints.emplace_back(mLeftTopPoint);
-	//mPoints.emplace_back(mRightTopPoint);
-	//mPoints.emplace_back(mLeftBottomPoint);
-	//mPoints.emplace_back(mRightBottomPoint);
-
-	//mSides.emplace_back(Side{ leftTop, rightTop });
-	//mSides.emplace_back(Side{ rightTop, rightBottom });
-	//mSides.emplace_back(Side{ rightBottom, leftBottom });
-	//mSides.emplace_back(Side{ leftBottom, leftTop });
+	SetType(Type::kRect);
 
 	UpdateSide();
 	Load();

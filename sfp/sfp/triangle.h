@@ -6,6 +6,13 @@ class Triangle
 	: public Object
 {
 public:
+	enum PointIdx
+	{
+		kLeft,
+		kRight,
+		kMid
+	};
+
 	Triangle(const glm::vec2& left, const glm::vec2& right, 
 		const glm::vec2& mid, class ObjectManager* manager);
 	~Triangle();

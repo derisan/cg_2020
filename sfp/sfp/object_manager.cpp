@@ -30,7 +30,7 @@ void ObjectManager::Update()
 	if (mCooldown < 0)
 	{
 		mCooldown = 3.0f;
-		CreateRandomPolygon();
+		GenerateRandomPolygon();
 	}
 
 	std::vector<Object*> deads;
@@ -40,17 +40,14 @@ void ObjectManager::Update()
 		if (obj->GetState() == Object::State::kDead)
 		{
 			deads.emplace_back(obj);
-			if (!mPaths.empty())
-			{
-				delete mPaths.front();
-				mPaths.erase(std::begin(mPaths));
-			}
 		}
 	}
 
 	for (auto obj : deads)
 		delete obj;
 	deads.clear();
+
+	// Think about how to delete path appropriately
 }
 
 void ObjectManager::Draw()
@@ -77,7 +74,7 @@ void ObjectManager::RemoveObj(Object* obj)
 	}
 }
 
-void ObjectManager::CreateRandomPolygon()
+void ObjectManager::GenerateRandomPolygon()
 {
 	auto choice = Random::GetIntRange(0, 1);
 	
@@ -116,7 +113,7 @@ void ObjectManager::CreatePath(const glm::vec2& p1, const glm::vec2& p2)
 	mPaths.emplace_back(new Line{ p1, p2 });
 }
 
-void ObjectManager::CollisionCheck(Line* cutter)
+void ObjectManager::CheckCollision(Line* cutter)
 {
 	if (cutter == nullptr)
 		return;
@@ -140,77 +137,126 @@ void ObjectManager::CollisionCheck(Line* cutter)
 		if (poses.size() == 2 && sides.size() == 2)
 		{
 			mGame->DeleteCutter();
-			DivideIntoTwo(poses[0], poses[1], sides[0], sides[1], obj);
+			CheckSide(poses[0], poses[1], sides[0], sides[1], obj);
 			break;
 		}
 	}
 }
 
-void ObjectManager::DivideIntoTwo(const glm::vec2& p1, const glm::vec2& p2, 
+void ObjectManager::CheckSide(const glm::vec2& p1, const glm::vec2& p2, 
 	const Object::Side& s1, const Object::Side& s2, Object* obj)
 {
+	auto type = obj->GetType();
+	if (type == Object::Type::kPentagon)
+		return;
+
 	// s1과 s2가 왼,오,중변인지 확인하기
+	
+	int option{ 0 };
+	if (type == Object::Type::kTriangle)
+	{
+		option = GetTriangleDivideOption(s1, s2, obj);
+		DivideTriangleIntoTwo(p1, p2, option, obj);
+	}
+	else if (type == Object::Type::kRect)
+	{
+		option = GetRectDivideOption(s1, s2, obj);
+		DivideRectIntoTwo(p1, p2, option, obj);
+	}
+}
+
+int ObjectManager::GetTriangleDivideOption(const Object::Side& s1, const Object::Side& s2, Object* obj)
+{
 	auto sides = obj->GetSides();
 	int option{ 0 };
-	if (s1.p1 == sides[0].p1 && s1.p2 == sides[0].p2)
+	if (s1.p1 == sides[Triangle::kLeft].p1 && s1.p2 == sides[Triangle::kLeft].p2)
 	{
-		if (s2.p1 == sides[1].p1 && s2.p2 == sides[1].p2)
-		{
-			//std::cout << "좌우" << std::endl;
+		if (s2.p1 == sides[Triangle::kRight].p1 && s2.p2 == sides[Triangle::kRight].p2)		// 좌우
 			option = 0;
-		}
-		else if (s2.p1 == sides[2].p1 && s2.p2 == sides[2].p2)
-		{
-			//std::cout << "좌중" << std::endl;
+		else if (s2.p1 == sides[Triangle::kMid].p1 && s2.p2 == sides[Triangle::kMid].p2)	// 좌중
 			option = 1;
-		}
 	}
-	else if (s1.p1 == sides[1].p1 && s1.p2 == sides[1].p2)
-	{
-		if (s2.p1 == sides[2].p1 && s2.p2 == sides[2].p2)
-		{
-			//std::cout << "우중" << std::endl;
+	else if (s1.p1 == sides[Triangle::kRight].p1 && s1.p2 == sides[Triangle::kRight].p2)
+		if (s2.p1 == sides[Triangle::kMid].p1 && s2.p2 == sides[Triangle::kMid].p2)		// 우중
 			option = 2;
-		}
-	}
 
-	// 삼각형의 세 점
+	return option;
+}
+
+int ObjectManager::GetRectDivideOption(const Object::Side& s1, const Object::Side& s2, Object* obj)
+{
+	// 상우하좌(반시계)
+	auto sides = obj->GetSides();
+	int option{ 0 };
+	if (s1.p1 == sides[Rect::kTopSide].p1 && s1.p2 == sides[Rect::kTopSide].p2)
+	{
+		if (s2.p1 == sides[Rect::kLeftSide].p1 && s2.p2 == sides[Rect::kLeftSide].p2) /* 상좌 */
+			option = 0;
+		else if (s2.p1 == sides[Rect::kBottomSide].p1 && s2.p2 == sides[Rect::kBottomSide].p2) /* 상하 */
+			option = 1;
+		else if (s2.p1 == sides[Rect::kRightSide].p1 && s2.p2 == sides[Rect::kRightSide].p2) /* 상우 */
+			option = 2;
+	}
+	else if (s1.p1 == sides[Rect::kRightSide].p1 && s1.p2 == sides[Rect::kRightSide].p2)
+	{
+		if (s2.p1 == sides[Rect::kLeftSide].p1 && s2.p2 == sides[Rect::kLeftSide].p2) /* 좌우 */
+			option = 3;
+		else if (s2.p1 == sides[Rect::kBottomSide].p1 && s2.p2 == sides[Rect::kBottomSide].p2) /* 우하 */
+			option = 4;
+	}
+	else if (s1.p1 == sides[Rect::kBottomSide].p1 && s1.p2 == sides[Rect::kBottomSide].p2)
+	{
+		if (s2.p1 == sides[Rect::kLeftSide].p1 && s2.p2 == sides[Rect::kLeftSide].p2) /* 좌하 */
+			option = 5;
+	}
+	return option;
+}
+
+void ObjectManager::DivideTriangleIntoTwo(const glm::vec2& p1, const glm::vec2& p2, int option, Object* obj)
+{
 	// Index 0 : left, 1 : right, 2 : mid
 	auto points = obj->GetPoints();
 
 	// 좌우 슬라이스
 	if (option == 0)
 	{
-		auto tri = new Triangle(p1, p2, points[2], this);
+		auto tri = new Triangle(p1, p2, points[Triangle::kMid], this);
 		tri->SetXSpeed(0.0f);
 		tri->SetYSpeed(-0.005f);
 
 		// 사각형 생성
-		auto rect = new Rect(p1, p2, points[0], points[1], this);
+		auto rect = new Rect(p1, p2, points[Triangle::kLeft], points[Triangle::kRight], this);
 		rect->SetXSpeed(0.0f);
 		rect->SetYSpeed(-0.0025f);
 	}
 	// 좌중 슬라이스
 	else if (option == 1)
 	{
-		auto tri = new Triangle(p1, p2, points[0], this);
+		auto tri = new Triangle(p1, p2, points[Triangle::kLeft], this);
 		tri->SetXSpeed(0.0f);
 		tri->SetYSpeed(-0.005f);
 
-		auto rect = new Rect(p1, points[2], p2, points[1], this);
+		auto rect = new Rect(p1, points[Triangle::kMid], p2, points[Triangle::kRight], this);
 		rect->SetXSpeed(0.0f);
 		rect->SetYSpeed(-0.0025f);
 	}
 	// 우중 슬라이스
 	else
 	{
-		auto tri = new Triangle(p1, p2, points[1], this);
+		auto tri = new Triangle(p1, p2, points[Triangle::kRight], this);
 		tri->SetXSpeed(0.0f);
 		tri->SetYSpeed(-0.005f);
 
-		auto rect = new Rect(points[0], points[2], p2, p1, this);
+		auto rect = new Rect(points[Triangle::kLeft], points[Triangle::kMid], p2, p1, this);
 		rect->SetXSpeed(0.0f);
 		rect->SetYSpeed(-0.0025f);
 	}
+	
+	// 원본 객체 삭제
 	obj->SetState(Object::State::kDead);
+}
+
+void ObjectManager::DivideRectIntoTwo(const glm::vec2& p1, const glm::vec2& p2, int option, class Object* obj)
+{
+
 }

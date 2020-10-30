@@ -20,6 +20,13 @@ public:
 		kDead
 	};
 
+	enum class Type
+	{
+		kTriangle,
+		kRect,
+		kPentagon
+	};
+
 	Object(class ObjectManager* manager);
 	virtual ~Object();
 
@@ -32,11 +39,13 @@ public:
 
 	// Getters
 	State GetState() const { return mState; }
+	Type GetType() const { return mType; }
 	float GetXSpeed() const { return mXSpeed; }
 	float GetYSpeed() const { return mYSpeed; }
 
 	// Setters
 	void SetState(State state) { mState = state; }
+	void SetType(Type type) { mType = type; }
 	void SetXSpeed(float speed) { mXSpeed = speed; }
 	void SetYSpeed(float speed) { mYSpeed = speed; }
 
@@ -45,6 +54,7 @@ protected:
 
 private:
 	State mState;
+	Type mType;
 
 	float mXSpeed;
 	float mYSpeed;

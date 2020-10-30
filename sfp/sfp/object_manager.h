@@ -18,12 +18,16 @@ public:
 	void AddObj(class Object* obj);
 	void RemoveObj(class Object* obj);
 	
-	void CreateRandomPolygon();
+	void GenerateRandomPolygon();
 	void CreatePath(const glm::vec2& p1, const glm::vec2& p2);
 
-	void CollisionCheck(class Line* cutter);
-	void DivideIntoTwo(const glm::vec2& p1, const glm::vec2& p2, 
+	void CheckCollision(class Line* cutter);
+	void CheckSide(const glm::vec2& p1, const glm::vec2& p2,
 		const Object::Side& s1, const Object::Side& s2, class Object* obj);
+	int GetTriangleDivideOption(const Object::Side& s1, const Object::Side& s2, class Object* obj);
+	int GetRectDivideOption(const Object::Side& s1, const Object::Side& s2, class Object* obj);
+	void DivideTriangleIntoTwo(const glm::vec2& p1, const glm::vec2& p2, int option, class Object* obj);
+	void DivideRectIntoTwo(const glm::vec2& p1, const glm::vec2& p2, int option, class Object* obj);
 
 	// Getters
 	bool GetShouldDrawPath() const { return mShouldDrawPath; }

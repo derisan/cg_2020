@@ -4,6 +4,22 @@ class Rect :
     public Object
 {
 public:
+	enum PointIdx
+	{
+		kLeftTopPoint,
+		kRightTopPoint,
+		kLeftBottomPoint,
+		kRightBottomPoint
+	};
+
+	enum SideIdx
+	{
+		kTopSide,
+		kRightSide,
+		kBottomSide,
+		kLeftSide
+	};
+
 	Rect(const glm::vec2& leftTop, const glm::vec2& rightTop,
 		const glm::vec2& leftBottom, const glm::vec2& rightBottom, class ObjectManager* manager);
 	~Rect();

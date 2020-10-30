@@ -14,6 +14,8 @@ Triangle::Triangle(const glm::vec2& left, const glm::vec2& right,
 	mMidPoint{ mid },
 	mVertexArray{ nullptr }
 {
+	SetType(Type::kTriangle);
+
 	mPoints.emplace_back(mLeftPoint);
 	mPoints.emplace_back(mRightPoint);
 	mPoints.emplace_back(mMidPoint);
