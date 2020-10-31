@@ -13,6 +13,7 @@
 
 ObjectManager::ObjectManager(Game* game)
 	: mCooldown{ 0.0f },
+	mSpeed{ 0.005f },
 	mShouldDrawPath{ true },
 	mGame{ game }
 {
@@ -97,8 +98,8 @@ void ObjectManager::GenerateRandomPolygon()
 	glm::vec2 p1 = { -1.0f, Random::GetFloatRange(0.0f, 0.8f) };
 	glm::vec2 p2 = { 1.0f, Random::GetFloatRange(0.0f, 0.8f) };
 	
-	float xSpeed{ 0.005f };
-	float ySpeed = (p2.y - p1.y) / 400.0f;
+	float xSpeed{ mSpeed };
+	float ySpeed = (p2.y - p1.y) / (2.0f / xSpeed);
 
 	auto choice = Random::GetIntRange(0, 1);
 	// Create triangle in left side of window

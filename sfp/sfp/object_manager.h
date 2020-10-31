@@ -43,18 +43,24 @@ public:
 	// Divide given rect into one tri, one penta or two rects
 	void DivideRectIntoTwo(const glm::vec2& p1, const glm::vec2& p2, int option, class Object* obj);
 
+	void SpeedUp(float speed) { if(mSpeed < 0.01f) mSpeed += speed; }
+	void SpeedDown(float speed) { if(mSpeed > 0.002f) mSpeed -= speed; }
+
 	// Getters
 	bool GetShouldDrawPath() const { return mShouldDrawPath; }
+	float GetSpeed() const { return mSpeed; }
 	std::vector<class Object*>& GetObjects() { return mObjs; }
 
 	// Setters
 	void SetShouldDrawPath(bool value) { mShouldDrawPath = value; }
+	void SetSpeed(float speed) { mSpeed = speed; }
 
 private:
 	std::vector<class Object*> mObjs;
 	std::vector<class Line*> mPaths;
 
 	float mCooldown;
+	float mSpeed;
 	
 	const float dt{ 16.0f / 1000.0f };
 

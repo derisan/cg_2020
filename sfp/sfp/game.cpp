@@ -91,6 +91,12 @@ void Game::ProcessKeyboardInput(unsigned char key)
 		case 's': case 'S':
 			mShouldPause = !mShouldPause;
 			break;
+		case 49: // Numpad 1
+			mObjManager->SpeedUp(0.001f);
+			break;
+		case 50: // Numpad 2
+			mObjManager->SpeedDown(0.001f);
+			break;
 	}
 }
 
