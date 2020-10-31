@@ -26,7 +26,7 @@ public:
 
 	// Check if the cutter collides with two sides of the single obj
 	// Note:: this function checks triangle' side in order of left->right->mid
-	// In case of rect, top->right->bottom->left side
+	// In case of rect, top->right->bottom->left order
 	void CheckCollision(class Line* cutter);
 
 
@@ -45,6 +45,7 @@ public:
 
 	// Getters
 	bool GetShouldDrawPath() const { return mShouldDrawPath; }
+	std::vector<class Object*>& GetObjects() { return mObjs; }
 
 	// Setters
 	void SetShouldDrawPath(bool value) { mShouldDrawPath = value; }

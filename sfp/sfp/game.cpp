@@ -6,10 +6,11 @@
 #include <GL/freeglut.h>
 
 #include "random.h"
-#include "shader.h"
-#include "line.h"
-#include "object_manager.h"
 #include "utils.h"
+#include "shader.h"
+#include "object_manager.h"
+#include "net.h"
+#include "line.h"
 
 Game::Game(int w, int h)
 	: mScrWidth{ w },
@@ -19,6 +20,7 @@ Game::Game(int w, int h)
 	mCutterStartPos{ 0.0f, 0.0f },
 	mCutterEndPos{ 0.0f, 0.0f },
 	mObjManager{ nullptr },
+	mNet{ nullptr },
 	mDrawMode{ GL_FILL },
 	mShouldPause{ false }
 {
@@ -34,7 +36,7 @@ bool Game::Init(int* argc, char** argv)
 {
 	glutInit(argc, argv);
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA);
-	glutInitWindowPosition(100, 100);
+	glutInitWindowPosition(0, 0);
 	glutInitWindowSize(mScrWidth, mScrHeight);
 	glutCreateWindow("Slice flying polygons");
 
@@ -61,6 +63,7 @@ bool Game::Init(int* argc, char** argv)
 void Game::LoadData()
 {
 	mObjManager = new ObjectManager{this};
+	mNet = new Net{ mScrWidth, mScrHeight, this };
 }
 
 void Game::Shutdown()
@@ -68,6 +71,7 @@ void Game::Shutdown()
 	delete mShader;
 	delete mCutter;
 	delete mObjManager;
+	delete mNet;
 }
 
 void Game::ProcessKeyboardInput(unsigned char key)
@@ -114,6 +118,9 @@ void Game::Update()
 
 	mObjManager->Update();
 	mObjManager->CheckCollision(mCutter);
+	
+	auto objs = mObjManager->GetObjects();
+	mNet->Update(objs);
 }
 
 
@@ -128,6 +135,7 @@ void Game::Draw()
 	if (mCutter)
 		mCutter->Draw();
 	mObjManager->Draw();
+	mNet->Draw();
 	
 	glutSwapBuffers();
 }

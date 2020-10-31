@@ -38,6 +38,7 @@ private:
 	glm::vec2 mCutterEndPos;
 
 	class ObjectManager* mObjManager;
+	class Net* mNet;
 
 	unsigned int mDrawMode;
 	bool mShouldPause;
