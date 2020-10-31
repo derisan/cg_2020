@@ -3,15 +3,17 @@
 #include <GL/glew.h>
 
 #include "object_manager.h"
+#include "line.h"
 #include "vertexarray.h"
 
 
 Triangle::Triangle(const glm::vec2& left, const glm::vec2& right,
-	const glm::vec2& mid, ObjectManager* manager)
+	const glm::vec2& mid, ObjectManager* manager, const glm::vec2& pathStart, const glm::vec2& pathEnd)
 	: Object{ manager },
 	mLeftPoint{ left },
 	mRightPoint{ right },
 	mMidPoint{ mid },
+	mPath{ nullptr },
 	mVertexArray{ nullptr }
 {
 	SetType(Type::kTriangle);
@@ -24,11 +26,23 @@ Triangle::Triangle(const glm::vec2& left, const glm::vec2& right,
 	mSides.emplace_back(Side{ right, mid });
 	mSides.emplace_back(Side{ left, right });
 	Load();
+
+	if (pathStart != glm::vec2{ 0.0f, 0.0f })
+	{
+		mPath = new Line{ pathStart, pathEnd };
+		manager->AddPath(mPath);
+	}
 }
 
 Triangle::~Triangle()
 {
 	delete mVertexArray;
+
+	if (mPath)
+	{
+		mManager->RemovePath(mPath);
+		delete mPath;
+	}
 }
 
 void Triangle::Update()

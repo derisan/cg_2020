@@ -17,12 +17,12 @@ public:
 	
 	void AddObj(class Object* obj);
 	void RemoveObj(class Object* obj);
+	void AddPath(class Line* path);
+	void RemovePath(class Line* path);
 	
 	// Create triangle in left or right side of the window
 	void GenerateRandomPolygon();
 
-	// Create path when two points are given
-	void CreatePath(const glm::vec2& p1, const glm::vec2& p2);
 
 	// Check if the cutter collides with two sides of the single obj
 	// Note:: this function checks triangle' side in order of left->right->mid
@@ -40,7 +40,7 @@ public:
 	// Divide given triangle into one tri, one rect
 	void DivideTriangleIntoTwo(const glm::vec2& p1, const glm::vec2& p2, int option, class Object* obj);
 
-	// Dive given rect into one tri, one penta or two rects
+	// Divide given rect into one tri, one penta or two rects
 	void DivideRectIntoTwo(const glm::vec2& p1, const glm::vec2& p2, int option, class Object* obj);
 
 	// Getters

@@ -14,7 +14,8 @@ public:
 	};
 
 	Triangle(const glm::vec2& left, const glm::vec2& right, 
-		const glm::vec2& mid, class ObjectManager* manager);
+		const glm::vec2& mid, class ObjectManager* manager, 
+		const glm::vec2& pathStart = glm::vec2{ 0.0f, 0.0f }, const glm::vec2& pathEnd = glm::vec2{ 0.0f, 0.0f });
 	~Triangle();
 
 	void Update() override;
@@ -33,6 +34,7 @@ private:
 	std::vector<Side> mSides;
 	std::vector<glm::vec2> mPoints;
 
+	class Line* mPath;
 	class VertexArray* mVertexArray;
 };
 

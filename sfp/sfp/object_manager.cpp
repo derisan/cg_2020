@@ -80,11 +80,22 @@ void ObjectManager::RemoveObj(Object* obj)
 	}
 }
 
+void ObjectManager::AddPath(Line* path)
+{
+	mPaths.emplace_back(path);
+}
+
+void ObjectManager::RemovePath(Line* path)
+{
+	auto iter = std::find(std::begin(mPaths), std::end(mPaths), path);
+	if (iter != std::end(mPaths))
+		mPaths.erase(iter);
+}
+
 void ObjectManager::GenerateRandomPolygon()
 {
 	glm::vec2 p1 = { -1.0f, Random::GetFloatRange(0.0f, 0.8f) };
 	glm::vec2 p2 = { 1.0f, Random::GetFloatRange(0.0f, 0.8f) };
-	CreatePath(p1, p2);
 	
 	float xSpeed{ 0.005f };
 	float ySpeed = (p2.y - p1.y) / 400.0f;
@@ -97,7 +108,7 @@ void ObjectManager::GenerateRandomPolygon()
 		glm::vec2 right{ -0.9f, p1.y - Random::GetFloatRange(0.05f, 0.1f) };
 		glm::vec2 mid{ -1.0f, p1.y + Random::GetFloatRange(0.05f, 0.1f) };
 
-		auto tri = new Triangle{ left, right, mid, this };
+		auto tri = new Triangle{ left, right, mid, this, p1, p2 };
 		tri->SetXSpeed(xSpeed);
 		tri->SetYSpeed(ySpeed);
 	}
@@ -107,16 +118,12 @@ void ObjectManager::GenerateRandomPolygon()
 		glm::vec2 right{ 1.1f, p2.y - Random::GetFloatRange(0.05f, 0.1f) };
 		glm::vec2 mid{ 1.0f, p2.y + Random::GetFloatRange(0.05f, 0.1f) };
 
-		auto tri = new Triangle{ left, right, mid, this };
+		auto tri = new Triangle{ left, right, mid, this, p1, p2 };
 		tri->SetXSpeed(-xSpeed);
 		tri->SetYSpeed(-ySpeed);
 	}
 }
 
-void ObjectManager::CreatePath(const glm::vec2& p1, const glm::vec2& p2)
-{
-	mPaths.emplace_back(new Line{ p1, p2 });
-}
 
 void ObjectManager::CheckCollision(Line* cutter)
 {
