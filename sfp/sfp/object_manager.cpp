@@ -367,6 +367,5 @@ Object* ObjectManager::CapturesObject(const glm::vec2& mouse)
 			return obj;
 		}
 	}
-
 	return nullptr;
 }

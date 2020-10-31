@@ -145,11 +145,11 @@ void Game::Update()
 	{
 		if (mRightMouseEndPos.x != -1.0f && mRightMouseEndPos.y != -1.0f)
 		{
-			obj->Rearrange(mRightMouseEndPos);
+			mNet->MouseReposition(obj, mRightMouseEndPos);
 			mRightMouseEndPos = glm::vec2{ -1.0f, -1.0f };
 		}
 	}
-		
+	
 	auto objs = mObjManager->GetObjects();
 	mNet->Update(objs);
 

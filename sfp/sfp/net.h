@@ -16,10 +16,11 @@ public:
 
 	void CheckCollision(std::vector<class Object*>& objs);
 	void Reposition(class Object* obj);
+	void MouseReposition(class Object* obj, const glm::vec2& pos);
 
 	void MakeMesh();
 
-	int IsOver() const { return mCount >= 24; }
+	int IsOver() const { return mCount == 24; }
 
 private:
 	class Game* mGame;

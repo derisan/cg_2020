@@ -98,6 +98,11 @@ void Net::Reposition(Object* obj)
 	mCount = std::count(std::begin(mVisited), std::end(mVisited), true);
 }
 
+void Net::MouseReposition(Object* obj, const glm::vec2& pos)
+{
+	obj->Rearrange(pos);
+}
+
 void Net::MakeMesh()
 {
 	// Rows
