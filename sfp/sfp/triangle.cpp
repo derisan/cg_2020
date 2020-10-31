@@ -107,3 +107,25 @@ void Triangle::UpdateSide()
 	mSides.emplace_back(Side{ mRightPoint, mMidPoint });
 	mSides.emplace_back(Side{ mLeftPoint, mRightPoint });
 }
+
+const glm::vec2 Triangle::GetCenter() const
+{
+	return glm::vec2{
+		(mLeftPoint.x + mRightPoint.x + mMidPoint.x) / 3,
+		(mLeftPoint.y + mRightPoint.y + mMidPoint.y) / 3
+	};
+}
+
+void Triangle::Rearrange(const glm::vec2& center)
+{
+	glm::vec2 prevCenter = GetCenter();
+	glm::vec2 leftCen = mLeftPoint - prevCenter;
+	glm::vec2 rightCen = mRightPoint - prevCenter;
+	glm::vec2 midCen = mMidPoint - prevCenter;
+
+	mLeftPoint = center + leftCen;
+	mRightPoint = center + rightCen;
+	mMidPoint = center + midCen;
+
+	Load();
+}

@@ -20,6 +20,8 @@ public:
     void Update() override;
     void Draw() override;
     void Load() override;
+    const glm::vec2 GetCenter() const override;
+    void Rearrange(const glm::vec2& center) override;
 
     void UpdateSide();
 

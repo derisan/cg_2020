@@ -93,3 +93,27 @@ void Rect::UpdateSide()
 	mSides.emplace_back(Side{ mRightBottomPoint, mLeftBottomPoint });
 	mSides.emplace_back(Side{ mLeftBottomPoint, mLeftTopPoint });
 }
+
+const glm::vec2 Rect::GetCenter() const
+{
+	return glm::vec2{
+		(mLeftTopPoint.x + mRightTopPoint.x + mLeftBottomPoint.x + mRightBottomPoint.x) / 4,
+		(mLeftTopPoint.y + mRightTopPoint.y + mLeftBottomPoint.y + mRightBottomPoint.y) / 4
+	};
+}
+
+void Rect::Rearrange(const glm::vec2& center)
+{
+	glm::vec2 prevCenter = GetCenter();
+	glm::vec2 leftTopCen = mLeftTopPoint - prevCenter;
+	glm::vec2 rightTopCen = mRightTopPoint - prevCenter;
+	glm::vec2 leftBottomCen = mLeftBottomPoint - prevCenter;
+	glm::vec2 rightBottomCen = mRightBottomPoint - prevCenter;
+
+	mLeftTopPoint = leftTopCen + center;
+	mRightTopPoint = rightTopCen + center;
+	mLeftBottomPoint = leftBottomCen + center;
+	mRightBottomPoint = rightBottomCen + center;
+
+	Load();
+}

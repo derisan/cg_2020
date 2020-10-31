@@ -92,3 +92,30 @@ void Pentagon::UpdateSide()
     mPoints.emplace_back(mFivePoint);
     mPoints.emplace_back(mThreePoint);
 }
+
+const glm::vec2 Pentagon::GetCenter() const
+{
+    return glm::vec2{
+        (mTwelvePoint.x + mNinePoint.x + mSevenPoint.x + mFivePoint.x + mThreePoint.x) / 5,
+        (mTwelvePoint.y + mNinePoint.y + mSevenPoint.y + mFivePoint.y + mThreePoint.y) / 5
+    };
+}
+
+void Pentagon::Rearrange(const glm::vec2& center)
+{
+    glm::vec2 prevCenter = GetCenter();
+    
+    glm::vec2 twelveCen = mTwelvePoint - prevCenter;
+    glm::vec2 nineCen = mNinePoint - prevCenter;
+    glm::vec2 sevenCen = mSevenPoint - prevCenter;
+    glm::vec2 fiveCen = mFivePoint - prevCenter;
+    glm::vec2 threeCen = mThreePoint - prevCenter;
+
+    mTwelvePoint = twelveCen + center;
+    mNinePoint = nineCen + center;
+    mSevenPoint = sevenCen + center;
+    mFivePoint = fiveCen + center;
+    mThreePoint = threeCen + center;
+
+    Load();
+}

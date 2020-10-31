@@ -22,7 +22,8 @@ Game::Game(int w, int h)
 	mObjManager{ nullptr },
 	mNet{ nullptr },
 	mDrawMode{ GL_FILL },
-	mShouldPause{ false }
+	mShouldPause{ false },
+	mShouldEnd{ false }
 {
 	
 }
@@ -121,6 +122,11 @@ void Game::Update()
 	
 	auto objs = mObjManager->GetObjects();
 	mNet->Update(objs);
+
+	if (mNet->IsOver())
+	{
+		mShouldEnd = true;
+	}
 }
 
 

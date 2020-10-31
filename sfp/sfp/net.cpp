@@ -3,7 +3,6 @@
 #include <iostream>
 
 #include "game.h"
-#include "object.h"
 #include "line.h"
 #include "triangle.h"
 #include "rect.h"
@@ -13,7 +12,8 @@ Net::Net(int w, int h, Game* game)
 	: mGame{ game },
 	mScrWidth{ w },
 	mScrHeight{ h },
-	mBorder{ -0.55f }
+	mBorder{ -0.55f },
+	mObjCount{ 0 }
 {
 	MakeMesh();
 }
@@ -38,6 +38,9 @@ void Net::Draw()
 
 void Net::CheckCollision(std::vector<Object*>& objs)
 {
+	if (mObjCount > 24)
+		return;
+
 	for (auto obj : objs)
 	{
 		if (obj->GetState() != Object::State::kActive)
@@ -48,23 +51,40 @@ void Net::CheckCollision(std::vector<Object*>& objs)
 		{
 			auto points = obj->GetPoints();
 			if (points[Triangle::kMid].y < mBorder)
+			{
 				obj->SetState(Object::State::kPaused);
+				Reposition(obj);
+			}
 		}
 
 		else if (type == Object::Type::kRect)
 		{
 			auto points = obj->GetPoints();
 			if (points[Rect::kLeftBottomPoint].y < mBorder)
+			{
 				obj->SetState(Object::State::kPaused);
+				Reposition(obj);
+			}
 		}
 
 		else if (type == Object::Type::kPentagon)
 		{
 			auto points = obj->GetPoints();
 			if (points[Pentagon::kSeven].y < mBorder)
+			{
 				obj->SetState(Object::State::kPaused);
+				Reposition(obj);
+			}
 		}
 	}
+}
+
+void Net::Reposition(Object* obj)
+{
+	glm::vec2 center{ -0.875f + 0.25f * (mObjCount % 8), -0.925f + 0.15f * (mObjCount / 8) };
+	obj->Rearrange(center);
+		
+	++mObjCount;
 }
 
 void Net::MakeMesh()

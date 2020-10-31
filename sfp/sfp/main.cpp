@@ -4,6 +4,8 @@
 // -----------------------------------
 
 #include <iostream>
+#include <thread>
+#include <chrono>
 
 #include <GL/glew.h>
 #include <GL/freeglut.h>
@@ -16,6 +18,8 @@ void KeyboardFunc(unsigned char key, int x, int y);
 void MouseFunc(int button, int state, int x, int y);
 void MotionFunc(int x, int y);
 void TimerFunc(int value);
+
+void Shutdown();
 
 constexpr int kScrWidth{ 1024 };
 constexpr int kScrHeight{ 768 };
@@ -56,10 +60,7 @@ void KeyboardFunc(unsigned char key, int x, int y)
 {
 	// 27 is 'ESC'
 	if (key == 27)
-	{
-		game.Shutdown();
-		glutLeaveMainLoop();
-	}
+		Shutdown();
 	else
 		game.ProcessKeyboardInput(key);
 }
@@ -79,5 +80,16 @@ void TimerFunc(int value)
 	// Update is called per 16 ms
 	glutTimerFunc(16, TimerFunc, 1);
 	game.Update();
+	if (game.GetShouldEnd())
+	{
+		std::this_thread::sleep_for(std::chrono::seconds(2));
+		Shutdown();
+	}
 	glutPostRedisplay();
+}
+
+void Shutdown()
+{
+	game.Shutdown();
+	glutLeaveMainLoop();
 }

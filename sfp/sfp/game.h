@@ -27,6 +27,9 @@ public:
 	// Setters
 	void SetShouldPause(bool value) { mShouldPause = value; }
 
+	// Getters
+	bool GetShouldEnd() const { return mShouldEnd; }
+
 private:
 	const int mScrWidth;
 	const int mScrHeight;
@@ -42,5 +45,6 @@ private:
 
 	unsigned int mDrawMode;
 	bool mShouldPause;
+	bool mShouldEnd;
 };
 

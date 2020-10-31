@@ -37,6 +37,9 @@ public:
 	virtual const std::vector<Side>& GetSides() const = 0;
 	virtual const std::vector<glm::vec2>& GetPoints() const = 0;
 
+	virtual const glm::vec2 GetCenter() const = 0;
+	virtual void Rearrange(const glm::vec2& center) {};
+
 	// Getters
 	State GetState() const { return mState; }
 	Type GetType() const { return mType; }

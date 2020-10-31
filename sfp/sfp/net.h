@@ -2,6 +2,8 @@
 
 #include <vector>
 
+#include "object.h"
+
 class Net
 {
 public:
@@ -12,8 +14,11 @@ public:
 	void Draw();
 
 	void CheckCollision(std::vector<class Object*>& objs);
+	void Reposition(class Object* obj);
 
 	void MakeMesh();
+
+	int IsOver() const { return mObjCount > 24; }
 
 private:
 	class Game* mGame;
@@ -22,7 +27,7 @@ private:
 	
 	int mScrWidth;
 	int mScrHeight;
-
 	float mBorder;
+	int mObjCount;
 };
 
