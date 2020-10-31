@@ -27,26 +27,29 @@ Rect::~Rect()
 
 void Rect::Update()
 {
-	Object::Update();
+	if (GetState() == State::kActive)
+	{
+		Object::Update();
 
-	auto speed = GetXSpeed();
-	mLeftTopPoint.x += speed;
-	mRightTopPoint.x += speed;
-	mLeftBottomPoint.x += speed;
-	mRightBottomPoint.x += speed;
+		auto speed = GetXSpeed();
+		mLeftTopPoint.x += speed;
+		mRightTopPoint.x += speed;
+		mLeftBottomPoint.x += speed;
+		mRightBottomPoint.x += speed;
 
-	speed = GetYSpeed();
-	mLeftTopPoint.y += speed;
-	mRightTopPoint.y += speed;
-	mLeftBottomPoint.y += speed;
-	mRightBottomPoint.y += speed;
+		speed = GetYSpeed();
+		mLeftTopPoint.y += speed;
+		mRightTopPoint.y += speed;
+		mLeftBottomPoint.y += speed;
+		mRightBottomPoint.y += speed;
 
-	UpdateSide();
-	Load();
+		UpdateSide();
+		Load();
 
-	if (mLeftTopPoint.x < -1.3f || mLeftBottomPoint.x < -1.3f || mRightTopPoint.x > 1.3f || mRightBottomPoint.x > 1.3f
-		|| mLeftBottomPoint.y < -1.3f)
-		SetState(State::kDead);
+		if (mLeftTopPoint.x < -1.3f || mLeftBottomPoint.x < -1.3f || mRightTopPoint.x > 1.3f || mRightBottomPoint.x > 1.3f
+			|| mLeftBottomPoint.y < -1.3f)
+			SetState(State::kDead);
+	}
 }
 
 void Rect::Draw()

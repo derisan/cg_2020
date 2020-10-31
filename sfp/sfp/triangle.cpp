@@ -47,24 +47,27 @@ Triangle::~Triangle()
 
 void Triangle::Update()
 {
-	Object::Update();
+	if (GetState() == State::kActive)
+	{
+		Object::Update();
 
-	auto speed = GetXSpeed();
-	mLeftPoint.x += speed;
-	mRightPoint.x += speed;
-	mMidPoint.x += speed;
+		auto speed = GetXSpeed();
+		mLeftPoint.x += speed;
+		mRightPoint.x += speed;
+		mMidPoint.x += speed;
 
-	speed = GetYSpeed();
-	mLeftPoint.y += speed;
-	mRightPoint.y += speed;
-	mMidPoint.y += speed;
+		speed = GetYSpeed();
+		mLeftPoint.y += speed;
+		mRightPoint.y += speed;
+		mMidPoint.y += speed;
 
-	UpdateSide();
-	Load();
+		UpdateSide();
+		Load();
 
-	if (mLeftPoint.x < -1.3f || mRightPoint.x > 1.3f
-		|| mLeftPoint.y < -1.3f)
-		SetState(State::kDead);
+		if (mLeftPoint.x < -1.3f || mRightPoint.x > 1.3f
+			|| mLeftPoint.y < -1.3f)
+			SetState(State::kDead);
+	}
 }
 
 void Triangle::Draw()

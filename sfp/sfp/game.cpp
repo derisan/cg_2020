@@ -19,7 +19,7 @@ Game::Game(int w, int h)
 	mCutterStartPos{ 0.0f, 0.0f },
 	mCutterEndPos{ 0.0f, 0.0f },
 	mObjManager{ nullptr },
-	mDrawMode{ GL_LINE },
+	mDrawMode{ GL_FILL },
 	mShouldPause{ false }
 {
 	
@@ -125,10 +125,9 @@ void Game::Draw()
 
 	mShader->SetActive();
 
-	mObjManager->Draw();
-	
 	if (mCutter)
 		mCutter->Draw();
+	mObjManager->Draw();
 	
 	glutSwapBuffers();
 }

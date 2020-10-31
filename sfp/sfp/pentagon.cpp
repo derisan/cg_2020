@@ -28,27 +28,30 @@ Pentagon::~Pentagon()
 
 void Pentagon::Update()
 {
-    Object::Update();
+    if (GetState() == State::kActive)
+    {
+        Object::Update();
 
-    auto speed = GetXSpeed();
-    mTwelvePoint.x += speed;
-    mNinePoint.x += speed;
-    mSevenPoint.x += speed;
-    mFivePoint.x += speed;
-    mThreePoint.x += speed;
+        auto speed = GetXSpeed();
+        mTwelvePoint.x += speed;
+        mNinePoint.x += speed;
+        mSevenPoint.x += speed;
+        mFivePoint.x += speed;
+        mThreePoint.x += speed;
 
-    speed = GetYSpeed();
-    mTwelvePoint.y += speed;
-    mNinePoint.y += speed;
-    mSevenPoint.y += speed;
-    mFivePoint.y += speed;
-    mThreePoint.y += speed;
+        speed = GetYSpeed();
+        mTwelvePoint.y += speed;
+        mNinePoint.y += speed;
+        mSevenPoint.y += speed;
+        mFivePoint.y += speed;
+        mThreePoint.y += speed;
 
-    UpdateSide();
-    Load();
+        UpdateSide();
+        Load();
 
-    if (mNinePoint.x < -1.3f || mThreePoint.x > 1.3f || mSevenPoint.y < -1.3f)
-        SetState(State::kDead);
+        if (mNinePoint.x < -1.3f || mThreePoint.x > 1.3f || mSevenPoint.y < -1.3f)
+            SetState(State::kDead);
+    }
 }
 
 void Pentagon::Draw()
