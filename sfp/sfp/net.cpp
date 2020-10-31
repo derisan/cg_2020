@@ -100,7 +100,31 @@ void Net::Reposition(Object* obj)
 
 void Net::MouseReposition(Object* obj, const glm::vec2& pos)
 {
+	int idx = FindCurrentIdx(obj);
+	if (idx != -1)
+		mVisited[idx] = false;
+
+	auto dest = FindNextPos(pos);
 	obj->Rearrange(pos);
+
+}
+
+int Net::FindCurrentIdx(Object* obj)
+{
+	auto objCen = obj->GetCenter();
+	for (size_t i = 0; i < mVisited.size(); ++i)
+	{
+		auto cen = glm::vec2{ -0.875f + 0.25f * (i % 8), -0.925f + 0.15f * (i / 8) };
+
+		if (objCen.x - cen.x < 0.01f && objCen.y - cen.y < 0.01f)
+			return i;
+	}
+	return -1;
+}
+
+glm::vec2 Net::FindNextPos(const glm::vec2& pos)
+{
+	return glm::vec2{ 0.0f };
 }
 
 void Net::MakeMesh()

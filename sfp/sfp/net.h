@@ -18,6 +18,9 @@ public:
 	void Reposition(class Object* obj);
 	void MouseReposition(class Object* obj, const glm::vec2& pos);
 
+	int FindCurrentIdx(class Object* obj);
+	glm::vec2 FindNextPos(const glm::vec2& pos);
+
 	void MakeMesh();
 
 	int IsOver() const { return mCount == 24; }
