@@ -19,7 +19,7 @@ public:
 	void MouseReposition(class Object* obj, const glm::vec2& pos);
 
 	int FindCurrentIdx(class Object* obj);
-	glm::vec2 FindNextPos(const glm::vec2& pos);
+	int FindNextIdx(const glm::vec2& pos);
 
 	void MakeMesh();
 

@@ -101,12 +101,16 @@ void Net::Reposition(Object* obj)
 void Net::MouseReposition(Object* obj, const glm::vec2& pos)
 {
 	int idx = FindCurrentIdx(obj);
-	if (idx != -1)
-		mVisited[idx] = false;
+	if (idx == -1)
+		return;
+	mVisited[idx] = false;
 
-	auto dest = FindNextPos(pos);
-	obj->Rearrange(pos);
-
+	auto destIdx = FindNextIdx(pos);
+	if (destIdx == -1)
+		return;
+	mVisited[destIdx] = true;
+	glm::vec2 dest{ -0.875f + 0.25f * (destIdx % 8), -0.925f + 0.15f * (destIdx / 8) };
+	obj->Rearrange(dest);
 }
 
 int Net::FindCurrentIdx(Object* obj)
@@ -122,9 +126,16 @@ int Net::FindCurrentIdx(Object* obj)
 	return -1;
 }
 
-glm::vec2 Net::FindNextPos(const glm::vec2& pos)
+int Net::FindNextIdx(const glm::vec2& pos)
 {
-	return glm::vec2{ 0.0f };
+	for (size_t i = 0; i < mVisited.size(); ++i)
+	{
+		auto cen = glm::vec2{ -0.875f + 0.25f * (i % 8), -0.925f + 0.15f * (i / 8) };
+
+		if (glm::distance(cen, pos) < 0.05f)
+			return i;
+	}
+	return -1;
 }
 
 void Net::MakeMesh()
