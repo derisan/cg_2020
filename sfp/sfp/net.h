@@ -1,6 +1,7 @@
 #pragma once
 
 #include <vector>
+#include <array>
 
 #include "object.h"
 
@@ -18,7 +19,7 @@ public:
 
 	void MakeMesh();
 
-	int IsOver() const { return mObjCount > 24; }
+	int IsOver() const { return mCount >= 24; }
 
 private:
 	class Game* mGame;
@@ -28,6 +29,8 @@ private:
 	int mScrWidth;
 	int mScrHeight;
 	float mBorder;
-	int mObjCount;
+	int mCount;
+
+	std::array<bool, 24> mVisited;
 };
 

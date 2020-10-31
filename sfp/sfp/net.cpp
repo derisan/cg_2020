@@ -13,7 +13,7 @@ Net::Net(int w, int h, Game* game)
 	mScrWidth{ w },
 	mScrHeight{ h },
 	mBorder{ -0.55f },
-	mObjCount{ 0 }
+	mCount{ 0 }
 {
 	MakeMesh();
 }
@@ -38,7 +38,7 @@ void Net::Draw()
 
 void Net::CheckCollision(std::vector<Object*>& objs)
 {
-	if (mObjCount > 24)
+	if (mCount == 24)
 		return;
 
 	for (auto obj : objs)
@@ -81,10 +81,21 @@ void Net::CheckCollision(std::vector<Object*>& objs)
 
 void Net::Reposition(Object* obj)
 {
-	glm::vec2 center{ -0.875f + 0.25f * (mObjCount % 8), -0.925f + 0.15f * (mObjCount / 8) };
+	int idx{ -1 };
+	for (size_t i = 0; i < mVisited.size(); ++i)
+	{
+		if (mVisited[i] == false)
+		{
+			idx = i;
+			mVisited[i] = true;
+			break;
+		}
+	}
+
+	glm::vec2 center{ -0.875f + 0.25f * (idx % 8), -0.925f + 0.15f * (idx / 8) };
 	obj->Rearrange(center);
 		
-	++mObjCount;
+	mCount = std::count(std::begin(mVisited), std::end(mVisited), true);
 }
 
 void Net::MakeMesh()
