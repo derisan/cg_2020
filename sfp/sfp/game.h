@@ -21,7 +21,6 @@ public:
 
 	void ChangeDrawMode();
 
-	// Program specific
 	void CreateCutter();
 	void DeleteCutter();
 

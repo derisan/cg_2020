@@ -25,14 +25,13 @@ public:
 	~Rect();
 
 	void Update() override;
+	void UpdateSide();
 	void Draw() override;
 	void Load() override;
 
-	// Class specific
-	void UpdateSide();
-
 	const std::vector<Side>& GetSides() const override { return mSides; }
 	const std::vector<glm::vec2>& GetPoints() const override { return mPoints; }
+
 private:
 	glm::vec2 mLeftTopPoint;
 	glm::vec2 mRightTopPoint;

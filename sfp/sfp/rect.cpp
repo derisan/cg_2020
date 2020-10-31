@@ -84,7 +84,6 @@ void Rect::UpdateSide()
 	mPoints.emplace_back(mLeftBottomPoint);
 	mPoints.emplace_back(mRightBottomPoint);
 
-	// 네 변의 순서 : 상우하좌(반시계)
 	mSides.clear();
 	mSides.emplace_back(Side{ mLeftTopPoint, mRightTopPoint});
 	mSides.emplace_back(Side{ mRightTopPoint, mRightBottomPoint});

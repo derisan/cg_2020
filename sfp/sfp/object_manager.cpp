@@ -166,17 +166,18 @@ void ObjectManager::CheckSide(const glm::vec2& p1, const glm::vec2& p2,
 
 int ObjectManager::GetTriangleDivideOption(const Object::Side& s1, const Object::Side& s2, Object* obj)
 {
+	// Triangle' sides are arranged in order of left, right, mid.
 	auto sides = obj->GetSides();
 	int option{ 0 };
 	if (s1.p1 == sides[Triangle::kLeft].p1 && s1.p2 == sides[Triangle::kLeft].p2)
 	{
-		if (s2.p1 == sides[Triangle::kRight].p1 && s2.p2 == sides[Triangle::kRight].p2)		// 좌우
+		if (s2.p1 == sides[Triangle::kRight].p1 && s2.p2 == sides[Triangle::kRight].p2)		// Left - Right
 			option = 0;
-		else if (s2.p1 == sides[Triangle::kMid].p1 && s2.p2 == sides[Triangle::kMid].p2)	// 좌중
+		else if (s2.p1 == sides[Triangle::kMid].p1 && s2.p2 == sides[Triangle::kMid].p2)	// Left - Mid
 			option = 1;
 	}
 	else if (s1.p1 == sides[Triangle::kRight].p1 && s1.p2 == sides[Triangle::kRight].p2)
-		if (s2.p1 == sides[Triangle::kMid].p1 && s2.p2 == sides[Triangle::kMid].p2)		// 우중
+		if (s2.p1 == sides[Triangle::kMid].p1 && s2.p2 == sides[Triangle::kMid].p2)		// Right - Mid
 			option = 2;
 
 	return option;
@@ -184,28 +185,28 @@ int ObjectManager::GetTriangleDivideOption(const Object::Side& s1, const Object:
 
 int ObjectManager::GetRectDivideOption(const Object::Side& s1, const Object::Side& s2, Object* obj)
 {
-	// 상우하좌(반시계)
+	// Rect' sides are arranged in order of counter clockwise(top side first)
 	auto sides = obj->GetSides();
 	int option{ 0 };
 	if (s1.p1 == sides[Rect::kTopSide].p1 && s1.p2 == sides[Rect::kTopSide].p2)
 	{
-		if (s2.p1 == sides[Rect::kLeftSide].p1 && s2.p2 == sides[Rect::kLeftSide].p2) /* 상좌 */
+		if (s2.p1 == sides[Rect::kLeftSide].p1 && s2.p2 == sides[Rect::kLeftSide].p2) // Top - Left
 			option = 0;
-		else if (s2.p1 == sides[Rect::kBottomSide].p1 && s2.p2 == sides[Rect::kBottomSide].p2) /* 상하 */
+		else if (s2.p1 == sides[Rect::kBottomSide].p1 && s2.p2 == sides[Rect::kBottomSide].p2) // Top - Bottom
 			option = 1;
-		else if (s2.p1 == sides[Rect::kRightSide].p1 && s2.p2 == sides[Rect::kRightSide].p2) /* 상우 */
+		else if (s2.p1 == sides[Rect::kRightSide].p1 && s2.p2 == sides[Rect::kRightSide].p2) // Top - Right
 			option = 2;
 	}
 	else if (s1.p1 == sides[Rect::kRightSide].p1 && s1.p2 == sides[Rect::kRightSide].p2)
 	{
-		if (s2.p1 == sides[Rect::kLeftSide].p1 && s2.p2 == sides[Rect::kLeftSide].p2) /* 좌우 */
+		if (s2.p1 == sides[Rect::kLeftSide].p1 && s2.p2 == sides[Rect::kLeftSide].p2) // Right - Left
 			option = 3;
-		else if (s2.p1 == sides[Rect::kBottomSide].p1 && s2.p2 == sides[Rect::kBottomSide].p2) /* 우하 */
+		else if (s2.p1 == sides[Rect::kBottomSide].p1 && s2.p2 == sides[Rect::kBottomSide].p2) // Right - Bottom
 			option = 4;
 	}
 	else if (s1.p1 == sides[Rect::kBottomSide].p1 && s1.p2 == sides[Rect::kBottomSide].p2)
 	{
-		if (s2.p1 == sides[Rect::kLeftSide].p1 && s2.p2 == sides[Rect::kLeftSide].p2) /* 좌하 */
+		if (s2.p1 == sides[Rect::kLeftSide].p1 && s2.p2 == sides[Rect::kLeftSide].p2) // Left - Bottom
 			option = 5;
 	}
 	return option;
@@ -213,22 +214,20 @@ int ObjectManager::GetRectDivideOption(const Object::Side& s1, const Object::Sid
 
 void ObjectManager::DivideTriangleIntoTwo(const glm::vec2& p1, const glm::vec2& p2, int option, Object* obj)
 {
-	// Index 0 : left, 1 : right, 2 : mid
 	auto points = obj->GetPoints();
 
-	// 좌우 슬라이스
+	// Slice left - right
 	if (option == 0)
 	{
 		auto tri = new Triangle(p1, p2, points[Triangle::kMid], this);
 		tri->SetXSpeed(0.0f);
 		tri->SetYSpeed(-0.005f);
 
-		// 사각형 생성
 		auto rect = new Rect(p1, p2, points[Triangle::kLeft], points[Triangle::kRight], this);
 		rect->SetXSpeed(0.0f);
 		rect->SetYSpeed(-0.0025f);
 	}
-	// 좌중 슬라이스
+	// Slice left - mid
 	else if (option == 1)
 	{
 		auto tri = new Triangle(p1, p2, points[Triangle::kLeft], this);
@@ -239,7 +238,7 @@ void ObjectManager::DivideTriangleIntoTwo(const glm::vec2& p1, const glm::vec2& 
 		rect->SetXSpeed(0.0f);
 		rect->SetYSpeed(-0.0025f);
 	}
-	// 우중 슬라이스
+	// Slice right - mid
 	else
 	{
 		auto tri = new Triangle(p1, p2, points[Triangle::kRight], this);
@@ -251,7 +250,7 @@ void ObjectManager::DivideTriangleIntoTwo(const glm::vec2& p1, const glm::vec2& 
 		rect->SetYSpeed(-0.0025f);
 	}
 	
-	// 원본 객체 삭제
+	// Delete origin
 	obj->SetState(Object::State::kDead);
 }
 
@@ -259,7 +258,7 @@ void ObjectManager::DivideRectIntoTwo(const glm::vec2& p1, const glm::vec2& p2, 
 {
 	auto points = obj->GetPoints();
 
-	// 상좌
+	// Slice top - left
 	if (option == 0)
 	{
 		auto tri = new Triangle(p2, p1, points[Rect::kLeftTopPoint], this);
@@ -270,7 +269,7 @@ void ObjectManager::DivideRectIntoTwo(const glm::vec2& p1, const glm::vec2& p2, 
 			points[Rect::kRightBottomPoint], points[Rect::kRightTopPoint], this);
 		penta->SetYSpeed(-0.00125f);
 	}
-	// 상하
+	// Slice top - bottom
 	else if (option == 1)
 	{
 		auto rect = new Rect(points[Rect::kLeftTopPoint], p1, points[Rect::kLeftBottomPoint], p2, this);
@@ -279,7 +278,7 @@ void ObjectManager::DivideRectIntoTwo(const glm::vec2& p1, const glm::vec2& p2, 
 		rect = new Rect(p1, points[Rect::kRightTopPoint], p2, points[Rect::kRightBottomPoint], this);
 		rect->SetYSpeed(-0.00125f);
 	}
-	// 상우
+	// Slice top - right
 	else if (option == 2)
 	{
 		auto tri = new Triangle(p1, p2, points[Rect::kRightTopPoint], this);
@@ -290,7 +289,7 @@ void ObjectManager::DivideRectIntoTwo(const glm::vec2& p1, const glm::vec2& p2, 
 			points[Rect::kRightBottomPoint], p2, this);
 		penta->SetYSpeed(-0.00125f);
 	}
-	// 우좌
+	// Slice right - left
 	else if (option == 3)
 	{
 		auto rect = new Rect(points[Rect::kLeftTopPoint], points[Rect::kRightTopPoint], 
@@ -300,7 +299,7 @@ void ObjectManager::DivideRectIntoTwo(const glm::vec2& p1, const glm::vec2& p2, 
 		rect = new Rect(p2, p1, points[Rect::kLeftBottomPoint], points[Rect::kRightBottomPoint], this);
 		rect->SetYSpeed(-0.00125f);
 	}
-	// 우하
+	// Slice right - bottom
 	else if (option == 4)
 	{
 		auto tri = new Triangle(p2, points[Rect::kRightBottomPoint], p1, this);
@@ -310,7 +309,7 @@ void ObjectManager::DivideRectIntoTwo(const glm::vec2& p1, const glm::vec2& p2, 
 		auto penta = new Pentagon(points[Rect::kLeftTopPoint], points[Rect::kLeftBottomPoint], p2, p1, points[Rect::kRightTopPoint], this);
 		penta->SetYSpeed(-0.00125f);
 	}
-	// 좌하
+	// Slice left - bottom
 	else
 	{
 		auto tri = new Triangle(points[Rect::kLeftBottomPoint], p1, p2, this);
