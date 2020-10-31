@@ -23,6 +23,11 @@ ObjectManager::~ObjectManager()
 {
 	while (!mObjs.empty())
 		delete mObjs.back();
+	mObjs.clear();
+
+	for (auto path : mPaths)
+		delete path;
+	mPaths.clear();
 }
 
 void ObjectManager::Update()
