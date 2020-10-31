@@ -12,7 +12,7 @@
 #include "utils.h"
 
 ObjectManager::ObjectManager(Game* game)
-	: mCooldown{ 2.0f },
+	: mCooldown{ 0.0f },
 	mShouldDrawPath{ true },
 	mGame{ game }
 {
@@ -82,8 +82,6 @@ void ObjectManager::RemoveObj(Object* obj)
 
 void ObjectManager::GenerateRandomPolygon()
 {
-	auto choice = Random::GetIntRange(0, 1);
-	
 	glm::vec2 p1 = { -1.0f, Random::GetFloatRange(0.0f, 0.8f) };
 	glm::vec2 p2 = { 1.0f, Random::GetFloatRange(0.0f, 0.8f) };
 	CreatePath(p1, p2);
@@ -91,6 +89,7 @@ void ObjectManager::GenerateRandomPolygon()
 	float xSpeed{ 0.005f };
 	float ySpeed = (p2.y - p1.y) / 400.0f;
 
+	auto choice = Random::GetIntRange(0, 1);
 	// Create triangle in left side of window
 	if (choice == 0)
 	{
@@ -227,10 +226,12 @@ void ObjectManager::DivideTriangleIntoTwo(const glm::vec2& p1, const glm::vec2& 
 		auto tri = new Triangle(p1, p2, points[Triangle::kMid], this);
 		tri->SetXSpeed(0.0f);
 		tri->SetYSpeed(-0.005f);
+		tri->SetShouldGravityWork(true);
 
 		auto rect = new Rect(p1, p2, points[Triangle::kLeft], points[Triangle::kRight], this);
 		rect->SetXSpeed(0.0f);
 		rect->SetYSpeed(-0.0025f);
+		rect->SetShouldGravityWork(true);
 	}
 	// Slice left - mid
 	else if (option == 1)
@@ -238,10 +239,12 @@ void ObjectManager::DivideTriangleIntoTwo(const glm::vec2& p1, const glm::vec2& 
 		auto tri = new Triangle(p1, p2, points[Triangle::kLeft], this);
 		tri->SetXSpeed(0.0f);
 		tri->SetYSpeed(-0.005f);
+		tri->SetShouldGravityWork(true);
 
 		auto rect = new Rect(p1, points[Triangle::kMid], p2, points[Triangle::kRight], this);
 		rect->SetXSpeed(0.0f);
 		rect->SetYSpeed(-0.0025f);
+		rect->SetShouldGravityWork(true);
 	}
 	// Slice right - mid
 	else
@@ -249,10 +252,12 @@ void ObjectManager::DivideTriangleIntoTwo(const glm::vec2& p1, const glm::vec2& 
 		auto tri = new Triangle(p1, p2, points[Triangle::kRight], this);
 		tri->SetXSpeed(0.0f);
 		tri->SetYSpeed(-0.005f);
+		tri->SetShouldGravityWork(true);
 
 		auto rect = new Rect(points[Triangle::kLeft], points[Triangle::kMid], p2, p1, this);
 		rect->SetXSpeed(0.0f);
 		rect->SetYSpeed(-0.0025f);
+		rect->SetShouldGravityWork(true);
 	}
 	
 	// Delete origin
@@ -269,19 +274,23 @@ void ObjectManager::DivideRectIntoTwo(const glm::vec2& p1, const glm::vec2& p2, 
 		auto tri = new Triangle(p2, p1, points[Rect::kLeftTopPoint], this);
 		tri->SetXSpeed(0.0f);
 		tri->SetYSpeed(-0.0025f);
+		tri->SetShouldGravityWork(true);
 
 		auto penta = new Pentagon(p1, p2, points[Rect::kLeftBottomPoint],
 			points[Rect::kRightBottomPoint], points[Rect::kRightTopPoint], this);
 		penta->SetYSpeed(-0.00125f);
+		penta->SetShouldGravityWork(true);
 	}
 	// Slice top - bottom
 	else if (option == 1)
 	{
 		auto rect = new Rect(points[Rect::kLeftTopPoint], p1, points[Rect::kLeftBottomPoint], p2, this);
 		rect->SetYSpeed(-0.0025f);
+		rect->SetShouldGravityWork(true);
 
 		rect = new Rect(p1, points[Rect::kRightTopPoint], p2, points[Rect::kRightBottomPoint], this);
 		rect->SetYSpeed(-0.00125f);
+		rect->SetShouldGravityWork(true);
 	}
 	// Slice top - right
 	else if (option == 2)
@@ -289,10 +298,12 @@ void ObjectManager::DivideRectIntoTwo(const glm::vec2& p1, const glm::vec2& p2, 
 		auto tri = new Triangle(p1, p2, points[Rect::kRightTopPoint], this);
 		tri->SetXSpeed(0.0f);
 		tri->SetYSpeed(-0.0025f);
+		tri->SetShouldGravityWork(true);
 
 		auto penta = new Pentagon(p1, points[Rect::kLeftTopPoint], points[Rect::kLeftBottomPoint],
 			points[Rect::kRightBottomPoint], p2, this);
 		penta->SetYSpeed(-0.00125f);
+		penta->SetShouldGravityWork(true);
 	}
 	// Slice right - left
 	else if (option == 3)
@@ -300,9 +311,11 @@ void ObjectManager::DivideRectIntoTwo(const glm::vec2& p1, const glm::vec2& p2, 
 		auto rect = new Rect(points[Rect::kLeftTopPoint], points[Rect::kRightTopPoint], 
 			p2, p1, this);
 		rect->SetYSpeed(-0.0025f);
+		rect->SetShouldGravityWork(true);
 
 		rect = new Rect(p2, p1, points[Rect::kLeftBottomPoint], points[Rect::kRightBottomPoint], this);
 		rect->SetYSpeed(-0.00125f);
+		rect->SetShouldGravityWork(true);
 	}
 	// Slice right - bottom
 	else if (option == 4)
@@ -310,9 +323,11 @@ void ObjectManager::DivideRectIntoTwo(const glm::vec2& p1, const glm::vec2& p2, 
 		auto tri = new Triangle(p2, points[Rect::kRightBottomPoint], p1, this);
 		tri->SetXSpeed(0.0f);
 		tri->SetYSpeed(-0.0025f);
+		tri->SetShouldGravityWork(true);
 
 		auto penta = new Pentagon(points[Rect::kLeftTopPoint], points[Rect::kLeftBottomPoint], p2, p1, points[Rect::kRightTopPoint], this);
 		penta->SetYSpeed(-0.00125f);
+		penta->SetShouldGravityWork(true);
 	}
 	// Slice left - bottom
 	else
@@ -320,9 +335,11 @@ void ObjectManager::DivideRectIntoTwo(const glm::vec2& p1, const glm::vec2& p2, 
 		auto tri = new Triangle(points[Rect::kLeftBottomPoint], p1, p2, this);
 		tri->SetXSpeed(0.0f);
 		tri->SetYSpeed(-0.0025f);
+		tri->SetShouldGravityWork(true);
 
 		auto penta = new Pentagon(points[Rect::kRightTopPoint], points[Rect::kLeftTopPoint], p2, p1, points[Rect::kRightBottomPoint], this);
 		penta->SetYSpeed(-0.00125f);
+		penta->SetShouldGravityWork(true);
 	}
 	obj->SetState(Object::State::kDead);
 }

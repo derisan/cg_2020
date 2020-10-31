@@ -42,12 +42,16 @@ public:
 	Type GetType() const { return mType; }
 	float GetXSpeed() const { return mXSpeed; }
 	float GetYSpeed() const { return mYSpeed; }
+	float GetGravity() const { return mGravity; }
+	bool GetShouldGravityWork() const { return mShouldGravityWork; }
 
 	// Setters
 	void SetState(State state) { mState = state; }
 	void SetType(Type type) { mType = type; }
 	void SetXSpeed(float speed) { mXSpeed = speed; }
 	void SetYSpeed(float speed) { mYSpeed = speed; }
+	void SetGravity(float g) { mGravity = g; }
+	void SetShouldGravityWork(bool value) { mShouldGravityWork = value; }
 
 protected:
 	class ObjectManager* mManager;
@@ -58,5 +62,8 @@ private:
 
 	float mXSpeed;
 	float mYSpeed;
+	float mGravity;
+
+	bool mShouldGravityWork;
 };
 
