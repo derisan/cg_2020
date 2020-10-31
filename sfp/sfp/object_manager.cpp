@@ -3,6 +3,8 @@
 #include <iostream>
 #include <algorithm>
 
+#include <glm/geometric.hpp>
+
 #include "game.h"
 #include "random.h"
 #include "triangle.h"
@@ -350,4 +352,21 @@ void ObjectManager::DivideRectIntoTwo(const glm::vec2& p1, const glm::vec2& p2, 
 		penta->SetShouldGravityWork(true);
 	}
 	obj->SetState(Object::State::kDead);
+}
+
+Object* ObjectManager::CapturesObject(const glm::vec2& mouse)
+{
+	for (auto obj : mObjs)
+	{
+		if (obj->GetState() != Object::State::kPaused)
+			continue;
+
+		auto center = obj->GetCenter();
+		if (glm::distance(center, mouse) < 0.05f)
+		{
+			return obj;
+		}
+	}
+
+	return nullptr;
 }

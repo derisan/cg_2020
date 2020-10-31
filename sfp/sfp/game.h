@@ -39,6 +39,8 @@ private:
 
 	glm::vec2 mCutterStartPos;
 	glm::vec2 mCutterEndPos;
+	glm::vec2 mRightMouseStartPos;
+	glm::vec2 mRightMouseEndPos;
 
 	class ObjectManager* mObjManager;
 	class Net* mNet;

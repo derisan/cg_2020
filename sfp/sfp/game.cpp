@@ -19,6 +19,8 @@ Game::Game(int w, int h)
 	mCutter{ nullptr },
 	mCutterStartPos{ 0.0f, 0.0f },
 	mCutterEndPos{ 0.0f, 0.0f },
+	mRightMouseStartPos{ -1.0f, -1.0f },
+	mRightMouseEndPos{ -1.0f, -1.0f },
 	mObjManager{ nullptr },
 	mNet{ nullptr },
 	mDrawMode{ GL_FILL },
@@ -115,6 +117,18 @@ void Game::ProcessMouseInput(int button, int state, int x, int y)
 			static_cast<float>(mScrWidth), static_cast<float>(mScrHeight));
 		CreateCutter();
 	}
+
+	else if (button == GLUT_RIGHT_BUTTON && state == GLUT_DOWN)
+	{
+		mRightMouseStartPos = ScreenToNDC(x, y,
+			static_cast<float>(mScrWidth), static_cast<float>(mScrHeight));
+	}
+	
+	else if (button == GLUT_RIGHT_BUTTON && state == GLUT_UP)
+	{
+		mRightMouseEndPos = ScreenToNDC(x, y,
+			static_cast<float>(mScrWidth), static_cast<float>(mScrHeight));
+	}
 }
 
 
@@ -125,7 +139,17 @@ void Game::Update()
 
 	mObjManager->Update();
 	mObjManager->CheckCollision(mCutter);
-	
+
+	auto obj = mObjManager->CapturesObject(mRightMouseStartPos);
+	if (obj)
+	{
+		if (mRightMouseEndPos.x != -1.0f && mRightMouseEndPos.y != -1.0f)
+		{
+			obj->Rearrange(mRightMouseEndPos);
+			mRightMouseEndPos = glm::vec2{ -1.0f, -1.0f };
+		}
+	}
+		
 	auto objs = mObjManager->GetObjects();
 	mNet->Update(objs);
 

@@ -43,6 +43,9 @@ public:
 	// Divide given rect into one tri, one penta or two rects
 	void DivideRectIntoTwo(const glm::vec2& p1, const glm::vec2& p2, int option, class Object* obj);
 
+	//
+	class Object* CapturesObject(const glm::vec2& mouse);
+
 	void SpeedUp(float speed) { if(mSpeed < 0.01f) mSpeed += speed; }
 	void SpeedDown(float speed) { if(mSpeed > 0.002f) mSpeed -= speed; }
 
