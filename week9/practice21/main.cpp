@@ -240,6 +240,8 @@ bool LoadData()
 	lightCube->SetScale(glm::vec3{ 0.2f, 0.2f, 0.2f });
 	lightCube->SetPosition(glm::vec3{ 0.0f, 0.0f, 3.0f });
 
+	std::cout << "Asdf" << std::endl;
+
 	return true;
 }
 

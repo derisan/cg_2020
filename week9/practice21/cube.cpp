@@ -18,10 +18,8 @@ Cube::~Cube()
 
 void Cube::Update()
 {
-	if (GetState() != State::kActive)
-		return;
-
-	Object::Update();
+	if (GetState() == State::kActive)
+        Object::Update();
 }
 
 void Cube::Draw(Shader* shader)

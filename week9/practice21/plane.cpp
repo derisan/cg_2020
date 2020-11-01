@@ -18,10 +18,8 @@ Plane::~Plane()
 
 void Plane::Update()
 {
-	if (GetState() != State::kActive)
-		return;
-
-	Object::Update();
+	if (GetState() == State::kActive)
+		Object::Update();
 }
 
 void Plane::Draw(Shader* shader)
