@@ -9,6 +9,7 @@
 #include <GL/glew.h>
 #include <GL/freeglut.h>
 #include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtx/rotate_vector.hpp>
 
 #include "cube.h"
 #include "plane.h"
@@ -24,6 +25,8 @@ bool LoadData();
 void Shutdown();
 
 void ChangeLightColor(int option);
+void ChangeLightTurn();
+void MoveCrane(unsigned int key);
 
 constexpr int kScrWidth{ 1024 };
 constexpr int kScrHeight{ 768 };
@@ -47,6 +50,7 @@ float lightRotateAngle{ 0.0f };
 bool shouldLightRotate{ false };
 float cameraRotateAngle{ 0.0f };
 bool shouldCameraRotate{ false };
+bool shouldTurnoffLight{ false };
 
 int main(int argc, char** argv)
 {
@@ -95,19 +99,19 @@ void DisplayFunc()
 	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	glEnable(GL_DEPTH_TEST);
 
-	meshShader->SetActive();
-
-	glm::mat4 view{ 1.0f };
-	view = glm::lookAt(camera.position, camera.position + camera.target, camera.up);
-	glm::mat4 proj{ 1.0f };
-	proj = glm::perspective(45.0f, static_cast<float>(kScrWidth) / static_cast<float>(kScrHeight), 0.1f, 100.0f);
-	glm::mat4 out{ 1.0f };
 	if (shouldLightRotate)
 		lightRotateAngle += cos(dt);
 	if (shouldCameraRotate)
 		cameraRotateAngle += cos(dt);
 
-	out = glm::rotate(out, glm::radians(lightRotateAngle), glm::vec3{ 0.0f, 1.0f, 0.0f });
+	meshShader->SetActive();
+	glm::mat4 view{ 1.0f };
+	view = glm::lookAt(camera.position, camera.position + camera.target, camera.up);
+	glm::mat4 proj{ 1.0f };
+	proj = glm::perspective(45.0f, static_cast<float>(kScrWidth) / static_cast<float>(kScrHeight), 0.1f, 100.0f);
+
+	glm::mat4 out{ 1.0f };
+	out = glm::rotate(out, glm::radians(lightRotateAngle + cameraRotateAngle), glm::vec3{ 0.0f, 1.0f, 0.0f });
 	meshShader->SetMatrix4Uniform("uView", view);
 	meshShader->SetMatrix4Uniform("uProj", proj);
 	meshShader->SetMatrix4Uniform("uOut", out);
@@ -120,9 +124,9 @@ void DisplayFunc()
 	phongShader->SetVectorUniform("viewPos", camera.position);
 	phongShader->SetVectorUniform("lightColor", lightColor);
 	out = glm::mat4{ 1.0f };
+	out = glm::rotate(out, glm::radians(cameraRotateAngle), glm::vec3{ 0.0f, 1.0f, 0.0f });
 	phongShader->SetMatrix4Uniform("uOut", out);
-
-
+	
 	for (auto obj : objs)
 		obj->Draw(phongShader);
 
@@ -149,6 +153,16 @@ void KeyboardFunc(unsigned char key, int x, int y)
 			break;
 		case 'y': case 'Y':
 			shouldCameraRotate = !shouldCameraRotate;
+			break;
+		case 'm': case 'M':
+			shouldTurnoffLight = !shouldTurnoffLight;
+			ChangeLightTurn();
+			break;
+		case 'w': case 'W':
+		case 's': case 'S':
+		case 'a': case 'A':
+		case 'd': case 'D':
+			MoveCrane(key);
 			break;
 	}
 }
@@ -183,35 +197,42 @@ bool LoadData()
 		return false;
 	}
 
-	camera.position = glm::vec3{ 0.0f, 0.5f, 6.0f };
+	camera.position = glm::vec3{ 0.0f, 1.0f, 6.0f };
 	camera.target = glm::vec3{ 0.0f, 0.0f, -1.0f };
 	camera.up = glm::vec3{ 0.0f, 1.0f, 0.0f };
 
 	Cube* cube = new Cube{};
 	cube->SetColor(glm::vec3{ 1.0f, 0.0f, 0.0f });
+	cube->SetScale(glm::vec3{ 1.0f, 0.5f, 1.0f });
 	objs.emplace_back(cube);
 
 	cube = new Cube{};
 	cube->SetColor(glm::vec3{ 0.0f, 1.0f, 0.0f });
-	cube->SetScale(0.7f);
-	cube->SetPosition(glm::vec3{ -2.5f, 0.0f, 0.0f });
+	cube->SetScale(glm::vec3{ 0.5f, 0.25f, 0.5f });
+	cube->SetPosition(glm::vec3{ 0.0f, 0.25f, 0.0f });
 	objs.emplace_back(cube);
 
 	cube = new Cube{};
 	cube->SetColor(glm::vec3{ 0.0f, 0.0f, 1.0f });
-	cube->SetScale(0.4f);
-	cube->SetPosition(glm::vec3{ -3.5f, 0.0f, 0.0f });
+	cube->SetScale(glm::vec3{ 0.1f, 0.5f, 0.1f });
+	cube->SetPosition(glm::vec3{ -0.1f, 0.5f, 0.0f });
+	objs.emplace_back(cube);
+
+	cube = new Cube{};
+	cube->SetColor(glm::vec3{ 0.0f, 0.0f, 1.0f });
+	cube->SetScale(glm::vec3{ 0.1f, 0.5f, 0.1f });
+	cube->SetPosition(glm::vec3{ 0.1f, 0.5f, 0.0f });
 	objs.emplace_back(cube);
 
 	Plane* plane = new Plane{};
 	plane->SetColor(glm::vec3{ 0.4f, 0.2f, 0.1f });
-	plane->SetScale(5.0f);
-	plane->SetPosition(glm::vec3{ 0.0f, -0.5f, 0.0f });
+	plane->SetScale(glm::vec3{ 5.0f, 1.0f, 5.0f });
+	plane->SetPosition(glm::vec3{ 0.0f, -0.25f, 0.0f });
 	objs.emplace_back(plane);
 	
 	lightCube = new Cube{};
-	lightCube->SetScale(0.2f);
-	lightCube->SetPosition(glm::vec3{ 0.0f, 0.0f, 5.0f });
+	lightCube->SetScale(glm::vec3{ 0.2f, 0.2f, 0.2f });
+	lightCube->SetPosition(glm::vec3{ 0.0f, 0.0f, 3.0f });
 
 	return true;
 }
@@ -232,5 +253,46 @@ void ChangeLightColor(int option)
 		case 3:
 			lightColor = glm::vec3{ 1.0f, 0.0f, 1.0f };
 			break;
+		case 4:
+			lightColor = glm::vec3{ 0.0f, 0.0f, 0.0f };
+			break;
+	}
+}
+
+void ChangeLightTurn()
+{
+	if (shouldTurnoffLight)
+		ChangeLightColor(4);
+	else
+		ChangeLightColor(lightColorOption);
+}
+
+void MoveCrane(unsigned int key)
+{
+	float forwardSpeed{ 0.0f };
+	float strafeSpeed{ 0.0f };
+
+	switch (key)
+	{
+		case 'w': case 'W':
+			forwardSpeed -= 0.1f;
+			break;
+		case 's': case 'S':
+			forwardSpeed += 0.1f;
+			break;
+		case 'a': case 'A':
+			strafeSpeed -= 0.1f;
+			break;
+		case 'd': case 'D':
+			strafeSpeed += 0.1f;
+			break;
+	}
+
+	for (int i = 0; i < 4; ++i)
+	{
+		auto pos = objs[i]->GetPosition();
+		pos.z += forwardSpeed;
+		pos.x += strafeSpeed;
+		objs[i]->SetPosition(pos);
 	}
 }
