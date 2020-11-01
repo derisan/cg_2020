@@ -9,11 +9,12 @@ out vec3 normal;
 uniform mat4 uWorld;
 uniform mat4 uView;
 uniform mat4 uProj;
+uniform mat4 uOut;
 
 void main()
 {
 	fragPos = vec3(uWorld * vec4(inPos, 1.0f));
 	normal = inNormal;
 
-	gl_Position = uProj * uView * vec4(fragPos, 1.0f);
+	gl_Position = uProj * uView * uOut * vec4(fragPos, 1.0f);
 }

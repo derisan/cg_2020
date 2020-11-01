@@ -5,7 +5,8 @@
 #include "vertexarray.h"
 
 Cube::Cube()
-	: mVertexArray{ nullptr }
+    : Object{},
+    mVertexArray{ nullptr }
 {
     Load();
 }

@@ -11,6 +11,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 #include "cube.h"
+#include "plane.h"
 #include "shader.h"
 
 void DisplayFunc();
@@ -42,8 +43,10 @@ Shader* phongShader{ nullptr };
 Camera camera;
 glm::vec3 lightColor{ 1.0f };
 int lightColorOption{ 0 };
-float lightRotateAngle{ 0 };
-bool shouldRotate{ false };
+float lightRotateAngle{ 0.0f };
+bool shouldLightRotate{ false };
+float cameraRotateAngle{ 0.0f };
+bool shouldCameraRotate{ false };
 
 int main(int argc, char** argv)
 {
@@ -51,7 +54,7 @@ int main(int argc, char** argv)
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH);
 	glutInitWindowPosition(0, 0);
 	glutInitWindowSize(kScrWidth, kScrHeight);
-	glutCreateWindow("Practice 20");
+	glutCreateWindow("Practice 21");
 
 	glewExperimental = GL_TRUE;
 	if (glewInit() != GLEW_OK)
@@ -87,7 +90,7 @@ void UpdateFunc()
 
 void DisplayFunc()
 {
-	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	glEnable(GL_DEPTH_TEST);
@@ -99,22 +102,27 @@ void DisplayFunc()
 	glm::mat4 proj{ 1.0f };
 	proj = glm::perspective(45.0f, static_cast<float>(kScrWidth) / static_cast<float>(kScrHeight), 0.1f, 100.0f);
 	glm::mat4 out{ 1.0f };
-	if (shouldRotate)
+	if (shouldLightRotate)
 		lightRotateAngle += cos(dt);
-	
+	if (shouldCameraRotate)
+		cameraRotateAngle += cos(dt);
+
 	out = glm::rotate(out, glm::radians(lightRotateAngle), glm::vec3{ 0.0f, 1.0f, 0.0f });
 	meshShader->SetMatrix4Uniform("uView", view);
 	meshShader->SetMatrix4Uniform("uProj", proj);
 	meshShader->SetMatrix4Uniform("uOut", out);
-	
 	lightCube->Draw(meshShader);
 
 	phongShader->SetActive();
+	phongShader->SetVectorUniform("lightPos", glm::vec3(out * glm::vec4(lightCube->GetPosition(), 1.0f)));
 	phongShader->SetMatrix4Uniform("uView", view);
 	phongShader->SetMatrix4Uniform("uProj", proj);
-	phongShader->SetVectorUniform("lightPos", glm::vec3( out * glm::vec4(lightCube->GetPosition(), 1.0f)));
 	phongShader->SetVectorUniform("viewPos", camera.position);
 	phongShader->SetVectorUniform("lightColor", lightColor);
+	out = glm::mat4{ 1.0f };
+	phongShader->SetMatrix4Uniform("uOut", out);
+
+
 	for (auto obj : objs)
 		obj->Draw(phongShader);
 
@@ -137,7 +145,10 @@ void KeyboardFunc(unsigned char key, int x, int y)
 			ChangeLightColor(lightColorOption);
 			break;
 		case 'r': case 'R':
-			shouldRotate = !shouldRotate;
+			shouldLightRotate = !shouldLightRotate;
+			break;
+		case 'y': case 'Y':
+			shouldCameraRotate = !shouldCameraRotate;
 			break;
 	}
 }
@@ -192,6 +203,12 @@ bool LoadData()
 	cube->SetPosition(glm::vec3{ -3.5f, 0.0f, 0.0f });
 	objs.emplace_back(cube);
 
+	Plane* plane = new Plane{};
+	plane->SetColor(glm::vec3{ 0.4f, 0.2f, 0.1f });
+	plane->SetScale(5.0f);
+	plane->SetPosition(glm::vec3{ 0.0f, -0.5f, 0.0f });
+	objs.emplace_back(plane);
+	
 	lightCube = new Cube{};
 	lightCube->SetScale(0.2f);
 	lightCube->SetPosition(glm::vec3{ 0.0f, 0.0f, 5.0f });
