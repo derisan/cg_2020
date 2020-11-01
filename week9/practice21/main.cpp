@@ -164,6 +164,12 @@ void KeyboardFunc(unsigned char key, int x, int y)
 		case 'd': case 'D':
 			MoveCrane(key);
 			break;
+		case 'z': case 'Z':
+			camera.position.z += 0.1f;
+			break;
+		case 'x': case 'X':
+			camera.position.z -= 0.1f;
+			break;
 	}
 }
 
