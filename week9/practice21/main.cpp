@@ -118,7 +118,10 @@ void DisplayFunc()
 	lightCube->Draw(meshShader);
 
 	phongShader->SetActive();
-	phongShader->SetVectorUniform("lightPos", glm::vec3(out * glm::vec4(lightCube->GetPosition(), 1.0f)));
+
+	glm::mat4 light{ 1.0f };
+	light = glm::rotate(light, glm::radians(lightRotateAngle), glm::vec3{ 0.0f, 1.0f, 0.0f });
+	phongShader->SetVectorUniform("lightPos", glm::vec3(light * glm::vec4(lightCube->GetPosition(), 1.0f)));
 	phongShader->SetMatrix4Uniform("uView", view);
 	phongShader->SetMatrix4Uniform("uProj", proj);
 	phongShader->SetVectorUniform("viewPos", camera.position);
