@@ -9,9 +9,12 @@
 #include <GL/glew.h>
 #include <GL/freeglut.h>
 #include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtx/rotate_vector.hpp>
 
 #include "sphere.h"
 #include "shader.h"
+#include "plane.h"
+#include "random.h"
 
 void DisplayFunc();
 void ReshapeFunc(int w, int h);
@@ -67,6 +70,8 @@ int main(int argc, char** argv)
 		std::cout << "Failed to load data" << std::endl;
 		return -1;
 	}
+	
+	Random::Init();
 
 	glutDisplayFunc(DisplayFunc);
 	glutReshapeFunc(ReshapeFunc);
@@ -91,6 +96,7 @@ void DisplayFunc()
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glEnable(GL_DEPTH_TEST);
 
+	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	meshShader->SetActive();
 
 	glm::mat4 view{ 1.0f };
@@ -111,7 +117,8 @@ void DisplayFunc()
 	phongShader->SetActive();
 	phongShader->SetMatrix4Uniform("uView", view);
 	phongShader->SetMatrix4Uniform("uProj", proj);
-	phongShader->SetVectorUniform("lightPos", glm::vec3( out * glm::vec4(lightCube->GetPosition(), 1.0f)));
+	phongShader->SetVectorUniform("lightPos", glm::vec3( glm::rotate(lightCube->GetPosition(), glm::radians(lightRotateAngle),
+		glm::vec3{ 0.0f, 0.0f, 1.0f })));
 	phongShader->SetVectorUniform("viewPos", camera.position);
 	phongShader->SetVectorUniform("lightColor", lightColor);
 	for (auto obj : objs)
@@ -178,22 +185,22 @@ bool LoadData()
 	auto sphere = new Sphere{};
 	sphere->SetColor(glm::vec3{ 1.0f, 0.0f, 0.0f });
 	sphere->SetScale(0.6f);
-	sphere->SetPosition(glm::vec3{ -3.0f, 0.0f, 0.0f });
+	sphere->SetPosition(glm::vec3{ -1.0f, 0.0f, 0.0f });
 	sphere->SetIsPlanet(true);
 	objs.emplace_back(sphere);
 
 	sphere = new Sphere{};
 	sphere->SetColor(glm::vec3{ 0.0f, 1.0f, 0.0f });
 	sphere->SetScale(0.4f);
-	sphere->SetPosition(glm::vec3{ -5.0f, 0.0f, 0.0f });
-	sphere->SetIsPlanet(true);
+	sphere->SetPosition(glm::vec3{ -2.0f, 0.0f, 0.0f });
+	//sphere->SetIsPlanet(true);
 	objs.emplace_back(sphere);
 
 	sphere = new Sphere{};
 	sphere->SetColor(glm::vec3{ 0.0f, 0.0f, 1.0f });
 	sphere->SetScale(0.2f);
-	sphere->SetPosition(glm::vec3{ -7.0f, 0.0f, 0.0f });
-	sphere->SetIsPlanet(true);
+	sphere->SetPosition(glm::vec3{ -3.0f, 0.0f, 0.0f });
+	//sphere->SetIsPlanet(true);
 	objs.emplace_back(sphere);
 
 	sphere = new Sphere{};
@@ -204,6 +211,23 @@ bool LoadData()
 	lightCube = new Sphere{};
 	lightCube->SetScale(0.2f);
 	lightCube->SetPosition(glm::vec3{ -8.0f, 0.0f, 0.0f });
+
+	auto plane = new Plane{};
+	plane->SetScale(10.0f);
+	plane->SetPosition(glm::vec3{ 0.0f, -2.0f, 0.0f });
+	objs.emplace_back(plane);
+
+	for (int i = 0; i < 100; ++i)
+	{
+		sphere = new Sphere{};
+		sphere->SetColor(glm::vec3{ 0.3f, 0.3f, 0.3f });
+		sphere->SetScale(0.1f);
+		sphere->SetPosition(glm::vec3{ Random::GetFloatRange(-3.0f, 3.0f), 2.0f, Random::GetFloatRange(-3.0f, 3.0f) });
+		sphere->SetIsSnow(true);
+		sphere->SetSpeed(Random::GetFloatRange(0.01f, 0.1f));
+		objs.emplace_back(sphere);
+	}
+
 
 	return true;
 }

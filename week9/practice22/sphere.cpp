@@ -10,7 +10,9 @@
 Sphere::Sphere()
 	: Object{},
 	mVertexArray{ nullptr },
-    mAngle{ 0.0f }
+    mAngle{ 0.0f },
+    mIsSnow{ false },
+    mSpeed{ -0.01f }
 {
 	Load();
 }
@@ -30,6 +32,17 @@ void Sphere::Update()
         {
             mAngle += cos(dt);
             SetRotation(mAngle);
+        }
+
+        if (mIsSnow)
+        {
+            auto pos = GetPosition();
+            pos.y -= mSpeed;
+
+            if (pos.y < -2.0f)
+                pos.y = 2.0f;
+
+            SetPosition(pos);
         }
     }
 }

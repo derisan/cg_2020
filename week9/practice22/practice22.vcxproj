@@ -141,6 +141,7 @@
   <ItemGroup>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="object.cpp" />
+    <ClCompile Include="plane.cpp" />
     <ClCompile Include="random.cpp" />
     <ClCompile Include="shader.cpp" />
     <ClCompile Include="sphere.cpp" />
@@ -149,6 +150,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="object.h" />
+    <ClInclude Include="plane.h" />
     <ClInclude Include="random.h" />
     <ClInclude Include="shader.h" />
     <ClInclude Include="sphere.h" />
