@@ -178,7 +178,7 @@ bool LoadData()
 		return false;
 	}
 
-	camera.position = glm::vec3{ 0.0f, 0.5f, 10.0f };
+	camera.position = glm::vec3{ 0.0f, 0.5f, 15.0f };
 	camera.target = glm::vec3{ 0.0f, 0.0f, -1.0f };
 	camera.up = glm::vec3{ 0.0f, 1.0f, 0.0f };
 
@@ -193,14 +193,14 @@ bool LoadData()
 	sphere->SetColor(glm::vec3{ 0.0f, 1.0f, 0.0f });
 	sphere->SetScale(0.4f);
 	sphere->SetPosition(glm::vec3{ -2.0f, 0.0f, 0.0f });
-	//sphere->SetIsPlanet(true);
+	sphere->SetIsPlanet(true);
 	objs.emplace_back(sphere);
 
 	sphere = new Sphere{};
 	sphere->SetColor(glm::vec3{ 0.0f, 0.0f, 1.0f });
 	sphere->SetScale(0.2f);
 	sphere->SetPosition(glm::vec3{ -3.0f, 0.0f, 0.0f });
-	//sphere->SetIsPlanet(true);
+	sphere->SetIsPlanet(true);
 	objs.emplace_back(sphere);
 
 	sphere = new Sphere{};
@@ -210,7 +210,7 @@ bool LoadData()
 
 	lightCube = new Sphere{};
 	lightCube->SetScale(0.2f);
-	lightCube->SetPosition(glm::vec3{ -8.0f, 0.0f, 0.0f });
+	lightCube->SetPosition(glm::vec3{ -7.0f, 0.0f, 0.0f });
 
 	auto plane = new Plane{};
 	plane->SetScale(10.0f);

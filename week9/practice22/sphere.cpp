@@ -1,8 +1,9 @@
 #include "sphere.h"
 
-#include <GL/glew.h>
-
 #include <vector>
+
+#include <GL/glew.h>
+#include <glm/gtx/rotate_vector.hpp>
 
 #include "vertexarray.h"
 #include "shader.h"
@@ -10,7 +11,6 @@
 Sphere::Sphere()
 	: Object{},
 	mVertexArray{ nullptr },
-    mAngle{ 0.0f },
     mIsSnow{ false },
     mSpeed{ -0.01f }
 {
@@ -30,8 +30,9 @@ void Sphere::Update()
 
         if (GetIsPlanet())
         {
-            mAngle += cos(dt);
-            SetRotation(mAngle);
+            auto pos = GetPosition();
+            pos = glm::rotate(pos, glm::radians(dt * 50.0f), glm::vec3{ 0.0f, 1.0f, 0.0f });
+            SetPosition(pos);
         }
 
         if (mIsSnow)

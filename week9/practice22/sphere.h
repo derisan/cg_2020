@@ -17,7 +17,6 @@ public:
 private:
     class VertexArray* mVertexArray;
 
-    float mAngle;
     float mSpeed;
     const float dt{ 16.0f / 1000.0f };
 
