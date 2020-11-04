@@ -101,7 +101,7 @@ void DisplayFunc()
 	if (shouldRotate)
 		lightRotateAngle += cos(dt);
 	
-	out = glm::rotate(out, glm::radians(lightRotateAngle), glm::vec3{ 0.0f, 1.0f, 0.0f });
+	out = glm::rotate(out, glm::radians(lightRotateAngle), glm::vec3{ 0.0f, 0.0f, 1.0f });
 	meshShader->SetMatrix4Uniform("uView", view);
 	meshShader->SetMatrix4Uniform("uProj", proj);
 	meshShader->SetMatrix4Uniform("uOut", out);
@@ -171,29 +171,39 @@ bool LoadData()
 		return false;
 	}
 
-	camera.position = glm::vec3{ 0.0f, 0.5f, 6.0f };
+	camera.position = glm::vec3{ 0.0f, 0.5f, 10.0f };
 	camera.target = glm::vec3{ 0.0f, 0.0f, -1.0f };
 	camera.up = glm::vec3{ 0.0f, 1.0f, 0.0f };
 
 	auto sphere = new Sphere{};
 	sphere->SetColor(glm::vec3{ 1.0f, 0.0f, 0.0f });
+	sphere->SetScale(0.6f);
+	sphere->SetPosition(glm::vec3{ -3.0f, 0.0f, 0.0f });
+	sphere->SetIsPlanet(true);
 	objs.emplace_back(sphere);
 
 	sphere = new Sphere{};
 	sphere->SetColor(glm::vec3{ 0.0f, 1.0f, 0.0f });
-	sphere->SetScale(0.7f);
-	sphere->SetPosition(glm::vec3{ -2.5f, 0.0f, 0.0f });
+	sphere->SetScale(0.4f);
+	sphere->SetPosition(glm::vec3{ -5.0f, 0.0f, 0.0f });
+	sphere->SetIsPlanet(true);
 	objs.emplace_back(sphere);
 
 	sphere = new Sphere{};
 	sphere->SetColor(glm::vec3{ 0.0f, 0.0f, 1.0f });
-	sphere->SetScale(0.4f);
-	sphere->SetPosition(glm::vec3{ -3.5f, 0.0f, 0.0f });
+	sphere->SetScale(0.2f);
+	sphere->SetPosition(glm::vec3{ -7.0f, 0.0f, 0.0f });
+	sphere->SetIsPlanet(true);
+	objs.emplace_back(sphere);
+
+	sphere = new Sphere{};
+	sphere->SetColor(glm::vec3{ 0.68f, 0.36f, 0.1f });
+	sphere->SetPosition(glm::vec3{ 0.0f, -1.0f, 0.0f });
 	objs.emplace_back(sphere);
 
 	lightCube = new Sphere{};
 	lightCube->SetScale(0.2f);
-	lightCube->SetPosition(glm::vec3{ 0.0f, 0.0f, 5.0f });
+	lightCube->SetPosition(glm::vec3{ -8.0f, 0.0f, 0.0f });
 
 	return true;
 }

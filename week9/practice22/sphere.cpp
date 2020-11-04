@@ -9,7 +9,8 @@
 
 Sphere::Sphere()
 	: Object{},
-	mVertexArray{ nullptr }
+	mVertexArray{ nullptr },
+    mAngle{ 0.0f }
 {
 	Load();
 }
@@ -21,8 +22,16 @@ Sphere::~Sphere()
 
 void Sphere::Update()
 {
-	if (GetState() == State::kActive)
-		Object::Update();
+    if (GetState() == State::kActive)
+    {
+        Object::Update();
+
+        if (GetIsPlanet())
+        {
+            mAngle += cos(dt);
+            SetRotation(mAngle);
+        }
+    }
 }
 
 void Sphere::Draw(Shader* shader)
@@ -45,7 +54,6 @@ void Sphere::Load()
     
     float x, y, z, xy;                              // vertex position
     float nx, ny, nz, lengthInv = 1.0f / radius;    // vertex normal
-    float s, t;                                     // vertex texCoord
 
     float sectorStep = 2 * PI / sectorCount;
     float stackStep = PI / stackCount;
