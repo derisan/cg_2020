@@ -11,6 +11,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 #include "cube.h"
+#include "sphere.h"
 #include "shader.h"
 
 void DisplayFunc();
@@ -176,21 +177,21 @@ bool LoadData()
 	camera.target = glm::vec3{ 0.0f, 0.0f, -1.0f };
 	camera.up = glm::vec3{ 0.0f, 1.0f, 0.0f };
 
-	Cube* cube = new Cube{};
-	cube->SetColor(glm::vec3{ 1.0f, 0.0f, 0.0f });
-	objs.emplace_back(cube);
+	auto sphere = new Sphere{};
+	sphere->SetColor(glm::vec3{ 1.0f, 0.0f, 0.0f });
+	objs.emplace_back(sphere);
 
-	cube = new Cube{};
-	cube->SetColor(glm::vec3{ 0.0f, 1.0f, 0.0f });
-	cube->SetScale(0.7f);
-	cube->SetPosition(glm::vec3{ -2.5f, 0.0f, 0.0f });
-	objs.emplace_back(cube);
+	sphere = new Sphere{};
+	sphere->SetColor(glm::vec3{ 0.0f, 1.0f, 0.0f });
+	sphere->SetScale(0.7f);
+	sphere->SetPosition(glm::vec3{ -2.5f, 0.0f, 0.0f });
+	objs.emplace_back(sphere);
 
-	cube = new Cube{};
-	cube->SetColor(glm::vec3{ 0.0f, 0.0f, 1.0f });
-	cube->SetScale(0.4f);
-	cube->SetPosition(glm::vec3{ -3.5f, 0.0f, 0.0f });
-	objs.emplace_back(cube);
+	sphere = new Sphere{};
+	sphere->SetColor(glm::vec3{ 0.0f, 0.0f, 1.0f });
+	sphere->SetScale(0.4f);
+	sphere->SetPosition(glm::vec3{ -3.5f, 0.0f, 0.0f });
+	objs.emplace_back(sphere);
 
 	lightCube = new Cube{};
 	lightCube->SetScale(0.2f);
