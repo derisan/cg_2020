@@ -13,6 +13,7 @@
 #include "snowman.h"
 #include "snow.h"
 #include "cube.h"
+#include "sound_engine.h"
 
 Game::Game()
 	: mRenderer{ nullptr },
@@ -61,6 +62,9 @@ bool Game::Init(int* argc, char** argv, int w, int h)
 	new Background{ this };
 	new Snowman{ this };
 	GenerateCubes();
+
+	SoundEngine::Get()->Create("Assets/SnowyVillage.mp3", "bgm", true);
+	SoundEngine::Get()->Play("bgm");
 	
 	return true;
 }
@@ -78,6 +82,7 @@ void Game::Run(unsigned char key)
 void Game::Shutdown()
 {
 	Renderer::Get()->Shutdown();
+	SoundEngine::Get()->Stop("bgm");
 
 	while (!mActors.empty())
 		delete mActors.back();
