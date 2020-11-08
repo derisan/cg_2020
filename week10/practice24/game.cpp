@@ -6,10 +6,12 @@
 #include <GL/freeglut.h>
 #include <glm/gtc/matrix_transform.hpp>
 
+#include "random.h"
 #include "renderer.h"
 #include "shader.h"
 #include "background.h"
 #include "snowman.h"
+#include "snow.h"
 
 Game::Game()
 	: mRenderer{ nullptr },
@@ -18,6 +20,7 @@ Game::Game()
 	mScrHeight{ 0 },
 	mShouldClose{ false },
 	mIsUpdating{ false },
+	mIsSnowy{ true },
 	mCameraPos{ 0.0f, 5.0f, 2.0f }
 {
 
@@ -40,6 +43,8 @@ bool Game::Init(int* argc, char** argv, int w, int h)
 		std::cout << "Unable to initialize GLEW" << std::endl;
 		return false;
 	}
+
+	Random::Init();
 
 	mRenderer = Renderer::Get();
 	mPhongShader = mRenderer->GetShader("phong");
@@ -82,6 +87,8 @@ void Game::ProcessInput(unsigned char key)
 		mCameraPos.y -= 0.1f;
 	else if (key == 'x')
 		mCameraPos.y += 0.1f;
+	else if (key == 's')
+		mIsSnowy = !mIsSnowy;
 	
 	for (auto actor : mActors)
 		actor->ProcessInput(key);
@@ -89,6 +96,9 @@ void Game::ProcessInput(unsigned char key)
 
 void Game::Update()
 {
+	if(mIsSnowy)
+		GenerateSnow();
+
 	std::vector<Actor*> deads;
 	mIsUpdating = true;
 	for (auto actor : mActors)
@@ -108,6 +118,7 @@ void Game::Update()
 
 	for (auto actor : deads)
 	{
+		RemoveSnow(actor);
 		delete actor;
 	}
 }
@@ -155,4 +166,17 @@ void Game::SetLightingUniforms()
 	mPhongShader->SetVectorUniform("uDirLight.ambient", glm::vec3{ 0.1f });
 	mPhongShader->SetVectorUniform("uDirLight.diffuse", glm::vec3{ 1.0f });
 	mPhongShader->SetVectorUniform("uDirLight.specular", glm::vec3{ 1.0f });
+}
+
+void Game::GenerateSnow()
+{
+	if (mSnows.size() < 40)
+		new Snow{ this };
+}
+
+void Game::RemoveSnow(Actor* actor)
+{
+	auto iter = std::find(std::begin(mSnows), std::end(mSnows), actor);
+	if (iter != std::end(mSnows))
+		mSnows.erase(iter);
 }

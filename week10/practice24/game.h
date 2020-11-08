@@ -18,11 +18,14 @@ public:
 	void RemoveActor(class Actor* actor);
 
 	void SetLightingUniforms();
+	void GenerateSnow();
+	void RemoveSnow(class Actor* actor);
 
 	// Getters
 	bool GetShouldClose() const { return mShouldClose; }
 	int GetScrWidth() const { return mScrWidth; }
 	int GetScrHeight() const { return mScrHeight; }
+	std::vector<class Snow*>& GetSnows() { return mSnows; }
 
 	// Setters
 	void SetShouldClose(bool value) { mShouldClose = value; }
@@ -34,6 +37,7 @@ private:
 
 	std::vector<class Actor*> mActors;
 	std::vector<class Actor*> mPendingActors;
+	std::vector<class Snow*> mSnows;
 
 	class Renderer* mRenderer;
 	class Shader* mPhongShader;
@@ -43,6 +47,7 @@ private:
 
 	bool mShouldClose;
 	bool mIsUpdating;
+	bool mIsSnowy;
 
 	glm::vec3 mCameraPos;
 };

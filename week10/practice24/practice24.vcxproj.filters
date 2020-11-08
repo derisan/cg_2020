@@ -48,6 +48,12 @@
     <ClCompile Include="snowman.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="snow.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="random.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="aabb.h">
@@ -78,6 +84,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="snowman.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="snow.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="random.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
