@@ -198,20 +198,20 @@ void Game::RemoveSnow(Actor* actor)
 void Game::GenerateCubes()
 {
 	auto cube = new Cube{ this };
-	cube->SetPosition(glm::vec3{ -2.0f, -0.88f, -0.1f });
+	cube->SetPosition(glm::vec3{ -2.0f, -0.88f, -0.9f });
 
 	cube = new Cube{ this };
 	cube->SetPosition(glm::vec3{ -2.0f, -0.88f, -0.5f });
 
 	cube = new Cube{ this };
-	cube->SetPosition(glm::vec3{ -2.0f, -0.88f, -0.9f });
+	cube->SetPosition(glm::vec3{ -2.0f, -0.88f, -0.1f });
 
 	cube = new Cube{ this };
-	cube->SetPosition(glm::vec3{ 0.0f, -0.88f, -0.1f });
+	cube->SetPosition(glm::vec3{ 0.0f, -0.88f, -0.9f });
 
 	cube = new Cube{ this };
 	cube->SetPosition(glm::vec3{ 0.0f, -0.88f, -0.5f });
 
 	cube = new Cube{ this };
-	cube->SetPosition(glm::vec3{ 0.0f, -0.88f, -0.9f });
+	cube->SetPosition(glm::vec3{ 0.0f, -0.88f, -0.1f });
 }
