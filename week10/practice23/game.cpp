@@ -4,10 +4,11 @@
 
 #include <GL/glew.h>
 #include <GL/freeglut.h>
+#include <glm/gtc/matrix_transform.hpp>
 
 #include "renderer.h"
-#include "actor.h"
 #include "shader.h"
+#include "plane.h"
 
 Game::Game()
 	: mRenderer{ nullptr },
@@ -40,6 +41,16 @@ bool Game::Init(int* argc, char** argv, int w, int h)
 
 	mRenderer = Renderer::Get();
 	mMeshShader = mRenderer->GetShader("mesh");
+	mMeshShader->SetActive();
+	glm::mat4 view{ 1.0f };
+	view = glm::lookAt(glm::vec3{ 0.0f, 1.0f, 3.0f }, glm::vec3{ 0.0f, 0.0f, -1.0f }, glm::vec3{ 0.0f, 1.0f, 0.0f });
+	glm::mat4 proj{ 1.0f };
+	proj = glm::perspective(45.0f, static_cast<float>(mScrWidth) / mScrHeight, 0.1f, 100.0f);
+	mMeshShader->SetMatrix4Uniform("uView", view);
+	mMeshShader->SetMatrix4Uniform("uProj", proj);
+
+	GenerateCube();
+
 
 	return true;
 }
@@ -57,6 +68,9 @@ void Game::Run(unsigned char key)
 void Game::Shutdown()
 {
 	Renderer::Get()->Shutdown();
+
+	while (!mActors.empty())
+		delete mActors.back();
 }
 
 void Game::ProcessInput(unsigned char key)
@@ -97,9 +111,11 @@ void Game::Update()
 
 void Game::Draw()
 {
-	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+	glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glEnable(GL_DEPTH_TEST);
+
+	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
 	mMeshShader->SetActive();
 	for (auto actor : mActors)
@@ -125,4 +141,14 @@ void Game::RemoveActor(Actor* actor)
 	iter = std::find(std::begin(mActors), std::end(mActors), actor);
 	if (iter != std::end(mActors))
 		mActors.erase(iter);
+}
+
+void Game::GenerateCube()
+{
+	new Plane{ this, Plane::Type::kTop };
+	new Plane{ this, Plane::Type::kBottom };
+	new Plane{ this, Plane::Type::kLeft };
+	new Plane{ this, Plane::Type::kRight };
+	new Plane{ this, Plane::Type::kFront };
+	new Plane{ this, Plane::Type::kBack };
 }

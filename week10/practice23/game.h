@@ -15,6 +15,9 @@ public:
 	void AddActor(class Actor* actor);
 	void RemoveActor(class Actor* actor);
 
+	void GenerateCube();
+	void GeneratePyramid();
+
 	// Getters
 	bool GetShouldClose() const { return mShouldClose; }
 	int GetScrWidth() const { return mScrWidth; }

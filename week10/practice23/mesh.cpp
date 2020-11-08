@@ -60,7 +60,6 @@ bool Mesh::Load(const std::string& file, Renderer* renderer)
 		return false;
 	}
 
-
 	size_t vertSize = 8;
 
 	// Load textures
