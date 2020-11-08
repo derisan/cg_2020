@@ -18,7 +18,9 @@ public:
 	void RemoveActor(class Actor* actor);
 
 	void SetLightingUniforms();
-	void GenerateSnow();
+
+	void GenerateCubes();
+	void GenerateSnows();
 	void RemoveSnow(class Actor* actor);
 
 	// Getters

@@ -12,6 +12,7 @@
 #include "background.h"
 #include "snowman.h"
 #include "snow.h"
+#include "cube.h"
 
 Game::Game()
 	: mRenderer{ nullptr },
@@ -55,6 +56,7 @@ bool Game::Init(int* argc, char** argv, int w, int h)
 
 	new Background{ this };
 	new Snowman{ this };
+	GenerateCubes();
 	
 	return true;
 }
@@ -97,7 +99,7 @@ void Game::ProcessInput(unsigned char key)
 void Game::Update()
 {
 	if(mIsSnowy)
-		GenerateSnow();
+		GenerateSnows();
 
 	std::vector<Actor*> deads;
 	mIsUpdating = true;
@@ -168,7 +170,7 @@ void Game::SetLightingUniforms()
 	mPhongShader->SetVectorUniform("uDirLight.specular", glm::vec3{ 1.0f });
 }
 
-void Game::GenerateSnow()
+void Game::GenerateSnows()
 {
 	if (mSnows.size() < 40)
 		new Snow{ this };
@@ -179,4 +181,25 @@ void Game::RemoveSnow(Actor* actor)
 	auto iter = std::find(std::begin(mSnows), std::end(mSnows), actor);
 	if (iter != std::end(mSnows))
 		mSnows.erase(iter);
+}
+
+void Game::GenerateCubes()
+{
+	auto cube = new Cube{ this };
+	cube->SetPosition(glm::vec3{ -2.0f, -0.88f, -0.1f });
+
+	cube = new Cube{ this };
+	cube->SetPosition(glm::vec3{ -2.0f, -0.88f, -0.5f });
+
+	cube = new Cube{ this };
+	cube->SetPosition(glm::vec3{ -2.0f, -0.88f, -0.9f });
+
+	cube = new Cube{ this };
+	cube->SetPosition(glm::vec3{ 0.0f, -0.88f, -0.1f });
+
+	cube = new Cube{ this };
+	cube->SetPosition(glm::vec3{ 0.0f, -0.88f, -0.5f });
+
+	cube = new Cube{ this };
+	cube->SetPosition(glm::vec3{ 0.0f, -0.88f, -0.9f });
 }
