@@ -1,10 +1,10 @@
 #pragma once
 #include "actor.h"
-class Background :
+class Snowman :
     public Actor
 {
 public:
-    Background(class Game* game);
+    Snowman(class Game* game);
 
     void Draw(class Shader* shader) override;
 

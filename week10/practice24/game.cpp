@@ -9,6 +9,7 @@
 #include "renderer.h"
 #include "shader.h"
 #include "background.h"
+#include "snowman.h"
 
 Game::Game()
 	: mRenderer{ nullptr },
@@ -17,7 +18,7 @@ Game::Game()
 	mScrHeight{ 0 },
 	mShouldClose{ false },
 	mIsUpdating{ false },
-	mCameraPos{ 0.0f, 5.0f, 3.0f }
+	mCameraPos{ 0.0f, 5.0f, 2.0f }
 {
 
 }
@@ -43,14 +44,12 @@ bool Game::Init(int* argc, char** argv, int w, int h)
 	mRenderer = Renderer::Get();
 	mPhongShader = mRenderer->GetShader("phong");
 	mPhongShader->SetActive();
-	glm::mat4 view{ 1.0f };
-	view = glm::lookAt(mCameraPos, glm::vec3{ 0.0f, 0.0f, -1.0f }, glm::vec3{ 0.0f, 1.0f, 0.0f });
 	glm::mat4 proj{ 1.0f };
 	proj = glm::perspective(45.0f, static_cast<float>(mScrWidth) / mScrHeight, 0.1f, 100.0f);
-	mPhongShader->SetMatrix4Uniform("uView", view);
 	mPhongShader->SetMatrix4Uniform("uProj", proj);
 
 	new Background{ this };
+	new Snowman{ this };
 	
 	return true;
 }
@@ -115,7 +114,7 @@ void Game::Update()
 
 void Game::Draw()
 {
-	glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glEnable(GL_DEPTH_TEST);
 
