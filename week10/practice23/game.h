@@ -17,6 +17,7 @@ public:
 
 	void GenerateCube();
 	void GeneratePyramid();
+	void ChangeDrawings();
 
 	// Getters
 	bool GetShouldClose() const { return mShouldClose; }
@@ -42,5 +43,6 @@ private:
 
 	bool mShouldClose;
 	bool mIsUpdating;
+	bool mIsCube;
 };
 

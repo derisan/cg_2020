@@ -9,6 +9,7 @@
 #include "renderer.h"
 #include "shader.h"
 #include "plane.h"
+#include "pyramid.h"
 
 Game::Game()
 	: mRenderer{ nullptr },
@@ -16,7 +17,8 @@ Game::Game()
 	mScrWidth{ 0 },
 	mScrHeight{ 0 },
 	mShouldClose{ false },
-	mIsUpdating{ false }
+	mIsUpdating{ false },
+	mIsCube{ true }
 {
 
 }
@@ -50,8 +52,7 @@ bool Game::Init(int* argc, char** argv, int w, int h)
 	mMeshShader->SetMatrix4Uniform("uProj", proj);
 
 	GenerateCube();
-
-
+	
 	return true;
 }
 
@@ -79,7 +80,11 @@ void Game::ProcessInput(unsigned char key)
 		return;
 	else if (key == 27)
 		mShouldClose = true;
-
+	else if (key == 'c' || key == 'C')
+	{
+		ChangeDrawings();
+	}
+	
 	for (auto actor : mActors)
 		actor->ProcessInput(key);
 }
@@ -151,4 +156,31 @@ void Game::GenerateCube()
 	new Plane{ this, Plane::Type::kRight };
 	new Plane{ this, Plane::Type::kFront };
 	new Plane{ this, Plane::Type::kBack };
+}
+
+void Game::GeneratePyramid()
+{
+	new Pyramid{ this, Pyramid::Type::kBottom };
+	new Pyramid{ this, Pyramid::Type::kLeft};
+	new Pyramid{ this, Pyramid::Type::kRight};
+	new Pyramid{ this, Pyramid::Type::kFront};
+	new Pyramid{ this, Pyramid::Type::kBack};
+}
+
+void Game::ChangeDrawings()
+{
+	if (mIsCube)
+	{
+		for (auto actor : mActors)
+			actor->SetState(Actor::State::kDead);
+
+		GeneratePyramid();
+	}
+	else
+	{
+		for (auto actor : mActors)
+			actor->SetState(Actor::State::kDead);
+		GenerateCube();
+	}
+	mIsCube = !mIsCube;
 }
