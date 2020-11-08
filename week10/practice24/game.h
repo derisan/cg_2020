@@ -43,6 +43,7 @@ private:
 
 	class Renderer* mRenderer;
 	class Shader* mPhongShader;
+	class Shader* mMeshShader;
 
 	int mScrWidth;
 	int mScrHeight;

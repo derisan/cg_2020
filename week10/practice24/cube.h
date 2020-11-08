@@ -9,5 +9,6 @@ public:
     void Draw(class Shader* shader) override;
 private:
     class Mesh* mMesh;
+    class Shader* mShader;
 };
 

@@ -42,6 +42,7 @@ void Snow::UpdateActor()
 
 void Snow::Draw(Shader* shader)
 {
+	shader->SetActive();
 	shader->SetMatrix4Uniform("uWorld", GetWorldTransform());
 	mMesh->GetTexture()->SetActive();
 	auto vertexArray = mMesh->GetVertexArray();

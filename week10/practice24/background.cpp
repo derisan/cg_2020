@@ -25,6 +25,7 @@ Background::Background(Game* game)
 
 void Background::Draw(Shader* shader)
 {
+	shader->SetActive();
 	shader->SetMatrix4Uniform("uWorld", GetWorldTransform());
 	mMesh->GetTexture()->SetActive();
 	auto vertexArray = mMesh->GetVertexArray();

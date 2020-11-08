@@ -11,11 +11,13 @@
 
 Cube::Cube(Game* game)
 	: Actor{ game },
-	mMesh{ nullptr }
+	mMesh{ nullptr },
+	mShader{ nullptr }
 {
 	auto renderer = Renderer::Get();
 	mMesh = new Mesh{};
 	mMesh = renderer->GetMesh("Assets/cube.gpmesh");
+	mShader = renderer->GetShader("mesh");
 
 	SetScale(0.02f);
 }
@@ -25,7 +27,8 @@ void Cube::Draw(Shader* shader)
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-	shader->SetMatrix4Uniform("uWorld", GetWorldTransform());
+	mShader->SetActive();
+	mShader->SetMatrix4Uniform("uWorld", GetWorldTransform());
 	mMesh->GetTexture()->SetActive();
 	auto vertexArray = mMesh->GetVertexArray();
 	vertexArray->SetActive();

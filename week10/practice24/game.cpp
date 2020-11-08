@@ -17,6 +17,7 @@
 Game::Game()
 	: mRenderer{ nullptr },
 	mPhongShader{ nullptr },
+	mMeshShader{ nullptr },
 	mScrWidth{ 0 },
 	mScrHeight{ 0 },
 	mShouldClose{ false },
@@ -49,10 +50,13 @@ bool Game::Init(int* argc, char** argv, int w, int h)
 
 	mRenderer = Renderer::Get();
 	mPhongShader = mRenderer->GetShader("phong");
+	mMeshShader = mRenderer->GetShader("mesh");
 	mPhongShader->SetActive();
 	glm::mat4 proj{ 1.0f };
 	proj = glm::perspective(45.0f, static_cast<float>(mScrWidth) / mScrHeight, 0.1f, 100.0f);
 	mPhongShader->SetMatrix4Uniform("uProj", proj);
+	mMeshShader->SetActive();
+	mMeshShader->SetMatrix4Uniform("uProj", proj);
 
 	new Background{ this };
 	new Snowman{ this };
@@ -168,6 +172,9 @@ void Game::SetLightingUniforms()
 	mPhongShader->SetVectorUniform("uDirLight.ambient", glm::vec3{ 0.1f });
 	mPhongShader->SetVectorUniform("uDirLight.diffuse", glm::vec3{ 1.0f });
 	mPhongShader->SetVectorUniform("uDirLight.specular", glm::vec3{ 1.0f });
+
+	mMeshShader->SetActive();
+	mMeshShader->SetMatrix4Uniform("uView", view);
 }
 
 void Game::GenerateSnows()
