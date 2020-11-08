@@ -2,6 +2,8 @@
 
 #include <vector>
 
+#include <glm/glm.hpp>
+
 class Game
 {
 public:
@@ -14,6 +16,8 @@ public:
 
 	void AddActor(class Actor* actor);
 	void RemoveActor(class Actor* actor);
+
+	void SetLightingUniforms();
 
 	// Getters
 	bool GetShouldClose() const { return mShouldClose; }
@@ -32,12 +36,14 @@ private:
 	std::vector<class Actor*> mPendingActors;
 
 	class Renderer* mRenderer;
-	class Shader* mMeshShader;
+	class Shader* mPhongShader;
 
 	int mScrWidth;
 	int mScrHeight;
 
 	bool mShouldClose;
 	bool mIsUpdating;
+
+	glm::vec3 mCameraPos;
 };
 

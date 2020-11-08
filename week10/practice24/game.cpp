@@ -12,11 +12,12 @@
 
 Game::Game()
 	: mRenderer{ nullptr },
-	mMeshShader{ nullptr },
+	mPhongShader{ nullptr },
 	mScrWidth{ 0 },
 	mScrHeight{ 0 },
 	mShouldClose{ false },
-	mIsUpdating{ false }
+	mIsUpdating{ false },
+	mCameraPos{ 0.0f, 5.0f, 3.0f }
 {
 
 }
@@ -40,14 +41,14 @@ bool Game::Init(int* argc, char** argv, int w, int h)
 	}
 
 	mRenderer = Renderer::Get();
-	mMeshShader = mRenderer->GetShader("mesh");
-	mMeshShader->SetActive();
+	mPhongShader = mRenderer->GetShader("phong");
+	mPhongShader->SetActive();
 	glm::mat4 view{ 1.0f };
-	view = glm::lookAt(glm::vec3{ 0.0f, 1.0f, 3.0f }, glm::vec3{ 0.0f, 0.0f, -1.0f }, glm::vec3{ 0.0f, 1.0f, 0.0f });
+	view = glm::lookAt(mCameraPos, glm::vec3{ 0.0f, 0.0f, -1.0f }, glm::vec3{ 0.0f, 1.0f, 0.0f });
 	glm::mat4 proj{ 1.0f };
 	proj = glm::perspective(45.0f, static_cast<float>(mScrWidth) / mScrHeight, 0.1f, 100.0f);
-	mMeshShader->SetMatrix4Uniform("uView", view);
-	mMeshShader->SetMatrix4Uniform("uProj", proj);
+	mPhongShader->SetMatrix4Uniform("uView", view);
+	mPhongShader->SetMatrix4Uniform("uProj", proj);
 
 	new Background{ this };
 	
@@ -78,6 +79,10 @@ void Game::ProcessInput(unsigned char key)
 		return;
 	else if (key == 27)
 		mShouldClose = true;
+	else if (key == 'z')
+		mCameraPos.y -= 0.1f;
+	else if (key == 'x')
+		mCameraPos.y += 0.1f;
 	
 	for (auto actor : mActors)
 		actor->ProcessInput(key);
@@ -114,9 +119,10 @@ void Game::Draw()
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glEnable(GL_DEPTH_TEST);
 
-	mMeshShader->SetActive();
+	mPhongShader->SetActive();
+	SetLightingUniforms();
 	for (auto actor : mActors)
-		actor->Draw(mMeshShader);
+		actor->Draw(mPhongShader);
 
 	glutSwapBuffers();
 }
@@ -140,3 +146,14 @@ void Game::RemoveActor(Actor* actor)
 		mActors.erase(iter);
 }
 
+void Game::SetLightingUniforms()
+{
+	glm::mat4 view{ 1.0f };
+	view = glm::lookAt(mCameraPos, glm::vec3{ 0.0f, 0.0f, -1.0f }, glm::vec3{ 0.0f, 1.0f, 0.0f });
+	mPhongShader->SetMatrix4Uniform("uView", view);
+	mPhongShader->SetVectorUniform("uViewPos", mCameraPos);
+	mPhongShader->SetVectorUniform("uDirLight.direction", glm::vec3{ -12.0f, -8.0f, -0.1f });
+	mPhongShader->SetVectorUniform("uDirLight.ambient", glm::vec3{ 0.1f });
+	mPhongShader->SetVectorUniform("uDirLight.diffuse", glm::vec3{ 1.0f });
+	mPhongShader->SetVectorUniform("uDirLight.specular", glm::vec3{ 1.0f });
+}
