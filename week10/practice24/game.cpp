@@ -8,7 +8,7 @@
 
 #include "renderer.h"
 #include "shader.h"
-#include "actor.h"
+#include "background.h"
 
 Game::Game()
 	: mRenderer{ nullptr },
@@ -48,6 +48,8 @@ bool Game::Init(int* argc, char** argv, int w, int h)
 	proj = glm::perspective(45.0f, static_cast<float>(mScrWidth) / mScrHeight, 0.1f, 100.0f);
 	mMeshShader->SetMatrix4Uniform("uView", view);
 	mMeshShader->SetMatrix4Uniform("uProj", proj);
+
+	new Background{ this };
 	
 	return true;
 }
