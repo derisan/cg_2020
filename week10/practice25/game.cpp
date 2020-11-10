@@ -46,7 +46,7 @@ bool Game::Init(int* argc, char** argv, int w, int h)
 	mMeshShader = mRenderer->GetShader("mesh");
 	mMeshShader->SetActive();
 	glm::mat4 view{ 1.0f };
-	view = glm::lookAt(glm::vec3{ 0.0f, 0.0f, 3.0f }, glm::vec3{ 0.0f, 0.0f, -1.0f }, glm::vec3{ 0.0f, 1.0f, 0.0f });
+	view = glm::lookAt(glm::vec3{ 0.0f, 1.0f, 3.0f }, glm::vec3{ 0.0f, 0.0f, -1.0f }, glm::vec3{ 0.0f, 1.0f, 0.0f });
 	glm::mat4 proj{ 1.0f };
 	proj = glm::perspective(45.0f, static_cast<float>(mScrWidth) / mScrHeight, 0.1f, 100.0f);
 	mMeshShader->SetMatrix4Uniform("uView", view);

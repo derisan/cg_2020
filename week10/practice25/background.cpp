@@ -12,33 +12,36 @@
 Background::Background(Game* game)
 	: Actor{ game },
 	mTexture{ nullptr },
-	mVertexArray{ nullptr }
+	mVertexArray{ nullptr },
+	mShader{ nullptr }
 {
 	auto renderer = Renderer::Get();
 
 	mTexture = renderer->GetTexture("Assets/bg.jpg");
+	mShader = renderer->GetShader("bg");
 
 	Load();
-
-	SetScale(20.0f);
 }
 
 void Background::Draw(Shader* shader)
 {
-	shader->SetMatrix4Uniform("uWorld", GetWorldTransform());
+	mShader->SetActive();
 	mTexture->SetActive();
 	mVertexArray->SetActive();
 	glDrawElements(GL_TRIANGLES, mVertexArray->GetNumIndices(), GL_UNSIGNED_INT, nullptr);
+
+	// Disable bg shader
+	shader->SetActive();
 }
 
 void Background::Load()
 {
 	const float vertices[] = {
 		// pos				// tex
-		-0.5f, 0.5f, -0.5f,  0.0f, 1.0f,
-		-0.5f,-0.5f, -0.5f,	0.0f, 0.0f,
-		0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
-		0.5f, 0.5f,  -0.5f,   1.0f, 1.0f
+		-1.0f, 1.0f, 0.99f,  0.0f, 1.0f,
+		-1.0f,-1.0f, 0.99f,	0.0f, 0.0f,
+		1.0f, -1.0f, 0.99f,  1.0f, 0.0f,
+		1.0f, 1.0f,  0.99f,   1.0f, 1.0f
 	};
 
 	const unsigned int indices[] = {

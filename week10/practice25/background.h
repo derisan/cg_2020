@@ -11,5 +11,6 @@ public:
 private:
     class Texture* mTexture;
     class VertexArray* mVertexArray;
+    class Shader* mShader;
 };
 
