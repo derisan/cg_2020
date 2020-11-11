@@ -37,6 +37,7 @@ private:
 
 	class Renderer* mRenderer;
 	class Shader* mMeshShader;
+	class Background* mBackground;
 
 	int mScrWidth;
 	int mScrHeight;

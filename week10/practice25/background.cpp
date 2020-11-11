@@ -2,16 +2,13 @@
 
 #include <GL/glew.h>
 
-#include "game.h"
-
 #include "vertexarray.h"
 #include "texture.h"
 #include "shader.h"
 #include "renderer.h"
 
-Background::Background(Game* game)
-	: Actor{ game },
-	mTexture{ nullptr },
+Background::Background()
+	: mTexture{ nullptr },
 	mVertexArray{ nullptr },
 	mShader{ nullptr }
 {
@@ -23,15 +20,12 @@ Background::Background(Game* game)
 	Load();
 }
 
-void Background::Draw(Shader* shader)
+void Background::Draw()
 {
 	mShader->SetActive();
 	mTexture->SetActive();
 	mVertexArray->SetActive();
 	glDrawElements(GL_TRIANGLES, mVertexArray->GetNumIndices(), GL_UNSIGNED_INT, nullptr);
-
-	// Disable bg shader
-	shader->SetActive();
 }
 
 void Background::Load()

@@ -5,6 +5,7 @@
 #include <GL/glew.h>
 #include <GL/freeglut.h>
 #include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtx/rotate_vector.hpp>
 
 #include "random.h"
 #include "renderer.h"
@@ -100,6 +101,8 @@ void Game::ProcessInput(unsigned char key)
 		mCameraPos.y += 0.1f;
 	else if (key == 's')
 		mIsSnowy = !mIsSnowy;
+	else if (key == 'y')
+		mCameraPos = glm::rotate(mCameraPos, glm::radians(10.0f), glm::vec3{ 0.0f, 1.0f, 0.0f });
 	
 	for (auto actor : mActors)
 		actor->ProcessInput(key);

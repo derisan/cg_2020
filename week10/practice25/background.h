@@ -1,12 +1,11 @@
 #pragma once
-#include "actor.h"
-class Background :
-    public Actor
+
+class Background
 {
 public:
-    Background(class Game* game);
+    Background();
 
-    void Draw(class Shader* shader) override;
+    void Draw();
     void Load();
 private:
     class Texture* mTexture;

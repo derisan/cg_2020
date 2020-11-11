@@ -19,7 +19,8 @@ Game::Game()
 	mScrHeight{ 0 },
 	mShouldClose{ false },
 	mIsUpdating{ false },
-	mIsCube{ true }
+	mIsCube{ true },
+	mBackground{ nullptr }
 {
 
 }
@@ -54,7 +55,7 @@ bool Game::Init(int* argc, char** argv, int w, int h)
 
 	GenerateCube();
 
-	new Background{ this };
+	mBackground = new Background{};
 	
 	return true;
 }
@@ -128,6 +129,7 @@ void Game::Draw()
 	mMeshShader->SetActive();
 	for (auto actor : mActors)
 		actor->Draw(mMeshShader);
+	mBackground->Draw();
 
 	glutSwapBuffers();
 }
