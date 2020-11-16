@@ -56,7 +56,7 @@
     <ClCompile Include="fps_actor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="camera_component.cpp">
+    <ClCompile Include="follow_actor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -103,7 +103,7 @@
     <ClInclude Include="fps_actor.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="camera_component.h">
+    <ClInclude Include="follow_actor.h">
       <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>

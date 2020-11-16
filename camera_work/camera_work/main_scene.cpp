@@ -10,13 +10,14 @@
 #include "renderer.h"
 #include "shader.h"
 #include "fps_actor.h"
+#include "follow_actor.h"
 #include "mesh_component.h"
-#include "camera_component.h"
 
 MainScene::MainScene(Gfw* gfw)
 	: Scene{ gfw },
 	mMeshShader{ nullptr },
-	mPlayer{ nullptr }
+	mFps{ nullptr },
+	mFollow{ nullptr }
 {
 	mMeshShader = Renderer::Get()->GetShader("mesh");
 
@@ -30,7 +31,8 @@ MainScene::MainScene(Gfw* gfw)
 
 void MainScene::Enter()
 {
-	mPlayer = new FpsActor{ mGfw };
+	mFps = new FpsActor{ mGfw };
+	mFollow = new FollowActor{ mGfw };
 
 	for (int i = 0; i < 10; ++i)
 	{
@@ -62,7 +64,8 @@ void MainScene::Draw()
 	glEnable(GL_DEPTH_TEST);
 
 	mMeshShader->SetActive();
-	mMeshShader->SetMatrix4Uniform("uView", mPlayer->GetCamera()->GetView());
+	//mMeshShader->SetMatrix4Uniform("uView", mFps->GetView());
+	mMeshShader->SetMatrix4Uniform("uView", mFollow->GetView());
 	for (auto mesh : mGfw->GetMeshes())
 		mesh->Draw(mMeshShader);
 

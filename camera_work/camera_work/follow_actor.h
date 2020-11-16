@@ -1,12 +1,10 @@
 #pragma once
-
 #include "actor.h"
-
-class FpsActor:
+class FollowActor:
     public Actor
 {
 public:
-    FpsActor(Gfw* gfw, Gfw::Layer layer = Gfw::Layer::kDefault);
+    FollowActor(Gfw* gfw, Gfw::Layer layer = Gfw::Layer::kDefault);
 
     void UpdateActor() override;
     void ActorInput(bool* keyState, int x, int y) override;
@@ -16,10 +14,9 @@ public:
 
 private:
     float mForwardSpeed;
-    float mStrafeSpeed;
-    float mPitch;
-    const float kSpeed{ 5.0f };
-    const float kSensitivty{ 3.0f };
+    float mRotationSpeed;
+    const float kMovementSpeed{ 5.0f };
+    const float kRotationSpeed{ 100.0f };
 
     glm::mat4 mView;
 };

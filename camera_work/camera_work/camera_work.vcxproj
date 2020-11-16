@@ -141,8 +141,8 @@
   <ItemGroup>
     <ClCompile Include="aabb.cpp" />
     <ClCompile Include="actor.cpp" />
-    <ClCompile Include="camera_component.cpp" />
     <ClCompile Include="component.cpp" />
+    <ClCompile Include="follow_actor.cpp" />
     <ClCompile Include="fps_actor.cpp" />
     <ClCompile Include="gfw.cpp" />
     <ClCompile Include="main.cpp" />
@@ -159,8 +159,8 @@
   <ItemGroup>
     <ClInclude Include="aabb.h" />
     <ClInclude Include="actor.h" />
-    <ClInclude Include="camera_component.h" />
     <ClInclude Include="component.h" />
+    <ClInclude Include="follow_actor.h" />
     <ClInclude Include="fps_actor.h" />
     <ClInclude Include="gfw.h" />
     <ClInclude Include="main_scene.h" />
