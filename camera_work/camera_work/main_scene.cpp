@@ -32,6 +32,13 @@ MainScene::MainScene(Gfw* gfw)
 void MainScene::Enter()
 {
 	new FpsActor{ mGfw };
+
+	for (int i = 0; i < 10; ++i)
+	{
+		auto plane = new Actor{ mGfw };
+		plane->SetPosition(glm::vec3{ 0.0f, -0.1f, -2.0f * i });
+		auto mc = new MeshComponent{ plane, "Assets/grass.gpmesh" };
+	}
 }
 
 void MainScene::Exit()
