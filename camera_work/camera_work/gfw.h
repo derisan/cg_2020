@@ -17,7 +17,7 @@ public:
 	Gfw();
 
 	bool Init(int* argc, char** argv, int w = 1024, int h = 768);
-	void Run(unsigned char key);
+	void Run(bool* keyState);
 	void Shutdown();
 
 	void ChangeScene(const std::string& scene);
@@ -46,7 +46,7 @@ public:
 	const float dt{ 16.f / 1000.f };
 
 private:
-	void ProcessInput(unsigned char key);
+	void ProcessInput(bool* keyState);
 	void Update();
 	void Draw();
 

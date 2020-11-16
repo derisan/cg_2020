@@ -13,7 +13,7 @@ public:
 
 	virtual void Enter() { }
 	virtual void Exit() { }
-	virtual void ProcessInput(unsigned char key) { }
+	virtual void ProcessInput(bool* keyState) { }
 	virtual void Update() { }
 	virtual void Draw() { }
 	virtual void Pause() { mState = State::kPaused; }

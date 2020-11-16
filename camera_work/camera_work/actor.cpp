@@ -45,14 +45,14 @@ void Actor::UpdateComponents()
 		comp->Update();
 }
 
-void Actor::ProcessInput(unsigned char key)
+void Actor::ProcessInput(bool* keyState)
 {
 	if (mState == State::kActive)
 	{
 		for (auto comp : mComponents)
-			comp->ProcessKeyboardInput(key);
+			comp->ProcessKeyboardInput(keyState);
 
-		ActorInput(key);
+		ActorInput(keyState);
 	}
 }
 

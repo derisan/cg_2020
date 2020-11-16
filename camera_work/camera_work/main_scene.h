@@ -8,7 +8,7 @@ public:
 
 	void Enter() override;
 	void Exit() override;
-	void ProcessInput(unsigned char key) override;
+	void ProcessInput(bool* keyState) override;
 	void Update() override;
 	void Draw() override;
 

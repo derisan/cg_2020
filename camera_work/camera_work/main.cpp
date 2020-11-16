@@ -14,7 +14,8 @@
 
 void DisplayFunc();
 void ReshapeFunc(int w, int h);
-void KeyboardFunc(unsigned char i, int x, int y);
+void KeyboardFunc(unsigned char key, int x, int y);
+void KeyboardUpFunc(unsigned char key, int x, int y);
 void PassiveMotionFunc(int x, int y);
 void TimerFunc(int value);
 void Shutdown();
@@ -32,6 +33,7 @@ int main(int argc, char** argv)
 	glutDisplayFunc(DisplayFunc);
 	glutReshapeFunc(ReshapeFunc);
 	glutKeyboardFunc(KeyboardFunc);
+	glutKeyboardUpFunc(KeyboardUpFunc);
 	glutPassiveMotionFunc(PassiveMotionFunc);
 	glutTimerFunc(16, TimerFunc, 1);
 
@@ -50,10 +52,15 @@ void ReshapeFunc(int w, int h)
 	glViewport(0, 0, w, h);
 }
 
-unsigned char key;
-void KeyboardFunc(unsigned char i, int x, int y)
+bool buffer[256];
+void KeyboardFunc(unsigned char key, int x, int y)
 {
-	key = i;
+	buffer[key] = true;
+}
+
+void KeyboardUpFunc(unsigned char key, int x, int y)
+{
+	buffer[key] = false;
 }
 
 void PassiveMotionFunc(int x, int y)
@@ -64,10 +71,9 @@ void PassiveMotionFunc(int x, int y)
 void TimerFunc(int value)
 {
 	glutTimerFunc(16, TimerFunc, 1);
-	gfw.Run(key);
+	gfw.Run(buffer);
 	if (gfw.GetShouldClose())
 		Shutdown();
-	key = NULL;
 }
 
 void Shutdown()

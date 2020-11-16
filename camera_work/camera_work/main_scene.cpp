@@ -46,7 +46,7 @@ void MainScene::Exit()
 	mGfw->RemoveAllActors();
 }
 
-void MainScene::ProcessInput(unsigned char key)
+void MainScene::ProcessInput(bool* keyState)
 {
 
 }

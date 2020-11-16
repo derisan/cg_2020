@@ -25,26 +25,24 @@ void FpsActor::UpdateActor()
 
 	SetPosition(pos);
 
+
+}
+
+void FpsActor::ActorInput(bool* keyState)
+{
 	// Need to reset speed per update
 	mForwardSpeed = 0.0f;
 	mStrafeSpeed = 0.0f;
-}
 
-void FpsActor::ActorInput(unsigned char key)
-{
-	switch (key)
-	{
-		case 'w': case 'W':
-			mForwardSpeed = kSpeed;
-			break;
-		case 's': case 'S':
-			mForwardSpeed = -kSpeed;
-			break;
-		case 'a': case 'A':
-			mStrafeSpeed = -kSpeed;
-			break;
-		case 'd': case 'D':
-			mStrafeSpeed = kSpeed;
-			break;
-	}
+	if(keyState[119]) // w
+		mForwardSpeed = kSpeed;
+	
+	if(keyState[115]) // s
+		mForwardSpeed = -kSpeed;
+
+	if(keyState[97]) // a 
+		mStrafeSpeed = -kSpeed;
+		
+	if(keyState[100]) // d
+		mStrafeSpeed = kSpeed;
 }

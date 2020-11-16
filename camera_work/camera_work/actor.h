@@ -23,8 +23,8 @@ public:
 	void UpdateComponents();
 	virtual void UpdateActor() { };
 
-	void ProcessInput(unsigned char key);
-	virtual void ActorInput(unsigned char key) { };
+	void ProcessInput(bool* keyState);
+	virtual void ActorInput(bool* keyState) { };
 
 	void ComputeWorldTransform();
 
