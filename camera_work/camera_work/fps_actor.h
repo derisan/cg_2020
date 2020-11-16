@@ -12,13 +12,13 @@ public:
     void ActorInput(bool* keyState, int x, int y) override;
 
     // Getters
-    const glm::mat4& GetView() const { return mView; }
+    class CameraComponent* GetCamera() { return mCamera; }
 
 private:
     float mForwardSpeed;
     float mStrafeSpeed;
     const float kSpeed{ 5.0f };
 
-    glm::mat4 mView;
+    class CameraComponent* mCamera;
 };
 
