@@ -20,9 +20,13 @@ private:
     glm::vec3 mCameraPos;
     glm::vec3 mCameraTarget;
     glm::vec3 mCameraUp;
+    glm::vec3 mForward;
 
     glm::mat4 mView;
 
     float mSensitivity;
+    float mPitch;
+
+
 };
 

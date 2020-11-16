@@ -65,10 +65,18 @@ void KeyboardUpFunc(unsigned char key, int x, int y)
 
 int prevMouseX, prevMouseY;
 int mouseX, mouseY;
+bool firstMouse{ true };
 void PassiveMotionFunc(int x, int y)
 {
+	if (firstMouse)
+	{
+		prevMouseX = 512;
+		prevMouseY = 384;
+		firstMouse = false;
+	}
+
 	mouseX = x - prevMouseX;
-	mouseY = y - prevMouseY;
+	mouseY = prevMouseY - y;
 
 	prevMouseX = x;
 	prevMouseY = y;
