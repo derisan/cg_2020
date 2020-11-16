@@ -165,6 +165,10 @@ void Gfw::ProcessInput(unsigned char key)
 	else if (key == 27)
 		mShouldClose = true;
 
+	for (auto actors : mActors)
+		for (auto actor : actors)
+			actor->ProcessInput(key);
+
 	mScenes.top()->ProcessInput(key);
 }
 

@@ -53,6 +53,9 @@
     <ClCompile Include="mesh_component.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="fps_actor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="aabb.h">
@@ -92,6 +95,9 @@
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="mesh_component.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="fps_actor.h">
       <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>

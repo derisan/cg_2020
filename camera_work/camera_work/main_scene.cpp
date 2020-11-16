@@ -9,7 +9,7 @@
 #include "gfw.h"
 #include "renderer.h"
 #include "shader.h"
-#include "actor.h"
+#include "fps_actor.h"
 #include "mesh_component.h"
 
 MainScene::MainScene(Gfw* gfw)
@@ -24,15 +24,14 @@ MainScene::MainScene(Gfw* gfw)
 	glm::mat4 view{ 1.0f };
 	view = glm::lookAt(glm::vec3{ 0.0f, 1.0f, 3.0f }, glm::vec3{ 0.0f, 0.0f, -1.0f }, glm::vec3{ 0.0f, 1.0f, 0.0f });
 	mMeshShader->SetActive();
-	mMeshShader->SetMatrix4Uniform("uView", view);
 	mMeshShader->SetMatrix4Uniform("uProj", proj);
+	mMeshShader->SetMatrix4Uniform("uView", view);
 }
 
 
 void MainScene::Enter()
 {
-	auto chr = new Actor{ mGfw };
-	auto mc = new MeshComponent{ chr, "Assets/bunny.gpmesh" };
+	new FpsActor{ mGfw };
 }
 
 void MainScene::Exit()
@@ -52,7 +51,7 @@ void MainScene::Update()
 
 void MainScene::Draw()
 {
-	glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
+	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glEnable(GL_DEPTH_TEST);
 
