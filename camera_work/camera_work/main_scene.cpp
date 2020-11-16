@@ -11,27 +11,26 @@
 #include "shader.h"
 #include "fps_actor.h"
 #include "mesh_component.h"
+#include "camera_component.h"
 
 MainScene::MainScene(Gfw* gfw)
 	: Scene{ gfw },
-	mMeshShader{ nullptr }
+	mMeshShader{ nullptr },
+	mPlayer{ nullptr }
 {
 	mMeshShader = Renderer::Get()->GetShader("mesh");
 
 	glm::mat4 proj{ 1.0f };
 	proj = glm::perspective(45.0f, static_cast<float>(mGfw->GetScrWidth()) / mGfw->GetScrHeight(),
 		0.1f, 100.0f);
-	glm::mat4 view{ 1.0f };
-	view = glm::lookAt(glm::vec3{ 0.0f, 1.0f, 3.0f }, glm::vec3{ 0.0f, 0.0f, -1.0f }, glm::vec3{ 0.0f, 1.0f, 0.0f });
 	mMeshShader->SetActive();
 	mMeshShader->SetMatrix4Uniform("uProj", proj);
-	mMeshShader->SetMatrix4Uniform("uView", view);
 }
 
 
 void MainScene::Enter()
 {
-	new FpsActor{ mGfw };
+	mPlayer = new FpsActor{ mGfw };
 
 	for (int i = 0; i < 10; ++i)
 	{
@@ -63,6 +62,7 @@ void MainScene::Draw()
 	glEnable(GL_DEPTH_TEST);
 
 	mMeshShader->SetActive();
+	mMeshShader->SetMatrix4Uniform("uView", mPlayer->GetCamera()->GetView());
 	for (auto mesh : mGfw->GetMeshes())
 		mesh->Draw(mMeshShader);
 
