@@ -46,7 +46,7 @@ void MainScene::Exit()
 	mGfw->RemoveAllActors();
 }
 
-void MainScene::ProcessInput(bool* keyState)
+void MainScene::ProcessInput(bool* keyState, int x, int y)
 {
 
 }

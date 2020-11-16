@@ -63,17 +63,26 @@ void KeyboardUpFunc(unsigned char key, int x, int y)
 	buffer[key] = false;
 }
 
+int prevMouseX, prevMouseY;
+int mouseX, mouseY;
 void PassiveMotionFunc(int x, int y)
 {
+	mouseX = x - prevMouseX;
+	mouseY = y - prevMouseY;
 
+	prevMouseX = x;
+	prevMouseY = y;
 }
 
 void TimerFunc(int value)
 {
 	glutTimerFunc(16, TimerFunc, 1);
-	gfw.Run(buffer);
+	gfw.Run(buffer, mouseX, mouseY);
 	if (gfw.GetShouldClose())
 		Shutdown();
+
+	mouseX = 0;
+	mouseY = 0;
 }
 
 void Shutdown()

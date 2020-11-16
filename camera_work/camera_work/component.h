@@ -7,7 +7,7 @@ public:
 	virtual ~Component();
 
 	virtual void Update() {};
-	virtual void ProcessKeyboardInput(bool* keyState) { };
+	virtual void ProcessInput(bool* keyState, int x, int y) { };
 	virtual void OnUpdateWorldTransform() { };
 
 protected:

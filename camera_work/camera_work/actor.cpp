@@ -45,14 +45,14 @@ void Actor::UpdateComponents()
 		comp->Update();
 }
 
-void Actor::ProcessInput(bool* keyState)
+void Actor::ProcessInput(bool* keyState, int x, int y)
 {
 	if (mState == State::kActive)
 	{
 		for (auto comp : mComponents)
-			comp->ProcessKeyboardInput(keyState);
+			comp->ProcessInput(keyState, x, y);
 
-		ActorInput(keyState);
+		ActorInput(keyState, x, y);
 	}
 }
 

@@ -24,11 +24,9 @@ void FpsActor::UpdateActor()
 	pos += GetRight() * mStrafeSpeed * mGfw->dt;
 
 	SetPosition(pos);
-
-
 }
 
-void FpsActor::ActorInput(bool* keyState)
+void FpsActor::ActorInput(bool* keyState, int x, int y)
 {
 	// Need to reset speed per update
 	mForwardSpeed = 0.0f;

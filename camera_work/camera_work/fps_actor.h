@@ -9,7 +9,7 @@ public:
     FpsActor(Gfw* gfw, Gfw::Layer layer = Gfw::Layer::kDefault);
 
     void UpdateActor() override;
-    void ActorInput(bool* keyState) override;
+    void ActorInput(bool* keyState, int x, int y) override;
 
     // Getters
     const glm::mat4& GetView() const { return mView; }

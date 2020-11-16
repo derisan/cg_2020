@@ -47,11 +47,11 @@ bool Gfw::Init(int* argc, char** argv, int w, int h)
 	return true;
 }
 
-void Gfw::Run(bool* keyState)
+void Gfw::Run(bool* keyState, int x, int y)
 {
 	if (!mShouldClose)
 	{
-		ProcessInput(keyState);
+		ProcessInput(keyState, x, y);
 		Update();
 		Draw();
 	}
@@ -158,16 +158,16 @@ void Gfw::RemoveMesh(MeshComponent* mesh)
 		mMeshes.erase(iter);
 }
 
-void Gfw::ProcessInput(bool* keyState)
+void Gfw::ProcessInput(bool* keyState, int x, int y)
 {
 	if (keyState[27])
 		mShouldClose = true;
 
 	for (auto actors : mActors)
 		for (auto actor : actors)
-			actor->ProcessInput(keyState);
+			actor->ProcessInput(keyState, x, y);
 
-	mScenes.top()->ProcessInput(keyState);
+	mScenes.top()->ProcessInput(keyState, x, y);
 }
 
 void Gfw::Update()

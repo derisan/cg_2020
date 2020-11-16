@@ -8,7 +8,7 @@ public:
 
 	void Enter() override;
 	void Exit() override;
-	void ProcessInput(bool* keyState) override;
+	void ProcessInput(bool* keyState, int x, int y) override;
 	void Update() override;
 	void Draw() override;
 
