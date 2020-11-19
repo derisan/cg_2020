@@ -1,5 +1,7 @@
 #include "robot.h"
 
+#include <iostream>
+
 #include <glm/gtx/norm.hpp>
 
 #include "mesh_component.h"
@@ -13,29 +15,39 @@ Robot::Robot(Gfw* gfw, Gfw::Layer layer)
 	mBox{ nullptr },
 	mTarget{ nullptr },
 	mBorder{ {-13.f, 13.f}, {-19.f, 1.f} },
-	mRotationCooldown{ 0.f }
+	mRotationCooldown{ 0.f },
+	mAngle{ 0.0f }
 {
 	auto mc = new MeshComponent{ this, "Assets/robot.gpmesh" };
 	mBox = new BoxComponent{ this };
 	mBox->SetObjectBox(mc->GetMesh()->GetBox());
 
 	SetScale(0.1f);
+
+	const auto& player = mGfw->GetActorsAt(Gfw::Layer::kPlayer)[0];
+	mTarget = player;
 }
 
 void Robot::UpdateActor()
 {
 	mRotationCooldown -= mGfw->dt;
 
-	SearchPlayer();
+	if (IsNear())
+	{
+		const auto& forward = glm::normalize(GetForward());
+		const auto& toA = glm::normalize(mTarget->GetPosition() - GetPosition());
 
-	if (mRotationCooldown < 0 && nullptr == mTarget)
+		auto cost = glm::dot(forward, toA);
+		auto rot = glm::degrees(glm::acos(cost));
+		
+		mAngle += rot * mGfw->dt;
+
+		SetRotation(mAngle);
+	}
+	else if(mRotationCooldown < 0)
 	{
 		mRotationCooldown = Random::GetFloatRange(1.0f, 2.0f);
 		ChangeDirection();
-	}
-	else if (mTarget)
-	{
-
 	}
 
 	auto pos = GetPosition();
@@ -81,20 +93,12 @@ void Robot::ChangeDirection(bool reflect)
 	}
 }
 
-void Robot::SearchPlayer()
+bool Robot::IsNear()
 {
-	const auto& players = mGfw->GetActorsAt(Gfw::Layer::kPlayer);
+	const auto& myPos = GetPosition();
+	const auto& targetPos = mTarget->GetPosition();
 
-	for (auto player : players)
-	{
-		const auto& pPos = player->GetPosition();
-		const auto& myPos = GetPosition();
-
-		if (glm::distance2(pPos, myPos) < 36.0f)
-		{
-			mTarget = player;
-			return;
-		}
-	}
-	mTarget = nullptr;
+	if (glm::distance2(myPos, targetPos) < 36.0f)
+		return true;
+	return false;
 }

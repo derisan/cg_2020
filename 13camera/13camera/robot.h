@@ -9,20 +9,23 @@ public:
     void UpdateActor() override;
 
     void ChangeDirection(bool reflect = false);
-    void SearchPlayer();
+    bool IsNear();
 
 private:
     class BoxComponent* mBox;
-
+    Actor* mTarget;
+    
     struct Border
     {
         glm::vec2 x;
         glm::vec2 z;
     };
     Border mBorder;
-    Actor* mTarget;
-
+    
     float mRotationCooldown;
-    const float kMovementSpeed{ 5.0f };
+    float mAngle;
+    
+    const float kMovementSpeed{ 1.0f };
+    const float kRotationSpeed{ 100.0f };
 };
 
