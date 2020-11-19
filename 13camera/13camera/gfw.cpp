@@ -11,7 +11,7 @@
 #include "actor.h"
 
 Gfw::Gfw()
-	: mActors( 3 ),
+	: mActors( 4 ),
 	mScrWidth{ 0 },
 	mScrHeight{ 0 },
 	mShouldClose{ false },

@@ -9,8 +9,9 @@ class Gfw
 public:
 	enum Layer
 	{
-		kFirst,
-		kSecond,
+		kPlayer,
+		kRobot,
+		kObstacle,
 		kDefault
 	};
 

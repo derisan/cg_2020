@@ -11,6 +11,7 @@
 #include "shader.h"
 #include "fps_actor.h"
 #include "follow_actor.h"
+#include "robot.h"
 #include "mesh_component.h"
 
 MainScene::MainScene(Gfw* gfw)
@@ -33,6 +34,7 @@ void MainScene::Enter()
 {
 	mFps = new FpsActor{ mGfw };
 	mFollow = new FollowActor{ mGfw };
+	new Robot{ mGfw };
 
 	for (int i = 0; i < 10; ++i)
 	{
