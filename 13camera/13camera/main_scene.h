@@ -14,7 +14,6 @@ public:
 
 private:
 	class Shader* mMeshShader;
-	class FpsActor* mFps;
-	class FollowActor* mFollow;
+	class Player* mPlayer;
 };
 

@@ -9,16 +9,14 @@
 #include "gfw.h"
 #include "renderer.h"
 #include "shader.h"
-#include "fps_actor.h"
-#include "follow_actor.h"
 #include "robot.h"
+#include "player.h"
 #include "mesh_component.h"
 
 MainScene::MainScene(Gfw* gfw)
 	: Scene{ gfw },
 	mMeshShader{ nullptr },
-	mFps{ nullptr },
-	mFollow{ nullptr }
+	mPlayer{ nullptr }
 {
 	mMeshShader = Renderer::Get()->GetShader("mesh");
 
@@ -32,14 +30,13 @@ MainScene::MainScene(Gfw* gfw)
 
 void MainScene::Enter()
 {
-	mFps = new FpsActor{ mGfw };
-	mFollow = new FollowActor{ mGfw };
+	mPlayer = new Player{ mGfw };
 	new Robot{ mGfw };
 
 	for (int i = 0; i < 10; ++i)
 	{
 		auto plane = new Actor{ mGfw };
-		plane->SetPosition(glm::vec3{ 0.0f, -1.0f, -2.0f * i });
+		plane->SetPosition(glm::vec3{ 0.0f, -1.1f, -2.0f * i });
 		auto mc = new MeshComponent{ plane, "Assets/road.gpmesh" };
 	}
 }
@@ -51,7 +48,10 @@ void MainScene::Exit()
 
 void MainScene::ProcessInput(bool* keyState, int x, int y)
 {
-
+	if (keyState[49]) // Numpad 1
+		mPlayer->SetViewOption(Player::ViewOption::kFPS);
+	else if (keyState[51]) // Numpad 3
+		mPlayer->SetViewOption(Player::ViewOption::kFollow);
 }
 
 void MainScene::Update()
@@ -66,8 +66,8 @@ void MainScene::Draw()
 	glEnable(GL_DEPTH_TEST);
 
 	mMeshShader->SetActive();
-	//mMeshShader->SetMatrix4Uniform("uView", mFps->GetView());
-	mMeshShader->SetMatrix4Uniform("uView", mFollow->GetView());
+	const auto& view = mPlayer->GetView();
+	mMeshShader->SetMatrix4Uniform("uView", view);
 	for (auto mesh : mGfw->GetMeshes())
 		mesh->Draw(mMeshShader);
 

@@ -20,12 +20,6 @@
     <ClCompile Include="component.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="follow_actor.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="fps_actor.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="gfw.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -59,6 +53,12 @@
     <ClCompile Include="vertexarray.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="robot.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="player.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="aabb.h">
@@ -68,12 +68,6 @@
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="component.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="follow_actor.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="fps_actor.h">
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="gfw.h">
@@ -104,6 +98,12 @@
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="vertexarray.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="robot.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="player.h">
       <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>
