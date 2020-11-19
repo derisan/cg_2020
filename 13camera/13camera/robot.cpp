@@ -1,5 +1,7 @@
 #include "robot.h"
 
+#include <glm/gtx/norm.hpp>
+
 #include "mesh_component.h"
 #include "box_component.h"
 #include "mesh.h"
@@ -9,6 +11,7 @@
 Robot::Robot(Gfw* gfw, Gfw::Layer layer)
 	: Actor{ gfw, layer },
 	mBox{ nullptr },
+	mTarget{ nullptr },
 	mBorder{ {-13.f, 13.f}, {-19.f, 1.f} },
 	mRotationCooldown{ 0.f }
 {
@@ -23,10 +26,16 @@ void Robot::UpdateActor()
 {
 	mRotationCooldown -= mGfw->dt;
 
-	if (mRotationCooldown < 0)
+	SearchPlayer();
+
+	if (mRotationCooldown < 0 && nullptr == mTarget)
 	{
 		mRotationCooldown = Random::GetFloatRange(1.0f, 2.0f);
 		ChangeDirection();
+	}
+	else if (mTarget)
+	{
+
 	}
 
 	auto pos = GetPosition();
@@ -70,4 +79,22 @@ void Robot::ChangeDirection(bool reflect)
 		auto rot = GetRotation() + 180.f;
 		SetRotation(rot);
 	}
+}
+
+void Robot::SearchPlayer()
+{
+	const auto& players = mGfw->GetActorsAt(Gfw::Layer::kPlayer);
+
+	for (auto player : players)
+	{
+		const auto& pPos = player->GetPosition();
+		const auto& myPos = GetPosition();
+
+		if (glm::distance2(pPos, myPos) < 36.0f)
+		{
+			mTarget = player;
+			return;
+		}
+	}
+	mTarget = nullptr;
 }
