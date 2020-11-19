@@ -77,6 +77,8 @@ void MainScene::ProcessInput(bool* keyState, int x, int y)
 		mPlayer->SetViewOption(Player::ViewOption::kFPS);
 	else if (keyState[51]) // Numpad 3
 		mPlayer->SetViewOption(Player::ViewOption::kFollow);
+	else if (keyState[114]) // r
+		ResetPosition();
 }
 
 void MainScene::Update()
@@ -115,4 +117,18 @@ void MainScene::Draw()
 	mBackground->Draw();
 
 	glutSwapBuffers();
+}
+
+void MainScene::ResetPosition()
+{
+	const auto& players = mGfw->GetActorsAt(Gfw::Layer::kPlayer);
+	const auto& robots = mGfw->GetActorsAt(Gfw::Layer::kRobot);
+
+	for (auto player : players)
+		player->SetPosition(glm::vec3{ 0.0f, -1.0f, 0.0f });
+
+	robots[0]->SetPosition(glm::vec3{ -9.0f, -1.0f, -9.0f });
+	robots[1]->SetPosition(glm::vec3{ -4.5f, -1.0f, -9.0f });
+	robots[2]->SetPosition(glm::vec3{ 4.5f, -1.0f, -9.0f });
+	robots[3]->SetPosition(glm::vec3{ 9.0f, -1.0f, -9.0f });
 }

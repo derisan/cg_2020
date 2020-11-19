@@ -12,6 +12,9 @@ public:
 	void Update() override;
 	void Draw() override;
 
+	// Scene specific
+	void ResetPosition();
+
 private:
 	class Shader* mMeshShader;
 	class Shader* mBgShader;
