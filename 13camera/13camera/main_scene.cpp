@@ -12,14 +12,18 @@
 #include "robot.h"
 #include "player.h"
 #include "mesh_component.h"
+#include "Background.h"
 
 
 MainScene::MainScene(Gfw* gfw)
 	: Scene{ gfw },
 	mMeshShader{ nullptr },
-	mPlayer{ nullptr }
+	mBgShader{ nullptr },
+	mPlayer{ nullptr },
+	mBackground{ nullptr }
 {
 	mMeshShader = Renderer::Get()->GetShader("mesh");
+	mBgShader = Renderer::Get()->GetShader("bg");
 
 	glm::mat4 proj{ 1.0f };
 	proj = glm::perspective(45.0f, static_cast<float>(mGfw->GetScrWidth()) / mGfw->GetScrHeight(),
@@ -32,6 +36,7 @@ MainScene::MainScene(Gfw* gfw)
 void MainScene::Enter()
 {
 	mPlayer = new Player{ mGfw };
+	mBackground = new Background{ "Assets/bg.jpg" };
 	
 	for (int i = 0; i < 10; ++i)
 	{
@@ -79,6 +84,9 @@ void MainScene::Draw()
 	mMeshShader->SetMatrix4Uniform("uView", view);
 	for (auto mesh : mGfw->GetMeshes())
 		mesh->Draw(mMeshShader);
+
+	mBgShader->SetActive();
+	mBackground->Draw();
 
 	glutSwapBuffers();
 }

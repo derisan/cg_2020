@@ -14,6 +14,8 @@ public:
 
 private:
 	class Shader* mMeshShader;
+	class Shader* mBgShader;
 	class Player* mPlayer;
+	class Background* mBackground;
 };
 

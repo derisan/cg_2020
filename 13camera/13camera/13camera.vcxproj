@@ -141,6 +141,7 @@
   <ItemGroup>
     <ClCompile Include="aabb.cpp" />
     <ClCompile Include="actor.cpp" />
+    <ClCompile Include="Background.cpp" />
     <ClCompile Include="box_component.cpp" />
     <ClCompile Include="component.cpp" />
     <ClCompile Include="gfw.cpp" />
@@ -160,6 +161,7 @@
   <ItemGroup>
     <ClInclude Include="aabb.h" />
     <ClInclude Include="actor.h" />
+    <ClInclude Include="Background.h" />
     <ClInclude Include="box_component.h" />
     <ClInclude Include="component.h" />
     <ClInclude Include="gfw.h" />
@@ -176,6 +178,8 @@
     <ClInclude Include="vertexarray.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Shaders\bg.frag" />
+    <None Include="Shaders\bg.vert" />
     <None Include="Shaders\mesh.frag" />
     <None Include="Shaders\mesh.vert" />
   </ItemGroup>

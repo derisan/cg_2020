@@ -62,6 +62,9 @@
     <ClCompile Include="box_component.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Background.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="aabb.h">
@@ -112,12 +115,21 @@
     <ClInclude Include="box_component.h">
       <Filter>Source Files</Filter>
     </ClInclude>
+    <ClInclude Include="Background.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Shaders\mesh.frag">
       <Filter>Shaders</Filter>
     </None>
     <None Include="Shaders\mesh.vert">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\bg.frag">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\bg.vert">
       <Filter>Shaders</Filter>
     </None>
   </ItemGroup>
