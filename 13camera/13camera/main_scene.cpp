@@ -1,5 +1,7 @@
 #include "main_scene.h"
 
+#include <iostream>
+
 #include <GL/glew.h>
 #include <GL/freeglut.h>
 
@@ -64,6 +66,8 @@ void MainScene::Enter()
 	tree->SetPosition(glm::vec3{ -6.0f, -1.0, -12.0f });
 	tree = new Tree{ mGfw };
 	tree->SetPosition(glm::vec3{ 6.0f, -1.0, -12.0f });
+
+	PrintMenu();
 }
 
 void MainScene::Exit()
@@ -131,4 +135,16 @@ void MainScene::ResetPosition()
 	robots[1]->SetPosition(glm::vec3{ -4.5f, -1.0f, -9.0f });
 	robots[2]->SetPosition(glm::vec3{ 4.5f, -1.0f, -9.0f });
 	robots[3]->SetPosition(glm::vec3{ 9.0f, -1.0f, -9.0f });
+}
+
+void MainScene::PrintMenu()
+{
+	std::cout << "--------------------명령어--------------------" << std::endl;
+	std::cout << "ESC	프로그램 종료" << std::endl;
+	std::cout << "숫자 1	1인칭 시점으로 변경" << std::endl;
+	std::cout << "숫자 3	3인칭 시점으로 변경" << std::endl;
+	std::cout << "WASD	각 시점에 따른 이동" << std::endl;
+	std::cout << "R	로봇과 플레이어 위치 초기화" << std::endl;
+	std::cout << "마우스	1인칭 시점에서 좌우로 시야 회전" << std::endl;
+	std::cout << "----------------------------------------------" << std::endl;
 }

@@ -24,7 +24,7 @@ Gfw gfw;
 
 int main(int argc, char** argv)
 {
-	if (!gfw.Init(&argc, argv, 1024, 768))
+	if (!gfw.Init(&argc, argv, 1600, 900))
 	{
 		std::cout << "Failed to initialize gfw" << std::endl;
 		return -1;
@@ -70,8 +70,8 @@ void PassiveMotionFunc(int x, int y)
 {
 	if (firstMouse)
 	{
-		prevMouseX = 512;
-		prevMouseY = 384;
+		prevMouseX = 800;
+		prevMouseY = 450;
 		firstMouse = false;
 	}
 

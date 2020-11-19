@@ -14,6 +14,7 @@ public:
 
 	// Scene specific
 	void ResetPosition();
+	void PrintMenu();
 
 private:
 	class Shader* mMeshShader;

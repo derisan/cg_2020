@@ -1,7 +1,5 @@
 #include "robot.h"
 
-#include <iostream>
-
 #include <glm/gtx/norm.hpp>
 
 #include "mesh_component.h"
