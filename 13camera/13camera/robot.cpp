@@ -16,7 +16,8 @@ Robot::Robot(Gfw* gfw, Gfw::Layer layer)
 	mTarget{ nullptr },
 	mBorder{ {-13.f, 13.f}, {-19.f, 1.f} },
 	mRotationCooldown{ 0.f },
-	mAngle{ 0.0f }
+	mAngle{ 0.0f },
+	mMovementSpeed{ 3.0f }
 {
 	auto mc = new MeshComponent{ this, "Assets/robot.gpmesh" };
 	mBox = new BoxComponent{ this };
@@ -34,24 +35,30 @@ void Robot::UpdateActor()
 
 	if (IsNear())
 	{
+		mMovementSpeed = 0.0f;
+
 		const auto& forward = glm::normalize(GetForward());
 		const auto& toA = glm::normalize(mTarget->GetPosition() - GetPosition());
 
 		auto cost = glm::dot(forward, toA);
 		auto rot = glm::degrees(glm::acos(cost));
 		
-		mAngle += rot * mGfw->dt;
+		if (rot < 5.0f)
+			mMovementSpeed = 3.0f;
+
+		mAngle -= rot * mGfw->dt;
 
 		SetRotation(mAngle);
 	}
 	else if(mRotationCooldown < 0)
 	{
+		mMovementSpeed = 3.0f;
 		mRotationCooldown = Random::GetFloatRange(1.0f, 2.0f);
 		ChangeDirection();
 	}
 
 	auto pos = GetPosition();
-	auto movement = GetForward() * kMovementSpeed * mGfw->dt;
+	auto movement = GetForward() * mMovementSpeed * mGfw->dt;
 	pos += movement;
 
 	if (pos.x < mBorder.x.x)

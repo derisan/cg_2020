@@ -28,7 +28,7 @@ private:
     float mRotationCooldown;
     float mAngle;
     
-    const float kMovementSpeed{ 3.0f };
+    float mMovementSpeed;
     const float kRotationSpeed{ 100.0f };
 };
 
