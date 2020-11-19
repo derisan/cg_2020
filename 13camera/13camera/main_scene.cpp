@@ -12,7 +12,9 @@
 #include "robot.h"
 #include "player.h"
 #include "mesh_component.h"
+#include "box_component.h"
 #include "Background.h"
+#include "tree.h"
 
 
 MainScene::MainScene(Gfw* gfw)
@@ -53,6 +55,15 @@ void MainScene::Enter()
 	robot->SetPosition(glm::vec3{ 4.5f, -1.0f, -9.0f });
 	robot = new Robot{ mGfw };
 	robot->SetPosition(glm::vec3{ 9.0f, -1.0f, -9.0f });
+
+	auto tree = new Tree{ mGfw };
+	tree->SetPosition(glm::vec3{ -6.0f, -1.0, -6.0f });
+	tree = new Tree{ mGfw };
+	tree->SetPosition(glm::vec3{ 6.0f, -1.0, -6.0f });
+	tree = new Tree{ mGfw };
+	tree->SetPosition(glm::vec3{ -6.0f, -1.0, -12.0f });
+	tree = new Tree{ mGfw };
+	tree->SetPosition(glm::vec3{ 6.0f, -1.0, -12.0f });
 }
 
 void MainScene::Exit()
@@ -70,7 +81,22 @@ void MainScene::ProcessInput(bool* keyState, int x, int y)
 
 void MainScene::Update()
 {
+	const auto& robots = mGfw->GetActorsAt(Gfw::Layer::kRobot);
+	const auto& trees = mGfw->GetActorsAt(Gfw::Layer::kObstacle);
 
+	for (auto robot : robots)
+	{
+		auto rp = (Robot*)robot;
+		const auto& robotBox = rp->GetBox()->GetWorldBox();
+		for(auto tree : trees)
+		{
+			auto tp = (Tree*)tree;
+
+			const auto& treeBox = tp->GetBox()->GetWorldBox();
+			if (Intersects(robotBox, treeBox))
+				rp->ChangeDirection();
+		}
+	}
 }
 
 void MainScene::Draw()

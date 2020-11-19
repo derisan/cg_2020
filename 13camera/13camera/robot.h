@@ -11,6 +11,9 @@ public:
     void ChangeDirection(bool reflect = false);
     bool IsNear();
 
+    // Getters
+    class BoxComponent* GetBox() { return mBox; }
+
 private:
     class BoxComponent* mBox;
     Actor* mTarget;
@@ -25,7 +28,7 @@ private:
     float mRotationCooldown;
     float mAngle;
     
-    const float kMovementSpeed{ 1.0f };
+    const float kMovementSpeed{ 3.0f };
     const float kRotationSpeed{ 100.0f };
 };
 

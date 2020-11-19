@@ -98,7 +98,7 @@ bool Robot::IsNear()
 	const auto& myPos = GetPosition();
 	const auto& targetPos = mTarget->GetPosition();
 
-	if (glm::distance2(myPos, targetPos) < 36.0f)
+	if (glm::distance2(myPos, targetPos) < 49.0f)
 		return true;
 	return false;
 }
