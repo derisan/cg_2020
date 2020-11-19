@@ -20,35 +20,31 @@ Player::Player(Gfw* gfw, Gfw::Layer layer)
 
 void Player::UpdateActor()
 {
+	auto pos = GetPosition();
+	auto rot = GetRotation();
+
 	if (ViewOption::kFollow == mViewOption)
 	{
-		auto pos = GetPosition();
-		auto rot = GetRotation();
-
-		pos += mForwardSpeed * GetForward() * mGfw->dt;
+		pos += GetForward() * mForwardSpeed  * mGfw->dt;
 		rot += mRotationSpeed * mGfw->dt;
 
 		auto cameraPos = pos - GetForward() * 3.0f + glm::vec3{ 0.0f, 3.0f, 0.0f };
 		auto cameraTarget = pos + GetForward() * 3.0f;
 
 		mView = glm::lookAt(cameraPos, cameraTarget, glm::vec3{ 0.0f, 1.0f, 0.0f });
-
-		SetPosition(pos);
-		SetRotation(rot);
 	}
 	else
 	{
-		auto pos = GetPosition();
 		pos += GetForward() * mForwardSpeed * mGfw->dt;
 		pos += GetRight() * mStrafeSpeed * mGfw->dt;
 
-		auto cameraPos = GetPosition() + glm::vec3{ 0.0f, 1.0f, 0.0f };
+		auto cameraPos = pos + glm::vec3{ 0.0f, 1.0f, 0.0f };
 		auto cameraTarget = cameraPos + GetForward();
 
 		mView = glm::lookAt(cameraPos, cameraTarget, glm::vec3{ 0.0f, 1.0f, 0.0f });
-
-		SetPosition(pos);
 	}
+	SetPosition(pos);
+	SetRotation(rot);
 }
 
 void Player::ActorInput(bool* keyState, int x, int y)
@@ -57,14 +53,14 @@ void Player::ActorInput(bool* keyState, int x, int y)
 	mRotationSpeed = 0.0f;
 	mStrafeSpeed = 0.0f;
 	
+	if (keyState[119]) // w
+		mForwardSpeed = kMovementSpeed;
+
+	if (keyState[115]) // s
+		mForwardSpeed = -kMovementSpeed;
+
 	if (ViewOption::kFollow == mViewOption)
 	{
-		if (keyState[119]) // w
-			mForwardSpeed = kMovementSpeed;
-
-		if (keyState[115]) // s
-			mForwardSpeed = -kMovementSpeed;
-
 		if (keyState[97]) // a 
 			mRotationSpeed = kRotationSpeed;
 
@@ -73,12 +69,6 @@ void Player::ActorInput(bool* keyState, int x, int y)
 	}
 	else
 	{
-		if (keyState[119]) // w
-			mForwardSpeed = kMovementSpeed;
-
-		if (keyState[115]) // s
-			mForwardSpeed = -kMovementSpeed;
-
 		if (keyState[97]) // a 
 			mStrafeSpeed = -kMovementSpeed;
 

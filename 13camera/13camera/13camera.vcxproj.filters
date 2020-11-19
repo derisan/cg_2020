@@ -59,6 +59,9 @@
     <ClCompile Include="player.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="box_component.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="aabb.h">
@@ -104,6 +107,9 @@
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="player.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="box_component.h">
       <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -13,6 +13,7 @@
 #include "player.h"
 #include "mesh_component.h"
 
+
 MainScene::MainScene(Gfw* gfw)
 	: Scene{ gfw },
 	mMeshShader{ nullptr },
@@ -31,14 +32,22 @@ MainScene::MainScene(Gfw* gfw)
 void MainScene::Enter()
 {
 	mPlayer = new Player{ mGfw };
-	new Robot{ mGfw };
-
+	
 	for (int i = 0; i < 10; ++i)
 	{
 		auto plane = new Actor{ mGfw };
 		plane->SetPosition(glm::vec3{ 0.0f, -1.1f, -2.0f * i });
 		auto mc = new MeshComponent{ plane, "Assets/road.gpmesh" };
 	}
+
+	auto robot = new Robot{ mGfw };
+	robot->SetPosition(glm::vec3{ -9.0f, -1.0f, -9.0f });
+	robot = new Robot{ mGfw };
+	robot->SetPosition(glm::vec3{ -4.5f, -1.0f, -9.0f });
+	robot = new Robot{ mGfw };
+	robot->SetPosition(glm::vec3{ 4.5f, -1.0f, -9.0f });
+	robot = new Robot{ mGfw };
+	robot->SetPosition(glm::vec3{ 9.0f, -1.0f, -9.0f });
 }
 
 void MainScene::Exit()

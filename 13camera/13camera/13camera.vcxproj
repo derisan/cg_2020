@@ -141,6 +141,7 @@
   <ItemGroup>
     <ClCompile Include="aabb.cpp" />
     <ClCompile Include="actor.cpp" />
+    <ClCompile Include="box_component.cpp" />
     <ClCompile Include="component.cpp" />
     <ClCompile Include="gfw.cpp" />
     <ClCompile Include="main.cpp" />
@@ -159,6 +160,7 @@
   <ItemGroup>
     <ClInclude Include="aabb.h" />
     <ClInclude Include="actor.h" />
+    <ClInclude Include="box_component.h" />
     <ClInclude Include="component.h" />
     <ClInclude Include="gfw.h" />
     <ClInclude Include="main_scene.h" />
