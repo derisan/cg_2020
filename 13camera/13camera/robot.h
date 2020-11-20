@@ -10,7 +10,7 @@ public:
 
     void ChangeDirection(bool reflect = false);
     bool IsNear();
-
+    
     // Getters
     class BoxComponent* GetBox() { return mBox; }
 
@@ -26,7 +26,6 @@ private:
     Border mBorder;
     
     float mRotationCooldown;
-    float mAngle;
     
     float mMovementSpeed;
     const float kRotationSpeed{ 100.0f };
